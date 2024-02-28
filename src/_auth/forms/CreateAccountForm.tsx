@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { createAccountValidation } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -15,15 +15,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import Loader from "@/components/shared/Loader";
-import { createUserAccount } from "@/lib/appwrite/api";
 import { useToast } from "@/components/ui/use-toast"
-import { useCreateUserAccountMutation } from "@/lib/react-query/queriesAndMutation";
+import { useCreateUserAccountMutation, useLoginAccountMutation } from "@/lib/react-query/queriesAndMutation";
+import { useUserContext } from "@/context/AuthContext";
 
 const CreateAccountForm = () => {
+  //const isCreatingAccount = false;
 
   const { toast } = useToast();
-
+ const {checkAuthUser, isLoading:isUserLoading} = useUserContext();
+ const navigate = useNavigate();
   const {mutateAsync:createUserAccount, isPending:isCreatingAccount} = useCreateUserAccountMutation();
+
+  const {mutateAsync: loginAccount, isPending:isLoggedIn} = useLoginAccountMutation();
   // 1. Define your form.
   const form = useForm<z.infer<typeof createAccountValidation>>({
     resolver: zodResolver(createAccountValidation),
@@ -42,7 +46,24 @@ const CreateAccountForm = () => {
     toast({
       title: "Account Created"
     })
-    //const session = await signInAccount()
+    const session = await loginAccount({email:values.email, password:values.password});
+    if(!session) {
+      return toast({
+        title: "Login failed. Please try again"
+      });
+    }
+
+    const isLoggedIn = await checkAuthUser();
+
+    if(isLoggedIn) {
+      form.reset();
+      navigate('/');
+    }
+    else {
+      toast({
+        title: "Creating of Account failed. Please try again"
+      });
+    }
   }
 
   return (

@@ -2,7 +2,7 @@ import './globals.css';
 import logo from './assets/login2.jpeg';
 import {Routes, Route} from 'react-router-dom';
 import LoginForm from './_auth/forms/LoginForm';
-import { Home } from './_root/pages';
+import { Home , Explore, AllUsers, Saved, AddRecipe, EditRecipe, RecipeDetails, Profile, UpdateProfile} from './_root/pages';
 import CreateAccountForm from './_auth/forms/CreateAccountForm';
 import AuthLayout from './_auth/AuthLayout';
 import RootLayout from './_root/RootLayout';
@@ -20,6 +20,14 @@ const App = ()=>{
         {/* private routes */}
         <Route element={<RootLayout/>}>
         <Route index element={<Home />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/all-users" element={<AllUsers />} />
+        <Route path="/saved" element={<Saved />} />
+        <Route path="/addRecipe" element={<AddRecipe />} />
+        <Route path="/update-recipe/:id" element={<EditRecipe />} />
+        <Route path="/recipe/:id" element={<RecipeDetails />} />
+        <Route path="/profile/:id/*" element={<Profile />} />
+        <Route path="/update-profile/:id" element={<UpdateProfile />} />
         </Route>        
       </Routes>
       <Toaster />

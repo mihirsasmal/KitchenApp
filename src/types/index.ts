@@ -1,3 +1,5 @@
+import React from "react";
+
 export type INavLink = {
     imgURL: string;
     route: string;
@@ -13,12 +15,16 @@ export type INavLink = {
     file: File[];
   };
   
-  export type INewPost = {
+  export type IRecipe = {
     userId: string;
-    caption: string;
+    name: string;
     file: File[];
-    location?: string;
-    tags?: string;
+    language?: string;
+    mealType?: string;
+    cuisineType?: string;
+    regionOfCuisine?: string;
+    ingredients?: string;
+    steps?: string;
   };
   
   export type IUpdatePost = {
@@ -37,7 +43,6 @@ export type INavLink = {
     username: string;
     email: string;
     imageUrl: string;
-    bio: string;
   };
   
   export type INewUser = {
@@ -46,3 +51,12 @@ export type INavLink = {
     username: string;
     password: string;
   };
+
+  export type IContextType = {
+    user:IUser;
+    isLoading:boolean;
+    setUser:React.Dispatch<React.SetStateAction<IUser>>;
+    isAuthenticated:boolean;
+    setIsAuthenticated:React.Dispatch<React.SetStateAction<boolean>>;
+    checkAuthUser:()=>Promise<boolean>;
+  }
