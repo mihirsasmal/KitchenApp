@@ -1,4 +1,5 @@
 import Loader from '@/components/shared/Loader'
+import RecipeCard from '@/components/shared/RecipeCard';
 import { useGetRecentRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { IRecipe } from '@/types';
 import { Models } from 'appwrite';
@@ -16,7 +17,7 @@ const Home = () => {
           ) : (
             <ul className='flex flex-col flex-1 gap-9 w-full'>
               {(recipes as any)?.documents.map((recipe:Models.Document)=>(
-                <li>{recipe?.RecipeName}</li>
+                <RecipeCard recipe={recipe}/>
               ))}
             </ul>
           )}

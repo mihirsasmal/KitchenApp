@@ -55,10 +55,12 @@ export async function loginAccount(user:{email:string, password:string}) {
 export async function getCurrentUser() {
     try{
         const currentAccount = await account.get();
-        const currentUser = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499');
+        const users = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499');
 
+        const currentUser = users.documents.filter(x=>x.accountId===currentAccount.$id)[0];
         if(!currentUser) throw Error;
-        return currentUser.documents[0];
+
+        return currentUser;
     }
     catch(error) {
         console.log(error)
@@ -137,6 +139,7 @@ export async function getFilePreview(fileId:string) {
             fileId,
             2000,2000,ImageGravity.Top,100
         );
+        console.log(uploadedFile);
         return uploadedFile;
     }
     catch(error) {

@@ -22,17 +22,18 @@ const Sidebar = () => {
           <img src="/assets/react.svg" alt="logo" width={10} height={10} />
         </Link>
         <Link to={`/profile/${user.id}`} className=' flex gap-3 items-center'>
+        
         <img
-              src={user.imageUrl || "/assets/react.svg"}
+              src={user.imageUrl || "assets/icons/profile-placeholder.svg"}
               alt="profile"
               className="h-14 w-14 rounded-full"
             />        
         <div className="flex flex-col">
             <p className="text-white">
-                sdasd{user.name}
+                {user.name}
             </p>
             <p className="small-regular text-light-3">
-             @asdsad{user.username}
+             @{user.username}
             </p>
         </div>
         </Link>
