@@ -14,7 +14,7 @@ const AddRecipe = () => {
                 />
                 <h2 className='h3-bold md:h2-bold text-left w-full'>Add Recipe</h2>
             </div>
-            <Recipes/>
+            <Recipes action = 'Create'/>
         </div>
         </div>
   )

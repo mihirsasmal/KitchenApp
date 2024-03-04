@@ -1,4 +1,4 @@
-import { INewUser, IRecipe } from "@/types";
+import { INewUser, IRecipe, IUpdateRecipe } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import {ID, ImageGravity, Models, Query} from 'appwrite';
 
@@ -100,7 +100,7 @@ export async function addRecipe(recipe:IRecipe) {
             MealType:recipe.mealType,
             Ingredients:recipe.ingredients,
             Steps:recipe.steps,
-
+            
             ImageId: uploadedFile.$id
         }
         )
@@ -110,6 +110,73 @@ export async function addRecipe(recipe:IRecipe) {
             throw Error
         }
         return newRecipe;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function editRecipe(recipe:IUpdateRecipe) {
+    const hasFileToUpdate = recipe.file.length>0;
+    try{
+
+        let image = {
+            imageUrl:recipe.imageUrl,
+            imageId:recipe.imageId,
+        }
+
+        if(hasFileToUpdate) {
+
+            const uploadedFile = await uploadFile(recipe.file[0]) as Models.File;
+        
+        if(!uploadedFile) throw Error;
+
+        const fileUrl = getFilePreview(uploadedFile.$id);
+
+        if(!fileUrl) {
+          await deleteFile(uploadedFile.$id);
+            throw Error
+        };
+
+        image = {...image, imageUrl:fileUrl as URL, imageId:uploadedFile.$id};
+
+        }
+        
+
+        const updatedRecipe = await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipe.recipeId,
+        {
+            RecipeName:recipe.name,
+            CuisineType:recipe.cuisineType,
+            CuisineRegion:recipe.regionOfCuisine,
+            MealType:recipe.mealType,
+            Ingredients:recipe.ingredients,
+            Steps:recipe.steps,
+            ImageUrl:image.imageUrl,
+            ImageId: image.imageId
+        }
+        )
+
+        if(!updatedRecipe) {
+            await deleteFile(recipe.imageId);
+            throw Error
+        }
+        return updatedRecipe;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function deleteRecipe(recipeId:string, imageId:string) {
+    if(!recipeId || !imageId ) throw Error;
+    try{
+        await databases.deleteDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipeId)
+
+            await deleteFile(imageId);
+          
+        return {status:'ok'};
     }
     catch(error) {
         console.log(error)
@@ -132,9 +199,9 @@ export async function uploadFile(file:File) {
     }
 }
 
-export async function getFilePreview(fileId:string) {
+export function getFilePreview(fileId:string) {
     try{
-        const uploadedFile = await storage.getFilePreview(
+        const uploadedFile = storage.getFilePreview(
             '65d811e43bbce2b5f5ae',
             fileId,
             2000,2000,ImageGravity.Top,100
@@ -179,3 +246,75 @@ export async function getRecentRecipe() {
     }
 }
 
+export async function getRecipeById(recipeId:string) {
+    try{
+
+        const recipe = await databases.getDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',recipeId);
+
+        if(!recipe) {
+            
+            throw Error
+        }
+        return recipe;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function likeRecipe(recipeId:string, likesArray:string[]) {
+    try{
+
+        const updatedRecipe = await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',recipeId,{
+            likes:likesArray
+        })
+
+        if(!updatedRecipe) {
+            
+            throw Error
+        }
+        return updatedRecipe;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function saveRecipe(recipeId:string, userId:string) {
+    try{
+
+        const updatedRecipe = await databases.createDocument('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',ID.unique(),{
+            users:userId,
+            recipe:recipeId
+        })
+
+        if(!updatedRecipe) {
+            
+            throw Error
+        }
+        return updatedRecipe;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function deleteSavedRecipe(saveRecordId:string) {
+    try{
+
+        const deleteStatusCode = await databases.deleteDocument('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',saveRecordId)
+
+        if(!deleteStatusCode) {
+            
+            throw Error
+        }
+        return deleteStatusCode;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}

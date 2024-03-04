@@ -26,6 +26,20 @@ export type INavLink = {
     ingredients?: string;
     steps?: string;
   };
+
+  export type IUpdateRecipe = {
+    recipeId:string;
+    name: string;
+    file: File[];
+    language?: string;
+    mealType?: string;
+    cuisineType?: string;
+    regionOfCuisine?: string;
+    ingredients?: string;
+    steps?: string;
+    imageId: string;
+    imageUrl: URL;    
+  };
   
   export type IUpdatePost = {
     postId: string;

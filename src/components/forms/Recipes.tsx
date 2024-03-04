@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast"
-import { useAddRecipeMutation, useCreateUserAccountMutation, useLoginAccountMutation } from "@/lib/react-query/queriesAndMutation";
+import { useAddRecipeMutation, useCreateUserAccountMutation, useLoginAccountMutation, useUpdateRecipeMutation } from "@/lib/react-query/queriesAndMutation";
 import { useUserContext } from "@/context/AuthContext";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
@@ -29,36 +29,48 @@ import { Models } from "appwrite";
 import { userInfo } from "os";
 
   type RecipeFormProps = {
-      recipe?:Models.Document
-
+      recipe?:Models.Document;
+     action: 'Create' | 'Update';
   }
 
-const Recipes = ({recipe}:RecipeFormProps) => {
+const Recipes = ({recipe, action}:RecipeFormProps) => {
   //const isCreatingAccount = false;
-
+  
   const { toast } = useToast();
  const {user} = useUserContext();
  const navigate = useNavigate();
   const {mutateAsync:addRecipe, isPending:isAddingRecipe} = useAddRecipeMutation();
+
+  const {mutateAsync:editRecipe, isPending:isEditingRecipe} = useUpdateRecipeMutation();
+
 
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof recipeSubmitValidation>>({
     resolver: zodResolver(recipeSubmitValidation),
     defaultValues: {
-      name: recipe?recipe?.name:"",      
+      name: recipe?recipe.RecipeName:"",      
       language:recipe?recipe?.language:"",
-      mealType: recipe?recipe?.mealType:"",
-      cuisineType: recipe?recipe?.cuisineType:"",
-      regionOfCuisine: recipe?recipe?.regionOfCuisine:"",
-      ingredients:recipe?recipe?.ingredients:"",
-      steps:recipe?recipe?.steps:"",
+      mealType: recipe?recipe.MealType:"",
+      cuisineType: recipe?recipe.CuisineType:"",
+      regionOfCuisine: recipe?recipe.CuisineRegion:"",
+      ingredients:recipe?recipe.Ingredients:"",
+      steps:recipe?recipe.Steps:"",
       file: [],
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof recipeSubmitValidation>) {
+if(recipe &&action ==='Update') {
+  const updateRecipe = await editRecipe({...values,recipeId:recipe.$id,imageId:recipe?.imageId,imageUrl:recipe?.imageUrl })
+  if(!updateRecipe) {
+    toast({title: 'Something went wrong, Please try again.'})
+  }
+
+  return  navigate(`/recipe/${recipe.$id}`);
+}
+
     const newRecipe = await addRecipe({...values, userId:user.id});
 
     if(!newRecipe) {
@@ -175,7 +187,7 @@ const Recipes = ({recipe}:RecipeFormProps) => {
               <FormControl>
                 <FileUploader 
                 fieldChange ={field.onChange}
-                mediaUrl={recipe?.imageUrl} />
+                mediaUrl={recipe?.ImageUrl} />
               </FormControl>              
               <FormMessage className="shad-form_message"/>
             </FormItem>
@@ -185,12 +197,9 @@ const Recipes = ({recipe}:RecipeFormProps) => {
         <Button type="button" className="shad-button_dark_4">
          Cancel
           </Button>
-        <Button type="submit" className="shad-button_primary whitespace-nowrap">
-          {isAddingRecipe? (
-            <div className = 'flex-center gap-2'>
-             <Loader/>Uploading...
-            </div>
-          ): 'Submit'}
+        <Button type="submit" className="shad-button_primary whitespace-nowrap"
+        disabled ={isAddingRecipe|| isEditingRecipe}>
+          {isAddingRecipe|| isEditingRecipe && 'Uploading...'} {action} Recipe
           </Button>
           </div>
       </form>

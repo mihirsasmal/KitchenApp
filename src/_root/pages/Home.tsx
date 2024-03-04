@@ -17,7 +17,7 @@ const Home = () => {
           ) : (
             <ul className='flex flex-col flex-1 gap-9 w-full'>
               {(recipes as any)?.documents.map((recipe:Models.Document)=>(
-                <RecipeCard recipe={recipe}/>
+                <RecipeCard recipe={recipe} key={recipe.$id}/>
               ))}
             </ul>
           )}
