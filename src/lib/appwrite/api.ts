@@ -57,7 +57,7 @@ export async function getCurrentUser() {
         const currentAccount = await account.get();
         const users = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499');
 
-        const currentUser = users.documents.filter(x=>x.accountId===currentAccount.$id)[0];
+        const currentUser = users.documents.filter((x:any)=>x.accountId===currentAccount.$id)[0];
         if(!currentUser) throw Error;
 
         return currentUser;

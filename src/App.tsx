@@ -1,5 +1,4 @@
 import './globals.css';
-import logo from './assets/login2.jpeg';
 import {Routes, Route} from 'react-router-dom';
 import LoginForm from './_auth/forms/LoginForm';
 import { Home , Explore, AllUsers, Saved, AddRecipe, EditRecipe, RecipeDetails, Profile, UpdateProfile} from './_root/pages';

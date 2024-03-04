@@ -60,7 +60,7 @@ const Sidebar = () => {
 
             </div>
             <Button
-            variant="ghost"
+             variant="ghost"
             className="shad-button_ghost"
             onClick={() => logout()}
           >
