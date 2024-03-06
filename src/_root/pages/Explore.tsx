@@ -26,7 +26,7 @@ const Explore = () => {
   )
  }
   const shouldShowSearchResults = searchValue !=='';
-  const shouldShowRecipes = !shouldShowSearchResults && (recipes as any).pages.every((item:any)=> item.documents.length === 0)
+  const shouldShowRecipes = !shouldShowSearchResults && (recipes as any).pages.every((item:any)=> item.length === 0)
   return (
     <div className='explore-container'>
       <div className='explore-inner_container'>
@@ -65,17 +65,17 @@ const Explore = () => {
             ) : shouldShowRecipes? (
               <p className='text-light-4 mt-10 text-center w-full'> End of Recipes</p>
             ) : recipes.pages.map((item,index)=>(
-              <GridRecipeList key={`page-${index}`} recipes = {(item as any).documents} />
+              <GridRecipeList key={`page-${index}`} recipes = {item} />
             ))}
           </div>
-          {hasNextPage ? (
+          {/* {hasNextPage ? (
                   <div ref = {ref} className = 'mt-10'> 
                   <Loader />
                   </div>
                 ): <div ref = {ref} className = 'mt-10'> 
                 <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
-                </div>}
-                
+                </div>} */}
+
           Explore</div>
   )
 }

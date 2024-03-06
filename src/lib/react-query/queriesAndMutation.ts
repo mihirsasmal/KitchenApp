@@ -150,16 +150,16 @@ export const useGetRecentRecipeMutation = ()=> {
             queryFn: async({pageParam})=>getInfiniteRecipes({pageParam}),
             initialPageParam:0,
             getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
-            //getNextPageParam: (lastPage) => lastPage.documents[lastPage.documents.length - 1].$id ?? undefined,
+            getNextPageParam: (lastPage) => lastPage[lastPage?.length - 1].$id ?? undefined,
 
-            getNextPageParam : (lastPage:any)=> {
-                if(lastPage && lastPage.length === 0) return null;
-                console.log('LastPage');
-                console.log(lastPage);
-                const lastId = lastPage[lastPage.length - 1].$id;
-                console.log(lastId)
-                return lastId;
-            }
+            // getNextPageParam : (lastPage:any)=> {
+            //     if(lastPage && lastPage.length === 0) return null;
+            //     console.log('LastPage');
+            //     console.log(lastPage);
+            //     const lastId = lastPage[lastPage.length - 1].$id;
+            //     console.log(lastId)
+            //     return lastId;
+            // }
         })
     };
 

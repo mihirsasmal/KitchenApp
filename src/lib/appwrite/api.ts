@@ -58,6 +58,8 @@ export async function getCurrentUser() {
         const users = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499');
 
         const currentUser = users.documents.filter((x:any)=>x.accountId===currentAccount.$id)[0];
+
+        // const currentUser = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499',[Query.equal('accountId', [currentAccount.$id])]);
         if(!currentUser) throw Error;
 
         return currentUser;
@@ -322,7 +324,7 @@ export async function deleteSavedRecipe(saveRecordId:string) {
 export async function getInfiniteRecipes({pageParam}:{pageParam:number}) {
     console.log('insidefunction -2');
 
-const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10)]
+const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(1)]
 console.log('before If -1');
 if(pageParam) {
     queries.push (Query.cursorAfter(pageParam.toString()));
@@ -331,7 +333,7 @@ console.log('After If -2');
     try{
 
         console.log('Inside Try -1');
-       // const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',queries); -- query not working hence skipping this one now
+        //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',queries); //-- query not working hence skipping this one now
         const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
         console.log('GetListApi -1')
         console.log(recipe);
