@@ -12,6 +12,7 @@ type GridRecipeListProps = {
 
 const GridRecipeList = ({recipes, showUser = true, showStats = true}:GridRecipeListProps) => {
     const {user} = useUserContext();
+
   return (
       <ul className='grid-container'>
           {recipes.map((recipe)=>(

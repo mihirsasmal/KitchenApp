@@ -1,7 +1,7 @@
 import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
 import { LucideSatelliteDish } from 'lucide-react';
-import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getCurrentUser, getInfiniteRecipes, getRecentRecipe, getRecipeById, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes } from '../appwrite/api'
+import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getCurrentUser, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';
 
 export const useCreateUserAccountMutation = ()=> {
@@ -131,7 +131,7 @@ export const useGetRecentRecipeMutation = ()=> {
         });
     };
 
-    export const usedeleteecipeMutation = ()=> {
+    export const usedeleteRecipeMutation = ()=> {
         const queryClient = useQueryClient();
         return useMutation ({
             mutationFn: ({recipeId,imageId}:{recipeId:string, imageId:string}) => deleteRecipe(recipeId, imageId),
@@ -168,5 +168,32 @@ export const useGetRecentRecipeMutation = ()=> {
             queryKey: [QUERY_KEYS.SEARCH_RECIPES, searchValue],
             queryFn: ()=> searchRecipes(searchValue),
             enabled: !! searchValue
+        });
+    };
+
+    export const useGetSavedRecipeByUserMutation = (userId:string)=> {
+        return useInfiniteQuery ({
+            queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID],
+            queryFn: ()=>getSavedRecipeByUser(userId),
+            enabled:!!userId,
+            initialPageParam:0,
+            getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
+            getNextPageParam: (lastPage) => lastPage[lastPage?.length - 1].$id ?? undefined,
+        });
+    }; 
+
+    export const useSearchSavedRecipeMutation = (searchValue:string, userId:string)=> {
+        return useQuery({
+            queryKey: [QUERY_KEYS.SEARCH_RECIPES, searchValue],
+            queryFn: ()=> searchSavedRecipes(searchValue, userId),
+            enabled: !! searchValue
+        });
+    };
+
+    export const useGetRecipeByUserMutation = (userId:string)=> {
+        return useQuery ({
+            queryKey: [QUERY_KEYS.GET_USER_RECIPES],
+            queryFn: ()=>getRecipeByUser(userId),
+            enabled:!!userId
         });
     };

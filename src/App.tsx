@@ -6,6 +6,7 @@ import CreateAccountForm from './_auth/forms/CreateAccountForm';
 import AuthLayout from './_auth/AuthLayout';
 import RootLayout from './_root/RootLayout';
 import { Toaster } from "@/components/ui/toaster"
+import YourRecipes from './_root/pages/YourRecipes';
 
 const App = ()=>{
   return (
@@ -20,7 +21,7 @@ const App = ()=>{
         <Route element={<RootLayout/>}>
         <Route index element={<Home />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/all-users" element={<AllUsers />} />
+        <Route path="/yourRecipes" element={<YourRecipes />} />
         <Route path="/saved" element={<Saved />} />
         <Route path="/addRecipe" element={<AddRecipe />} />
         <Route path="/update-recipe/:id" element={<EditRecipe />} />

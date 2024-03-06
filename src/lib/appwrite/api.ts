@@ -265,6 +265,27 @@ export async function getRecipeById(recipeId:string) {
     }
 }
 
+export async function getRecipeByUser(userId:string) {
+    try{
+
+        const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb')
+
+
+        const recipeOfUser = allRecipe.documents.filter(x=>x.creator.$id === userId);
+
+
+        if(!recipeOfUser) {
+            
+            throw Error
+        }
+        return recipeOfUser;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
 export async function likeRecipe(recipeId:string, likesArray:string[]) {
     try{
 
@@ -321,6 +342,27 @@ export async function deleteSavedRecipe(saveRecordId:string) {
     }
 }
 
+export async function getSavedRecipeByUser(userId:string) {
+    try{
+
+
+        const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252')
+
+        const savedRecipeOfUser = allSavedRecipe.documents.filter(x=>x.users.$id === userId).map(x=>x.recipe);
+
+       
+        if(!savedRecipeOfUser) {
+            
+            throw Error
+        }
+        return savedRecipeOfUser;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
 export async function getInfiniteRecipes({pageParam}:{pageParam:number}) {
     console.log('insidefunction -2');
 
@@ -369,3 +411,26 @@ export async function searchRecipes(searchValue:string) {
             return error;
         }
     }
+
+export async function searchSavedRecipes(searchValue:string, userId:string) {
+
+            try{
+        
+                //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.search('RecipeName',searchValue),Query.search('Ingredients',searchValue)]);
+                const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252')
+
+                const savedRecipeOfUser = allSavedRecipe.documents.filter(x=>x.users.$id === userId).map(x=>x.recipe);
+    
+                const recipe = savedRecipeOfUser.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
+     
+                if(!recipe) {
+                    
+                    throw Error
+                }
+                return {documents:recipe}; // return only recipe when query issue is fixed
+            }
+            catch(error) {
+                console.log(error)
+                return error;
+            }
+        }
