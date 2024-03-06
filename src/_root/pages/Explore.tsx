@@ -8,14 +8,16 @@ import {useInView} from 'react-intersection-observer';
 
 const Explore = () => {
   const {ref, inView} = useInView();
- const {data:recipes, fetchNextPage, hasNextPage} = useGetRecipeMutation();
+ const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetRecipeMutation();
+ useEffect (()=>{
+  if(inView) fetchNextPage();
+},[inView, fetchNextPage]);
+
   const [searchValue, setSearchValue] = useState('');
   const debouncedValue = useDebounce(searchValue, 500);
  const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchRecipeMutation(debouncedValue);
 
- useEffect (()=>{
-   if(inView && !searchValue) fetchNextPage();
- },[fetchNextPage, inView]);
+
 
  if(!recipes) {
 
@@ -68,13 +70,15 @@ const Explore = () => {
               <GridRecipeList key={`page-${index}`} recipes = {item} />
             ))}
           </div>
-          {/* {hasNextPage ? (
+          { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
+                  Loading...
+                  </div>: hasNextPage ? (
                   <div ref = {ref} className = 'mt-10'> 
                   <Loader />
                   </div>
-                ): <div ref = {ref} className = 'mt-10'> 
+                ): <div className = 'mt-10'> 
                 <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
-                </div>} */}
+                </div>}
 
           Explore</div>
   )

@@ -144,22 +144,19 @@ export const useGetRecentRecipeMutation = ()=> {
     };
 
     export const useGetRecipeMutation = ()=> {
-        console.log('Inside Mutation -1');
+
         return useInfiniteQuery ({
             queryKey:[QUERY_KEYS.GET_INFINITE_RECIPES],
             queryFn: async({pageParam})=>getInfiniteRecipes({pageParam}),
             initialPageParam:0,
-            getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
-            getNextPageParam: (lastPage) => lastPage[lastPage?.length - 1].$id ?? undefined,
+            //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
 
-            // getNextPageParam : (lastPage:any)=> {
-            //     if(lastPage && lastPage.length === 0) return null;
-            //     console.log('LastPage');
-            //     console.log(lastPage);
-            //     const lastId = lastPage[lastPage.length - 1].$id;
-            //     console.log(lastId)
-            //     return lastId;
-            // }
+            getNextPageParam : (lastPage:any)=> {
+                if(lastPage && lastPage.length === 0) return null;
+
+                const lastId = lastPage[lastPage.length - 1].$id;
+                return lastId;
+            }
         })
     };
 

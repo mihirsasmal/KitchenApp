@@ -1,6 +1,6 @@
 import { INewUser, IRecipe, IUpdateRecipe } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import {ID, ImageGravity, Models, Query} from 'appwrite';
+import {ID,  Models, Query} from 'appwrite';
 
 
 export async function createUserAccount(user:INewUser) {
@@ -43,7 +43,7 @@ export async function saveUserToDB( user:{
 
 export async function loginAccount(user:{email:string, password:string}) {
     try{
-        const session = await account.createEmailPasswordSession(user.email,user.password);
+        const session = await account.createEmailSession(user.email,user.password);
         return session;
     }
     catch(error) {
@@ -54,15 +54,13 @@ export async function loginAccount(user:{email:string, password:string}) {
 
 export async function getCurrentUser() {
     try{
-        const currentAccount = await account.get();
-        const users = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499');
+        const currentAccount = await account.get();        
 
-        const currentUser = users.documents.filter((x:any)=>x.accountId===currentAccount.$id)[0];
+         const currentUser = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499',[Query.equal('accountId', [currentAccount.$id])]);
 
-        // const currentUser = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499',[Query.equal('accountId', [currentAccount.$id])]);
         if(!currentUser) throw Error;
 
-        return currentUser;
+        return currentUser.documents[0];
     }
     catch(error) {
         console.log(error)
@@ -206,7 +204,7 @@ export function getFilePreview(fileId:string) {
         const uploadedFile = storage.getFilePreview(
             '65d811e43bbce2b5f5ae',
             fileId,
-            2000,2000,ImageGravity.Top,100
+            2000,2000,'top',100
         );
         console.log(uploadedFile);
         return uploadedFile;
@@ -268,17 +266,16 @@ export async function getRecipeById(recipeId:string) {
 export async function getRecipeByUser(userId:string) {
     try{
 
-        const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb')
+        const recipeOfUser = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.equal('creator', [userId])])
 
 
-        const recipeOfUser = allRecipe.documents.filter(x=>x.creator.$id === userId);
-
+        
 
         if(!recipeOfUser) {
             
             throw Error
         }
-        return recipeOfUser;
+        return recipeOfUser.documents;
     }
     catch(error) {
         console.log(error)
@@ -346,9 +343,9 @@ export async function getSavedRecipeByUser(userId:string) {
     try{
 
 
-        const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252')
+        const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',[Query.equal('users', [userId])])
 
-        const savedRecipeOfUser = allSavedRecipe.documents.filter(x=>x.users.$id === userId).map(x=>x.recipe);
+        const savedRecipeOfUser = allSavedRecipe.documents.map(x=>x.recipe);
 
        
         if(!savedRecipeOfUser) {
@@ -364,21 +361,18 @@ export async function getSavedRecipeByUser(userId:string) {
 }
 
 export async function getInfiniteRecipes({pageParam}:{pageParam:number}) {
-    console.log('insidefunction -2');
 
-const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(1)]
-console.log('before If -1');
+const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10)]
+
 if(pageParam) {
+
     queries.push (Query.cursorAfter(pageParam.toString()));
 }
-console.log('After If -2');
+
     try{
 
-        console.log('Inside Try -1');
-        //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',queries); //-- query not working hence skipping this one now
-        const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
-        console.log('GetListApi -1')
-        console.log(recipe);
+        const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',queries); 
+
         if(!recipe) {
             
             throw Error
@@ -395,16 +389,17 @@ export async function searchRecipes(searchValue:string) {
     console.log('insideSearchfunction -1');
         try{
     
-            //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.search('RecipeName',searchValue),Query.search('Ingredients',searchValue)]);
-            const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
+            const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.search('RecipeName',searchValue)]); // currently ANd OR option not available in Appwrite query so using only recipename
+            // const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
 
-            const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
+            // const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
  
             if(!recipe) {
                 
                 throw Error
             }
-            return {documents:recipe}; // return only recipe when query issue is fixed
+            //return {documents:recipe}; // return only recipe when query issue is fixed
+            return recipe
         }
         catch(error) {
             console.log(error)
@@ -416,7 +411,7 @@ export async function searchSavedRecipes(searchValue:string, userId:string) {
 
             try{
         
-                //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.search('RecipeName',searchValue),Query.search('Ingredients',searchValue)]);
+                //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',[Query.equal('users', [userId]),Query.search('RecipeName',searchValue),Query.search('Ingredients',searchValue)]); // Appwrite realtion search doesnot work
                 const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252')
 
                 const savedRecipeOfUser = allSavedRecipe.documents.filter(x=>x.users.$id === userId).map(x=>x.recipe);
