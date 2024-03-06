@@ -318,3 +318,52 @@ export async function deleteSavedRecipe(saveRecordId:string) {
         return error;
     }
 }
+
+export async function getInfiniteRecipes({pageParam}:{pageParam:number}) {
+    console.log('insidefunction -2');
+
+const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10)]
+console.log('before If -1');
+if(pageParam) {
+    queries.push (Query.cursorAfter(pageParam.toString()));
+}
+console.log('After If -2');
+    try{
+
+        console.log('Inside Try -1');
+       // const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',queries); -- query not working hence skipping this one now
+        const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
+        console.log('GetListApi -1')
+        console.log(recipe);
+        if(!recipe) {
+            
+            throw Error
+        }
+        return recipe.documents;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function searchRecipes(searchValue:string) {
+    console.log('insideSearchfunction -1');
+        try{
+    
+            //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.search('RecipeName',searchValue),Query.search('Ingredients',searchValue)]);
+            const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
+
+            const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
+ 
+            if(!recipe) {
+                
+                throw Error
+            }
+            return {documents:recipe}; // return only recipe when query issue is fixed
+        }
+        catch(error) {
+            console.log(error)
+            return error;
+        }
+    }

@@ -1,7 +1,32 @@
-import React, { useState } from 'react'
+import GridRecipeList from '@/components/shared/GridRecipeList';
+import Loader from '@/components/shared/Loader';
+import SearchResults from '@/components/shared/SearchResults';
+import useDebounce from '@/hooks/useDebounce';
+import { useGetRecipeMutation, useSearchRecipeMutation } from '@/lib/react-query/queriesAndMutation';
+import { useEffect, useState } from 'react'
+import {useInView} from 'react-intersection-observer';
 
 const Explore = () => {
-  //const {searchValue, setSearchValue} = useState('');
+  const {ref, inView} = useInView();
+ const {data:recipes, fetchNextPage, hasNextPage} = useGetRecipeMutation();
+  const [searchValue, setSearchValue] = useState('');
+  const debouncedValue = useDebounce(searchValue, 500);
+ const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchRecipeMutation(debouncedValue);
+
+ useEffect (()=>{
+   if(inView && !searchValue) fetchNextPage();
+ },[fetchNextPage, inView]);
+
+ if(!recipes) {
+
+  return(
+    <div className='flex-center w-full h-full'>
+      <Loader />
+    </div>
+  )
+ }
+  const shouldShowSearchResults = searchValue !=='';
+  const shouldShowRecipes = !shouldShowSearchResults && (recipes as any).pages.every((item:any)=> item.documents.length === 0)
   return (
     <div className='explore-container'>
       <div className='explore-inner_container'>
@@ -16,9 +41,41 @@ const Explore = () => {
             type = 'text'
             placeholder='search'
             className='explore-search w-full'
-            />
+            value = {searchValue}
+            onChange = {(e)=>setSearchValue(e.target.value)}/>
           </div></div>
-          <div className='flex-between w-full max-w-5xl mt'></div>
+          <div className='flex-between w-full max-w-5xl mt-16 mb-7'>
+          <h3 className='body-bold md:h3-bold'>Popular Today</h3>
+          <div className='flex-center gap-3 bg-darek-3 rounded-cl px-4 py-2 cursor-pointer'>
+            <p className = 'small-medium md:base-medium text-light-2'>All</p>
+            <img 
+            src = 'assets/icons/filter.svg'
+            width={20}
+            height = {20}
+            alt= 'filter'
+             />
+          </div>
+          </div>
+          <div className='flex flex-wrap gap-9 w-full maz-w-5xl'>
+            {shouldShowSearchResults?(
+              <SearchResults 
+              isSearchFetching = {isSearchFetching}
+              searchedRecipes = {searchedRecipes as any}
+              />
+            ) : shouldShowRecipes? (
+              <p className='text-light-4 mt-10 text-center w-full'> End of Recipes</p>
+            ) : recipes.pages.map((item,index)=>(
+              <GridRecipeList key={`page-${index}`} recipes = {(item as any).documents} />
+            ))}
+          </div>
+          {hasNextPage ? (
+                  <div ref = {ref} className = 'mt-10'> 
+                  <Loader />
+                  </div>
+                ): <div ref = {ref} className = 'mt-10'> 
+                <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
+                </div>}
+                
           Explore</div>
   )
 }

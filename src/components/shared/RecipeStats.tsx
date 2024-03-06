@@ -56,8 +56,8 @@ const handleSaveRecipe = (e:React.MouseEvent)=>{
 
   return (
     <div className='flex justify-between items-center z-20'>
-        <div className='flex gap-2 mr-5'>Likes
-        <p className='small-medium lg:base-medium'>{likes.length}</p>
+        <div className='flex gap-2 mr-5'>
+        <p className='small-medium lg:base-medium'>Likes {likes.length}</p>
             <img 
             src = {`${checkIsLiked(likes,userId)? '/assets/icons/liked.svg':'/assets/icons/like.svg'}`}
             alt='like'
@@ -69,7 +69,8 @@ const handleSaveRecipe = (e:React.MouseEvent)=>{
             
             </div>
             
-            <div className='flex gap-2'>Save
+            <div className='flex gap-2'>
+            <p className='small-medium lg:base-medium'>Save</p>
                 {isSavingRecipe || isDeleteSavingRecipe ? <Loader /> :
                 <img 
                 src ={`${isSaved? '/assets/icons/saved.svg':'/assets/icons/save.svg'}`}
