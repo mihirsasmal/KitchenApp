@@ -1,0 +1,93 @@
+import { useUserContext } from '@/context/AuthContext';
+import { useDeleteRecipeMutation, useDeleteSavedRecipeMutation, useGetCurrentUserMutation, useLikeRecipeMutation, useSaveRecipeMutation } from '@/lib/react-query/queriesAndMutation';
+import { checkIsLiked } from '@/lib/utils';
+import { Models } from 'appwrite';
+import React, { useEffect, useState } from 'react'
+import { REPL_MODE_SLOPPY } from 'repl';
+import Loader from './Loader';
+import { Link } from 'react-router-dom';
+import { Button } from '../ui/button';
+import Modal from './Modal';
+
+
+type RecipeActionProps = {
+    recipe:Models.Document;
+    userId:string;
+}
+
+const RecipeActions = ({recipe, userId}:RecipeActionProps) => {
+
+    const {mutate:deleteRecipe, isPending:isDeletingRecipe} = useDeleteRecipeMutation();
+
+    const[open, setOpen] = useState(false);
+
+
+const handleDeleteRecipe = ()=>{
+    deleteRecipe({recipeId:recipe.$id, imageId:recipe.ImageId});
+}
+
+  return (
+    <div className='flex justify-between items-center z-20'>
+        <div className='flex gap-2 mr-5'>
+        {(userId ===recipe.creator.$id) ? 
+                (
+                <div  className ='flex-center'>
+                  <Link to={`/update-recipe/${recipe.$id}`}>
+                  <img src='/assets/icons/edit.svg' alt='edit' width={20} height={20} />
+                </Link>
+                <Button
+                  onClick = {()=>setOpen(true)}
+                  variant = 'ghost'
+                  className={`ghost_details-delete_btn ${userId !==recipe.creator.$id && 'hidden'}`}
+                >
+                  <img 
+                  src = '/assets/icons/delete.svg'
+                  alt='delete'
+                  width = {24}
+                  height = {24}
+                  />
+                  </Button></div>
+            ):( <></>)}
+            
+            </div>
+            <Modal open={open} onClose={()=>setOpen(false)}>
+                
+            
+                <div className='text-center w-56'>
+            <img 
+                  src = '/assets/icons/delete.svg'
+                  alt='delete'
+                  width = {24}
+                  height = {24}
+                  />
+                  <div className='mx-auto my-4 w-48'>
+                    <h3 className='text-lg font-black text-gray-800'> Confirm Delete</h3>
+                    <p className='text-sm text-gray-500'> Are you sure you want to delete this recipe?</p>
+                  </div>
+                  <div className='flex-gap-4'>
+                    <Button className='bg-red w-full' onClick = {handleDeleteRecipe}>Delete</Button>
+                    <Button className='bg-gray-400 w-full' onClick={()=>setOpen(false)}>Cancel</Button>
+                  </div>
+                  
+                  </div>
+
+                  {isDeletingRecipe?
+                    (
+                    
+                        <div className='text-center w-56 h-56'>
+                    <Loader />
+                    </div>
+                    
+                    ):<></>
+            }
+            </Modal>
+
+            
+                    
+                    
+            
+  </div>
+  )
+}
+
+export default RecipeActions

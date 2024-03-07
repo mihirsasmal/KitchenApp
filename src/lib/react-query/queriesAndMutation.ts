@@ -38,6 +38,28 @@ const queryClient = useQueryClient();
     });
 }; 
 
+export const useDeleteRecipeMutation = ()=> {
+    const queryClient = useQueryClient();
+    return useMutation ({
+        mutationFn: ({recipeId, imageId}:{recipeId:string; imageId: string}) => deleteRecipe(recipeId,imageId),
+        onSuccess:()=> {
+            queryClient.invalidateQueries ({
+                queryKey: [QUERY_KEYS.GET_RECENT_RECIPES]
+            })
+            queryClient.invalidateQueries ({
+                queryKey: [QUERY_KEYS.GET_RECIPES]
+            })
+            queryClient.invalidateQueries ({
+                queryKey: [QUERY_KEYS.GET_CURRENT_USER]
+            })
+            
+            queryClient.invalidateQueries ({
+                queryKey: [QUERY_KEYS.GET_USER_RECIPES]
+            })
+            }
+    });
+}; 
+
 export const useGetRecentRecipeMutation = ()=> {
         return useQuery ({
             queryKey: [QUERY_KEYS.GET_RECENT_RECIPES],
@@ -99,7 +121,6 @@ export const useGetRecentRecipeMutation = ()=> {
                 queryClient.invalidateQueries ({
                     queryKey: [QUERY_KEYS.GET_CURRENT_USER]
                 })
-
                 }
         });
     }; 

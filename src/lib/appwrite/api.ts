@@ -170,11 +170,14 @@ export async function editRecipe(recipe:IUpdateRecipe) {
 }
 
 export async function deleteRecipe(recipeId:string, imageId:string) {
-    if(!recipeId || !imageId ) throw Error;
+    
+    if(!recipeId ) throw Error;
+
     try{
+
         await databases.deleteDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipeId)
 
-            await deleteFile(imageId);
+           if(imageId) await deleteFile(imageId);
           
         return {status:'ok'};
     }

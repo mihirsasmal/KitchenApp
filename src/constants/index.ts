@@ -38,6 +38,11 @@ export const sidebarLinks = [
       label: "Explore",
     },
     {
+      imgURL: "/assets/icons/people.svg",
+      route: "/yourRecipes",
+      label: "Your Recipes",
+    },
+    {
       imgURL: "/assets/icons/bookmark.svg",
       route: "/saved",
       label: "Saved",

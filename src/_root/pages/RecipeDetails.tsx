@@ -35,7 +35,8 @@ const RecipeDetails = () => {
                 </div>
                 {(user.id ===recipe.creator.$id) ? 
                 (
-                <div  className ='flex-center'><Link to={`/update-recipe/${recipe.$id}`}>
+                <div  className ='flex-center'>
+                  <Link to={`/update-recipe/${recipe.$id}`}>
                   <img src='/assets/icons/edit.svg' alt='edit' width={20} height={20} />
                 </Link><Button
                   onClick = {handleDeleteRecipe}
