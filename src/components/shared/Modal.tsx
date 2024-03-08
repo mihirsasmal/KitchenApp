@@ -1,6 +1,15 @@
 import React from 'react'
+import { Button } from '../ui/button'
+import { useDeleteRecipeMutation } from '@/lib/react-query/queriesAndMutation';
+import { Models } from 'appwrite';
+import Loader from './Loader';
 
-const Modal = ({open, onClose, children}:{open:boolean, onClose:()=>void, children:React.ReactNode}) => {
+const Modal = ({open, onClose, recipe}:{open:boolean, onClose:()=>void, recipe:Models.Document}) => {
+  const {mutate:deleteRecipe, isPending:isDeletingRecipe} = useDeleteRecipeMutation();
+  const handleDeleteRecipe = ()=>{
+    deleteRecipe({recipeId:recipe.$id, imageId:recipe.ImageId});
+}
+
   return (
     <div
         onClick = {onClose}
@@ -9,7 +18,33 @@ const Modal = ({open, onClose, children}:{open:boolean, onClose:()=>void, childr
            onClick={(e)=>e.stopPropagation()}>
             <button className=' absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600' onClick = {onClose}> X</button>
            
-            {children}
+            <div className='text-center w-56'>
+            <img 
+                  src = '/assets/icons/delete.svg'
+                  alt='delete'
+                  width = {24}
+                  height = {24}
+                  />
+                  <div className='mx-auto my-4 w-48'>
+                    <h3 className='text-lg font-black text-gray-800'> Confirm Delete</h3>
+                    <p className='text-sm text-gray-500'> Are you sure you want to delete this recipe?</p>
+                  </div>
+                  <div className='flex-gap-4'>
+                    <Button className='bg-red w-full' onClick = {handleDeleteRecipe}>Delete</Button>
+                    <Button className='bg-gray-400 w-full' onClick={onClose}>Cancel</Button>
+                  </div>
+                  
+                  </div>
+
+                  {isDeletingRecipe?
+                    (
+                    
+                        <div className='text-center w-56 h-56'>
+                    <Loader />
+                    </div>
+                    
+                    ):<></>
+            }
             </div>
     </div>
   )

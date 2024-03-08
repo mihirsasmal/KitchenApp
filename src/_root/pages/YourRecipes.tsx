@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from '@/components/ui/button';
+import TableView,{ columns} from '@/components/shared/TableView';
 
 
 
@@ -64,7 +65,10 @@ const YourRecipes = () => {
      </DropdownMenuContent>
    </DropdownMenu>
    </div>
-         
+         {
+         position==='Table View' ?(
+          <TableView columns ={columns} data={recipes as any} />
+         ):(
           <div className='flex flex-wrap gap-9 w-full maz-w-5xl mb-7'>
           <ul className='w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-7 max-w-5xl'>
           {recipes.map((recipe)=>(
@@ -85,8 +89,9 @@ const YourRecipes = () => {
               </li>
           ))}
       </ul>
-           
+    
           </div>
+          )}
           </div>
 
 

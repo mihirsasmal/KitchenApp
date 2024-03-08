@@ -50,36 +50,12 @@ const handleDeleteRecipe = ()=>{
             ):( <></>)}
             
             </div>
-            <Modal open={open} onClose={()=>setOpen(false)}>
+            <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe}>
                 
             
-                <div className='text-center w-56'>
-            <img 
-                  src = '/assets/icons/delete.svg'
-                  alt='delete'
-                  width = {24}
-                  height = {24}
-                  />
-                  <div className='mx-auto my-4 w-48'>
-                    <h3 className='text-lg font-black text-gray-800'> Confirm Delete</h3>
-                    <p className='text-sm text-gray-500'> Are you sure you want to delete this recipe?</p>
-                  </div>
-                  <div className='flex-gap-4'>
-                    <Button className='bg-red w-full' onClick = {handleDeleteRecipe}>Delete</Button>
-                    <Button className='bg-gray-400 w-full' onClick={()=>setOpen(false)}>Cancel</Button>
-                  </div>
-                  
-                  </div>
+                
 
-                  {isDeletingRecipe?
-                    (
-                    
-                        <div className='text-center w-56 h-56'>
-                    <Loader />
-                    </div>
-                    
-                    ):<></>
-            }
+                  
             </Modal>
 
             
