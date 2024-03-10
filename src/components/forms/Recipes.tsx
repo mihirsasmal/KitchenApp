@@ -28,6 +28,8 @@ import {
 import { Models } from "appwrite";
 import { userInfo } from "os";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { useState } from "react";
+import Select from 'react-select'
 
   type RecipeFormProps = {
       recipe?:Models.Document;
@@ -36,7 +38,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 const Recipes = ({recipe, action}:RecipeFormProps) => {
   //const isCreatingAccount = false;
-  
+
   const { toast } = useToast();
  const {user} = useUserContext();
  const navigate = useNavigate();
@@ -51,8 +53,8 @@ const Recipes = ({recipe, action}:RecipeFormProps) => {
     resolver: zodResolver(recipeSubmitValidation),
     defaultValues: {
       name: recipe?recipe.RecipeName:"",      
-      language:recipe?recipe?.language:"",
-      mealType: recipe?recipe.MealType:"",
+      language:recipe?recipe?.language:'english',
+      mealType: recipe?recipe.MealType:'MainCourse',
       cuisineType: recipe?recipe.CuisineType:"",
       regionOfCuisine: recipe?recipe.CuisineRegion:"",
       ingredients:recipe?recipe.Ingredients:"",
@@ -61,8 +63,12 @@ const Recipes = ({recipe, action}:RecipeFormProps) => {
     },
   });
 
+  const [languageValue, setLanguageValue] = useState(form.getValues().language);
+  const [mealTypeValue, setMealTypeValue] = useState(form.getValues().mealType);
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof recipeSubmitValidation>) {
+    console.log('I am here')
 if(recipe &&action ==='Update') {
   const updateRecipe = await editRecipe({...values,recipeId:recipe.$id,imageId:recipe?.imageId,imageUrl:recipe?.imageUrl })
   if(!updateRecipe) {
@@ -86,13 +92,15 @@ if(recipe &&action ==='Update') {
       navigate('/');
     }
 
-    
+    function onError(a:any) {
+      console.log(a);
+    }
 
   return (
     <Form {...form}>
       <div className='sm:w-420 flex-center flex-col'>
      
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-9 w-full max-w-5xl">
+      <form onSubmit={form.handleSubmit(onSubmit,onError)} className="flex flex-col gap-9 w-full max-w-5xl">
       <FormField
           control={form.control}
           name="name"
@@ -109,12 +117,30 @@ if(recipe &&action ==='Update') {
         <FormField
           control={form.control}
           name="language"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
+
               <FormLabel>Language</FormLabel>
               <FormControl>
-                <Input type = 'text' className="shad-input" placeholder="English / Odiya" {...field} />
-              </FormControl>              
+
+        <ToggleGroup type="single" variant = 'outline'  onValueChange={ (value)=> {if(value){setLanguageValue(value); form.setValue('language',value);}}} >
+      <ToggleGroupItem value="english" aria-label="Toggle english" className= {(languageValue==='english')?"bg-slate-900":"bg-gray-400"} >
+      
+         English
+         
+      </ToggleGroupItem>
+      <ToggleGroupItem value="odiya" aria-label="Toggle odiya" className= {(languageValue==='odiya')?"bg-slate-900":"bg-gray-400"} >
+     
+         Odiya
+         
+      </ToggleGroupItem>
+      <ToggleGroupItem value="kannada" aria-label="Toggle kannada" className= {(languageValue==='kannada')?"bg-slate-900":"bg-gray-400"} >
+      
+         Kannada
+          
+      </ToggleGroupItem>
+    </ToggleGroup>
+    </FormControl>          
              </FormItem>
           )}
         />
@@ -145,11 +171,32 @@ if(recipe &&action ==='Update') {
         <FormField
           control={form.control}
           name="mealType"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Meal Type</FormLabel>
               <FormControl>
-                <Input type = 'text' className="shad-input" placeholder="Breakfast/ Lunch/ Dinner" {...field} />
+              <ToggleGroup type="single" variant = 'outline' defaultValue={form.getValues().language} onValueChange={ (value)=> {if(value)setMealTypeValue(value); form.setValue('mealType',value); }} >
+      <ToggleGroupItem value="MainCourse" aria-label="Toggle MainCourse" className= {(mealTypeValue==='MainCourse')?"bg-slate-900":"bg-gray-400"} >
+      
+         Main Course
+         
+      </ToggleGroupItem>
+      <ToggleGroupItem value="Breakfast" aria-label="Toggle Breakfast" className= {(mealTypeValue==='Breakfast')?"bg-slate-900":"bg-gray-400"} >
+     
+         Breakfast
+         
+      </ToggleGroupItem>
+      <ToggleGroupItem value="Dessert" aria-label="Toggle Dessert" className= {(mealTypeValue==='Dessert')?"bg-slate-900":"bg-gray-400"} >
+      
+         Dessert
+          
+      </ToggleGroupItem>
+      <ToggleGroupItem value="Snacks" aria-label="Toggle Snacks" className= {(mealTypeValue==='Snacks')?"bg-slate-900":"bg-gray-400"} >
+      
+         Snacks
+          
+      </ToggleGroupItem>
+    </ToggleGroup>
               </FormControl>              
             </FormItem>
           )}
