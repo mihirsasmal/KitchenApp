@@ -38,15 +38,15 @@ const YourRecipes = () => {
  }
 
   return (
-    <div className='flex flex-col flex-1 items-start overflow-scroll py-10 px-5 md:p-14 custom-scrollbar'>
-      <div className='max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9'>
-        <div className='max-w-5xl flex flex-col-span items-start w-full gap-6 md:gap-9'>
+
+      <div className='flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 custom-scrollbar'>
+        <div className='max-w-5xl flex-start flex-col gap-3 justify-start w-full'>
         <h2 className = 'h3-bold md:h2-bold w-full'> Your Recipes</h2>      
-        
+        <div className='flex items-end justify-end gap-0 px-4 w-full rounded-lg'>
             
             <DropdownMenu>
      <DropdownMenuTrigger asChild>
-       <Button className='gap-2'><p className = 'small-medium md:base-medium text-light-2'>{position}</p>
+       <Button className='gap-2 '><p className = 'small-medium md:base-medium text-light-2'>{position}</p>
            <img 
            src = 'assets/icons/filter.svg'
            width={20}
@@ -93,9 +93,10 @@ const YourRecipes = () => {
           </div>
           )}
           </div>
+          </div>
 
 
-YourRecipes</div>
+
   )
 }
 
