@@ -19,13 +19,13 @@ export const createAccountValidation = z.object({
   });
 
   export const recipeSubmitValidation = z.object({
-    name:z.string().min(2).max(50),
-    language: z.string(),
-    mealType: z.string(),
-    cuisineType: z.string().min(2).max(50),
-    regionOfCuisine: z.string().min(2).max(50),
-    ingredients: z.array(optionSchema).min(1),
-    steps: z.string().min(2).max(5000),
+    name:z.string().min(2,{message:'RecipeName must be at least 2 characters'}).max(50),
+    language: z.string().min(1,{message:'One Language must be selected'}),
+    mealType: z.string().min(1,{message:'One Meal Type must be selected'}),
+    cuisineType: z.string().optional(),
+    regionOfCuisine: z.string().optional(),
+    ingredients: z.array(optionSchema).min(1,{message:'Minimum one ingredient must be selected'}),
+    steps: z.string().min(2,{message:'Steps must be at least 2 characters'}).max(5000),
     file: z.custom<File[]>()
   });
   
