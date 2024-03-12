@@ -47,6 +47,7 @@ interface DataTableProps<TData, TValue> {
 export const columns:ColumnDef<RecipeTableView>[] = [
 {
     accessorKey:'RecipeName',
+    id:'RecipeName',
     header: ({ column }) => {
         return (
           <Button
@@ -57,10 +58,12 @@ export const columns:ColumnDef<RecipeTableView>[] = [
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         )
-      },
+      },    
+    enableHiding: false,
 },
 {
     accessorKey:'status',
+    id:'Status',
     header: ({ column }) => {
         return (
           <Button
@@ -75,10 +78,12 @@ export const columns:ColumnDef<RecipeTableView>[] = [
 },
 {
     accessorKey:'creator.name',
+    id:'Last Updated By',
     header:'Last Updated By'
 },
 {
     accessorKey:'$updatedAt',
+    id:'Last Updated On',
     header: ({ column }) => {
         return (
           <Button
@@ -97,18 +102,22 @@ export const columns:ColumnDef<RecipeTableView>[] = [
 },
 {
     accessorKey:'MealType',
+    id:'MealType',
     header:'Meal Type'
 },
 {
     accessorKey:'CuisineType',
+    id:'CuisineType',
     header:'Cuisine Type'
 },
 {
     accessorKey:'likes.length',
+    id:'Likes',
     header:'Likes'
 },
 {
     accessorKey:'saved.length',
+    id:'Saves',
     header:'Saves'
 },
 {
@@ -147,6 +156,8 @@ export const columns:ColumnDef<RecipeTableView>[] = [
         
       )
     },
+    enableSorting: false,
+    enableHiding: false,
   },
 ]
  function TableView<TData, TValue> ({
@@ -177,7 +188,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
     },
       })
   return (
-    <div>
+    <div className='w-full'>
         <div className="flex items-center py-4">
         <Input
           placeholder="Filter recipes..."
@@ -190,7 +201,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns
+              Show / Hide Columns
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
