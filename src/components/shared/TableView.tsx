@@ -96,7 +96,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
         )
       },
     cell:({row})=>{
-        const formattedValue = formatDate(row.getValue('$updatedAt'));
+        const formattedValue = formatDate(row.getValue('Last Updated On'));
         return formattedValue;
     }
 },
@@ -189,7 +189,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
       })
   return (
     <div className='w-full'>
-        <div className="flex items-center py-4">
+        <div className="flex items-center gap-3 py-4">
         <Input
           placeholder="Filter recipes..."
           value={(table.getColumn("RecipeName")?.getFilterValue() as string) ?? ""}
