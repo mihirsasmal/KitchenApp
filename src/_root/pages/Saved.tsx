@@ -4,11 +4,16 @@ import SearchResults from '@/components/shared/SearchResults';
 import { useUserContext } from '@/context/AuthContext';
 import useDebounce from '@/hooks/useDebounce';
 import { useGetSavedRecipeByUserMutation, useSearchSavedRecipeMutation } from '@/lib/react-query/queriesAndMutation';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer';
 
 const Saved = () => {
+  const {ref, inView} = useInView();
   const {user} = useUserContext();
- const {data:recipes, isPending} = useGetSavedRecipeByUserMutation(user.id);
+ const {data:recipes, isPending,  fetchNextPage,isFetchingNextPage, hasNextPage} = useGetSavedRecipeByUserMutation(user.id);
+ useEffect (()=>{
+  if(inView) fetchNextPage();
+},[inView, fetchNextPage]);
   const [searchValue, setSearchValue] = useState('');
   const debouncedValue = useDebounce(searchValue, 500);
  const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchSavedRecipeMutation(debouncedValue, user.id);
@@ -53,15 +58,17 @@ const Saved = () => {
               <GridRecipeList key={`page-${index}`} recipes = {item} />
             ))}
           </div>
-          {/* {hasNextPage ? (
+          { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
+                  Loading... <Loader />
+                  </div>: hasNextPage ? (
                   <div ref = {ref} className = 'mt-10'> 
                   <Loader />
                   </div>
-                ): <div ref = {ref} className = 'mt-10'> 
+                ): <div className = 'mt-10'> 
                 <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
-                </div>} */}
+                </div>}
 
-          Saved</div>
+          </div>
   )
 }
 

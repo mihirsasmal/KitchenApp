@@ -41,6 +41,7 @@ const Explore = () => {
  }
   const shouldShowSearchResults = searchValue !=='';
   const shouldShowRecipes = !shouldShowSearchResults && (recipes as any).pages.every((item:any)=> item.length === 0)
+ 
   return (
     <div className='explore-container'>
       <div className='explore-inner_container'>
@@ -95,9 +96,10 @@ const Explore = () => {
             ) : recipes.pages.map((item,index)=>(
               <GridRecipeList key={`page-${index}`} recipes = {item} />
             ))}
+            
           </div>
           { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
-                  Loading...
+                  Loading... <Loader />
                   </div>: hasNextPage ? (
                   <div ref = {ref} className = 'mt-10'> 
                   <Loader />
@@ -106,7 +108,7 @@ const Explore = () => {
                 <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
                 </div>}
 
-          Explore</div>
+          </div>
   )
 }
 

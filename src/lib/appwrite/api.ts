@@ -343,15 +343,21 @@ export async function deleteSavedRecipe(saveRecordId:string) {
     }
 }
 
-export async function getSavedRecipeByUser(userId:string) {
+export async function getSavedRecipeByUser(userId:string, pageParam:number) {
+
+    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10),Query.equal('users', [userId])]
+    if(pageParam) {
+
+        queries.push (Query.cursorAfter(pageParam.toString()));
+    }
+
     try{
 
 
-        const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',[Query.equal('users', [userId])])
+        const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',queries)
 
-        const savedRecipeOfUser = allSavedRecipe.documents.map(x=>x.recipe);
+        const savedRecipeOfUser = allSavedRecipe.documents.map(x=>{return {...x.recipe,savedId : x.$id}});
 
-       
         if(!savedRecipeOfUser) {
             
             throw Error
