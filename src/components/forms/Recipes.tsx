@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast"
-import { useAddRecipeMutation, useCreateUserAccountMutation, useLoginAccountMutation, useUpdateRecipeMutation } from "@/lib/react-query/queriesAndMutation";
+import { useAddRecipeMutation, useCreateUserAccountMutation, useGetIngredientsMutation, useLoginAccountMutation, useUpdateRecipeMutation } from "@/lib/react-query/queriesAndMutation";
 import { useUserContext } from "@/context/AuthContext";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
@@ -29,7 +29,11 @@ import { Models } from "appwrite";
 import { userInfo } from "os";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { useState } from "react";
-import Select from 'react-select'
+import CreatableSelect from 'react-select/creatable';
+
+import MultipleSelector, { Option } from '../shared/MultipleSelector';
+import { AutosizeTextarea } from "../shared/AutosizeTextarea";
+
 
   type RecipeFormProps = {
       recipe?:Models.Document;
@@ -46,7 +50,16 @@ const Recipes = ({recipe, action}:RecipeFormProps) => {
 
   const {mutateAsync:editRecipe, isPending:isEditingRecipe} = useUpdateRecipeMutation();
 
+  const {data:getIngredients, isPending} = useGetIngredientsMutation();
 
+  const ingredientOption = (ingredients:string[]):Option[] =>{  
+    if(!ingredients) return [];
+
+    const allIngredients = (ingredients as any).map((x:string)=>{return {label:x, value:x}});
+
+
+    return allIngredients;
+  };
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof recipeSubmitValidation>>({
@@ -57,7 +70,7 @@ const Recipes = ({recipe, action}:RecipeFormProps) => {
       mealType: recipe?recipe.MealType:'MainCourse',
       cuisineType: recipe?recipe.CuisineType:"",
       regionOfCuisine: recipe?recipe.CuisineRegion:"",
-      ingredients:recipe?recipe.Ingredients:"",
+      ingredients:recipe?ingredientOption(recipe.Ingredients):undefined,
       steps:recipe?recipe.Steps:"",
       file: [],
     },
@@ -68,9 +81,9 @@ const Recipes = ({recipe, action}:RecipeFormProps) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof recipeSubmitValidation>) {
-    console.log('I am here')
+
 if(recipe &&action ==='Update') {
-  const updateRecipe = await editRecipe({...values,recipeId:recipe.$id,imageId:recipe?.imageId,imageUrl:recipe?.imageUrl })
+ const updateRecipe = await editRecipe({...values, ingredients: values.ingredients.map(x=>x.value),recipeId:recipe.$id,imageId:recipe?.imageId,imageUrl:recipe?.imageUrl })
   if(!updateRecipe) {
     toast({title: 'Something went wrong, Please try again.'})
   }
@@ -78,7 +91,7 @@ if(recipe &&action ==='Update') {
   return  navigate(`/recipe/${recipe.$id}`);
 }
 
-    const newRecipe = await addRecipe({...values, userId:user.id});
+    const newRecipe = await addRecipe({...values, ingredients: values.ingredients.map(x=>x.value), userId:user.id});
 
     if(!newRecipe) {
       return toast({
@@ -95,6 +108,8 @@ if(recipe &&action ==='Update') {
     function onError(a:any) {
       console.log(a);
     }
+
+   
 
   return (
     <Form {...form}>
@@ -208,7 +223,19 @@ if(recipe &&action ==='Update') {
             <FormItem>
               <FormLabel>Ingredients</FormLabel>
               <FormControl>
-                <Input type = 'text' className="shad-input" placeholder="Ingredients" {...field} />
+              <MultipleSelector
+              value={field.value}
+              onChange={field.onChange}
+              hidePlaceholderWhenSelected
+        options={ingredientOption(getIngredients as string[])}
+        placeholder="Ingredients..."
+        creatable
+        emptyIndicator={
+          <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+            no results found.
+          </p>
+        }
+      />
               </FormControl>              
             </FormItem>
           )}
@@ -220,7 +247,7 @@ if(recipe &&action ==='Update') {
             <FormItem>
               <FormLabel className = 'shad-form_label'>Steps</FormLabel>
               <FormControl>
-                <Textarea className="shad-textarea custom-scrollbar" placeholder="Steps to prepare" {...field} />
+                <AutosizeTextarea  className="h-36 bg-dark-3 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 custom-scrollbar " placeholder="Steps to prepare" {...field} />
               </FormControl>              
               <FormMessage className="shad-form_message"/>
             </FormItem>

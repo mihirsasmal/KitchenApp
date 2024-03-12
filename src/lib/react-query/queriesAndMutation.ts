@@ -1,7 +1,7 @@
 import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
 import { LucideSatelliteDish } from 'lucide-react';
-import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getCurrentUser, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes } from '../appwrite/api'
+import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';
 
 export const useCreateUserAccountMutation = ()=> {
@@ -213,5 +213,12 @@ export const useGetRecentRecipeMutation = ()=> {
             queryKey: [QUERY_KEYS.GET_USER_RECIPES],
             queryFn: ()=>getRecipeByUser(userId),
             enabled:!!userId
+        });
+    };
+
+    export const useGetIngredientsMutation = ()=> {
+        return useQuery ({
+            queryKey: [QUERY_KEYS.GET_INGREDIENTS],
+            queryFn:getIncredients
         });
     };

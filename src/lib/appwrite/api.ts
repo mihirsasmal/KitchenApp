@@ -91,6 +91,7 @@ export async function addRecipe(recipe:IRecipe) {
             throw Error
         };
 
+ 
         const newRecipe = await databases.createDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', ID.unique(),
         {
             creator:recipe.userId,
@@ -99,7 +100,7 @@ export async function addRecipe(recipe:IRecipe) {
             CuisineRegion:recipe.regionOfCuisine,
             MealType:recipe.mealType,
             Ingredients:recipe.ingredients,
-            Steps:recipe.steps,
+            Steps:recipe.steps, 
             
             ImageId: uploadedFile.$id
         }
@@ -426,6 +427,30 @@ export async function searchSavedRecipes(searchValue:string, userId:string) {
                     throw Error
                 }
                 return {documents:recipe}; // return only recipe when query issue is fixed
+            }
+            catch(error) {
+                console.log(error)
+                return error;
+            }
+        }
+
+export async function getIncredients() {
+
+            try{
+        
+                const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb')
+
+                const allIngredients = allRecipe.documents.flatMap((x)=>{ if(x.Ingredients) return x.Ingredients; });
+                
+                 const allUniqueIngredients =  [...new Set(allIngredients)];
+    
+                console.log(allUniqueIngredients);
+     
+                if(!allIngredients) {
+                    
+                    throw Error
+                }
+                return allUniqueIngredients; 
             }
             catch(error) {
                 console.log(error)

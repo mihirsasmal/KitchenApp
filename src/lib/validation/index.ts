@@ -12,13 +12,19 @@ export const createAccountValidation = z.object({
     password: z.string()
   });
 
+  const optionSchema = z.object({
+    label: z.string(),
+    value: z.string(),
+    disable: z.boolean().optional(),
+  });
+
   export const recipeSubmitValidation = z.object({
     name:z.string().min(2).max(50),
     language: z.string(),
     mealType: z.string(),
     cuisineType: z.string().min(2).max(50),
     regionOfCuisine: z.string().min(2).max(50),
-    ingredients: z.string().min(2).max(5000),
+    ingredients: z.array(optionSchema).min(1),
     steps: z.string().min(2).max(5000),
     file: z.custom<File[]>()
   });

@@ -23,7 +23,7 @@ export type INavLink = {
     mealType?: string;
     cuisineType?: string;
     regionOfCuisine?: string;
-    ingredients?: string;
+    ingredients?: string[];
     steps?: string;
   };
 
@@ -35,7 +35,7 @@ export type INavLink = {
     mealType?: string;
     cuisineType?: string;
     regionOfCuisine?: string;
-    ingredients?: string;
+    ingredients?: string[];
     steps?: string;
     imageId: string;
     imageUrl: URL;    
