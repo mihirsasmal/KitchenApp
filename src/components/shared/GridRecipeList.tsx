@@ -14,8 +14,8 @@ const GridRecipeList = ({recipes, showUser = true, showStats = true}:GridRecipeL
     const {user} = useUserContext();
 
   return (
-      <ul className='grid-container'>
-          {recipes.map((recipe)=>(
+      
+          recipes.map((recipe)=>(
               <li key = {recipe.$id} className='relative min-w-80 h-80'> {recipe.RecipeName}
               <Link to = {`/recipe/${recipe.$id}`} className='grid-post_link'>
               <img src = {recipe.ImageUrl} alt='recipe' className= 'h-full w-full object-cover'/>
@@ -30,8 +30,8 @@ const GridRecipeList = ({recipes, showUser = true, showStats = true}:GridRecipeL
                   {showStats && <RecipeStats recipe = {recipe} userId = {user.id}/>}
               </div>
               </li>
-          ))}
-      </ul>
+          ))
+      
     
   )
 }

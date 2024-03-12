@@ -58,7 +58,7 @@ const Explore = () => {
             className='explore-search w-full'
             value = {searchValue}
             onChange = {(e)=>setSearchValue(e.target.value)}/>
-          </div></div>
+          </div>
           <div className='flex-between w-full max-w-5xl mt-16 mb-7'>
           <h3 className='body-bold md:h3-bold'>Popular Today</h3>
           <div className='flex-center gap-3 bg-darek-3 rounded-cl px-4 py-2 cursor-pointer'>
@@ -86,6 +86,7 @@ const Explore = () => {
           </div>
           </div>
           <div className='flex flex-wrap gap-9 w-full maz-w-5xl'>
+          <ul className='grid-container'>
             {shouldShowSearchResults?(
               <SearchResults 
               isSearchFetching = {isSearchFetching}
@@ -94,8 +95,11 @@ const Explore = () => {
             ) : shouldShowRecipes? (
               <p className='text-light-4 mt-10 text-center w-full'> End of Recipes</p>
             ) : recipes.pages.map((item,index)=>(
+              
               <GridRecipeList key={`page-${index}`} recipes = {item} />
+             
             ))}
+             </ul>
             
           </div>
           { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
@@ -104,10 +108,11 @@ const Explore = () => {
                   <div ref = {ref} className = 'mt-10'> 
                   <Loader />
                   </div>
-                ): <div className = 'mt-10'> 
+                ): !shouldShowSearchResults && <div className = 'mt-10'> 
                 <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
                 </div>}
 
+          </div>
           </div>
   )
 }

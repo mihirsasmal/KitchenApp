@@ -44,9 +44,10 @@ const Saved = () => {
             className='explore-search w-full'
             value = {searchValue}
             onChange = {(e)=>setSearchValue(e.target.value)}/>
-          </div></div>
+          </div>
           
           <div className='flex flex-wrap gap-9 w-full maz-w-5xl mt-16 mb-7'>
+          <ul className='grid-container'>
             {shouldShowSearchResults?(
               <SearchResults 
               isSearchFetching = {isSearchFetching}
@@ -57,6 +58,7 @@ const Saved = () => {
             ) : recipes.pages.map((item,index)=>(
               <GridRecipeList key={`page-${index}`} recipes = {item} />
             ))}
+            </ul>
           </div>
           { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
                   Loading... <Loader />
@@ -64,10 +66,10 @@ const Saved = () => {
                   <div ref = {ref} className = 'mt-10'> 
                   <Loader />
                   </div>
-                ): <div className = 'mt-10'> 
+                ): !shouldShowSearchResults && (<div className = 'mt-10'> 
                 <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
-                </div>}
-
+                </div>)}
+          </div>
           </div>
   )
 }
