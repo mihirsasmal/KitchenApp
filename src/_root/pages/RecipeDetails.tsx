@@ -15,29 +15,21 @@ const RecipeDetails = () => {
 
   const handleDeleteRecipe =()=>{};
   return (
-    <div className='post_details-container'>
+    <div className='flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar items-center-container'>
       {isPending? <Loader /> :(
-        <div className='post_details-info'> 
-         <div className = 'flex items-center gap-3'>
-                <Link to={`/profile/${recipe.creator.$id}`}>
-                    <img 
-                    src = {recipe.ImageUrl || 'assets/icons/profile-placeholder.svg'}
-                    alt = 'creator'
-                className='rounded-full w-12 lg:h-12'
-            />
-                </Link>
-                <div className='flex flex-col'>
-                    <p className='base-medium lg:body-bold text-light-1'> {recipe.RecipeName}</p>
-                    <div className='flex-center gap-2 text-light-3'>
-                    <p className='subtle-semibold lg:small-regular'>by {recipe.creator.name}</p> - 
-                        <p className='subtle-semibold lg:small-regular'>{formatDate(recipe.$createdAt)}</p>
-                    </div>
-                </div>
+        <div className=' bg-dark-2 flex flex-col gap-5 lg:gap-1 flex-1 items-start p-8 rounded-[30px]'> 
+         <div className = 'flex flex-col items-center justify-center  w-full'>
+
+         <h2 className='h3-bold md:h2-bold text-light-1'> {recipe.RecipeName}</h2>
+         </div>
+                        
                 {(user.id ===recipe.creator.$id) ? 
-                (
-                <div  className ='flex-center'>
-                  <Link to={`/update-recipe/${recipe.$id}`}>
-                  <img src='/assets/icons/edit.svg' alt='edit' width={20} height={20} />
+                (<div className = 'flex  justify-between w-full '> 
+                  <p className='subtle-semibold lg:small-regular flex justify-center items-center gap-2 text-light-3'>
+                         {formatDate(recipe.$createdAt)}</p>
+                <div className='flex items-end justify-end  ml-auto '>
+                  <Link to={`/update-recipe/${recipe.$id}`} className='px-4 py-2'>
+                  <img src='/assets/icons/edit.svg' alt='edit' width={24} height={24} />
                 </Link><Button
                   onClick = {handleDeleteRecipe}
                   variant = 'ghost'
@@ -50,8 +42,22 @@ const RecipeDetails = () => {
                   height = {24}
                   />
                   </Button></div>
-            ):( <></>)}
-            </div>
+                  </div>
+            ):( <div className = 'flex  justify-between w-full '> 
+            <p className='subtle-semibold lg:small-regular flex justify-center items-center mx-auto gap-2 text-light-3'>by {recipe.creator.name} - 
+                   {formatDate(recipe.$createdAt)}</p> </div>)}          
+            
+           <hr className='border w-full border-dark-4/80' />
+           <div className = 'flex flex-col items-start justify-start w-full '> 
+            <p className='flex justify-start items-start font-sans text-2xl'>Ingredients </p>
+            <ul className='flex-col px-32'> 
+                   {recipe.Ingredients.map((x:string)=>{return (<li className='text-light-2 '><span className='flex gap-5 pt-3'><img src = '/assets/icons/bulletPoint.jpeg' alt='bulletIcon' className='h-10 w-10 rounded-full'/> <span className='pt-1 font-thin text-2xl'>{x}</span></span></li>)})} </ul>
+                   </div>
+                   <div className = 'flex flex-col items-start justify-start w-full lg:gap-2 md:gap-5 sm:gap-9 gap-9'> 
+                   <p className='flex justify-start items-start font-sans text-2xl'>Steps  </p>   
+                   
+                   <p className='flex lg:px-32 justify-start items-start gap-2 font-thin text-2xl'>{recipe.Steps} </p> 
+                   </div>
            <hr className='border w-full border-dark-4/80' />
             <RecipeStats recipe={recipe} userId={user.id}/>
         </div>
