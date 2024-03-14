@@ -1,19 +1,20 @@
+import { EditorView } from '@/components/shared/Editor';
 import Loader from '@/components/shared/Loader';
 import RecipeStats from '@/components/shared/RecipeStats';
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetRecipeByIdMutation } from '@/lib/react-query/queriesAndMutation'
 import { formatDate } from '@/lib/utils';
-import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 
-const RecipeDetails = () => {
+const RecipeDetails =  () => {
   const {id} = useParams();
   const {user} = useUserContext();
   const {data:recipes, isPending} = useGetRecipeByIdMutation(id ||'');
   const recipe = recipes as any;
-
   const handleDeleteRecipe =()=>{};
+  
+ 
   return (
     <div className='flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar items-center-container'>
       {isPending? <Loader /> :(
@@ -56,7 +57,7 @@ const RecipeDetails = () => {
                    <div className = 'flex flex-col items-start justify-start w-full lg:gap-2 md:gap-5 sm:gap-9 gap-9'> 
                    <p className='flex justify-start items-start font-sans text-2xl'>Steps  </p>   
                    
-                   <p className='flex lg:px-32 justify-start items-start gap-2 font-thin text-2xl'>{recipe.Steps} </p> 
+                   <div className='flex lg:px-20 justify-start items-start gap-2 font-thin text-2xl'> <EditorView content={recipe.Steps}/> </div> 
                    </div>
            <hr className='border w-full border-dark-4/80' />
             <RecipeStats recipe={recipe} userId={user.id}/>

@@ -25,7 +25,7 @@ import { Models } from "appwrite";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useState } from "react";
 import MultipleSelector, { Option } from "../shared/MultipleSelector";
-import { AutosizeTextarea } from "../shared/AutosizeTextarea";
+import Editor from "../shared/Editor";
 
 type RecipeFormProps = {
   recipe?: Models.Document;
@@ -37,7 +37,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
 
   const { toast } = useToast();
   const { user } = useUserContext();
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   const { mutateAsync: addRecipe, isPending: isAddingRecipe } =
     useAddRecipeMutation();
 
@@ -45,7 +45,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
     useUpdateRecipeMutation();
 
   const { data: getIngredients, isPending } = useGetIngredientsMutation();
-
+ 
   const ingredientOption = (ingredients: string[]): Option[] => {
     if (!ingredients) return [];
 
@@ -90,7 +90,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
 
       return navigate(`/recipe/${recipe.$id}`);
     }
-
+ 
     const newRecipe = await addRecipe({
       ...values,
       ingredients: values.ingredients.map((x) => x.value),
@@ -329,11 +329,9 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
               <FormItem>
                 <FormLabel className="shad-form_label">Steps</FormLabel>
                 <FormControl>
-                  <AutosizeTextarea
-                    className="h-36 bg-dark-3 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 custom-scrollbar "
-                    placeholder="Steps to prepare"
-                    {...field}
-                  />
+                  <Editor content={field.value}  onValueChange={(value) => {
+                          form.setValue("steps", value);
+                    }}/>
                 </FormControl>
                 <FormMessage className="shad-form_message" />
               </FormItem>
