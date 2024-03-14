@@ -56,6 +56,54 @@ const lightRedTheme = {
       highlights: darkDefaultTheme.colors!.highlights,
     },
   } satisfies Theme;
+
+  const lightDarkTheme = {
+    colors: {
+      editor: {
+        text: "#222222",
+        background: "#1F1F22",
+      },
+      menu: {
+        text: "#9B9B9B",
+        background: "#1F1F22",
+      },
+      tooltip: {
+        text: "#9B9B9B",
+        background: "#1F1F22",
+      },
+      hovered: {
+        text: "#09090A",
+        background: "#676767",
+      },
+      selected: {
+        text: "#000000",
+        background: "#000000",
+      },
+      disabled: {
+        text: "#9b0000",
+        background: "#7d0000",
+      },
+      shadow: "#1F1F22",
+      border: "#1F1F22",
+      sideMenu: "#9B9B9B",
+      highlights: darkDefaultTheme.colors!.highlights,
+    },
+    borderRadius: 4,
+    fontFamily: "Helvetica Neue, sans-serif",
+  } satisfies Theme;
+
+  const darkFormTheme = {
+    ...lightDarkTheme,
+    colors: {
+      ...lightDarkTheme.colors,
+      editor: {
+        text: "#9B9B9B",
+        background: "#1F1F22",
+      },
+      sideMenu: "#9B9B9B",
+      highlights: darkDefaultTheme.colors!.highlights,
+    },
+  } satisfies Theme;
    
   // The combined "red theme",
   // we pass this to BlockNoteView and then the editor will automatically
@@ -68,7 +116,7 @@ const lightRedTheme = {
 const Editor = ( {content, onValueChange}:{content:string, onValueChange:(content:string)=>void}) => {
 
     const editor = content!==''? useCreateBlockNote({initialContent:JSON.parse(content) as PartialBlock[]}):useCreateBlockNote();
-    return <BlockNoteView editor={editor} theme= {darkDefaultTheme} onChange={() => {
+    return <BlockNoteView editor={editor} theme= {darkFormTheme} onChange={() => {
 
       content= JSON.stringify(editor.document);
       onValueChange(content)
