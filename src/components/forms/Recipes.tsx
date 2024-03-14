@@ -315,6 +315,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                         no results found.
                       </p>
                     }
+                    className="shad-input"
                   />
                   
                 </FormControl>
