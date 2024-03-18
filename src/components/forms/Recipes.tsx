@@ -38,13 +38,14 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
   const { toast } = useToast();
   const { user } = useUserContext();
     const navigate = useNavigate();
+    const [languageValue, setLanguageValue] = useState("english");
   const { mutateAsync: addRecipe, isPending: isAddingRecipe } =
     useAddRecipeMutation();
 
   const { mutateAsync: editRecipe, isPending: isEditingRecipe } =
     useUpdateRecipeMutation();
 
-  const { data: getIngredients, isPending } = useGetIngredientsMutation();
+  const { data: getIngredients, isPending } = useGetIngredientsMutation(languageValue);
  
   const ingredientOption = (ingredients: string[]): Option[] => {
     if (!ingredients) return [];
@@ -71,7 +72,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
     },
   });
 
-  const [languageValue, setLanguageValue] = useState(form.getValues().language);
+
   const [mealTypeValue, setMealTypeValue] = useState(form.getValues().mealType);
 
   // 2. Define a submit handler.
@@ -153,6 +154,14 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       if (value) {
                         setLanguageValue(value);
                         form.setValue("language", value);
+                        if(value==='english')
+                        {form.setValue('ingredients',ingredientOption(recipe?.Ingredients))
+                        form.setValue("steps", recipe?.Steps);
+                        }
+                        if(value==='odiya')
+                        {form.setValue('ingredients',ingredientOption(recipe?.IngredientsOdia))
+                        form.setValue("steps", recipe?.StepsOdia);
+                        }
                       }
                     }}
                   >
@@ -181,6 +190,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                     <ToggleGroupItem
                       value="kannada"
                       aria-label="Toggle kannada"
+                      disabled = {true}
                       className={
                         languageValue === "kannada"
                           ? "bg-slate-900"

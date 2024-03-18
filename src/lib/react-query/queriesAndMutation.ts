@@ -216,9 +216,9 @@ export const useGetRecentRecipeMutation = ()=> {
         });
     };
 
-    export const useGetIngredientsMutation = ()=> {
+    export const useGetIngredientsMutation = (language:string)=> {
         return useQuery ({
             queryKey: [QUERY_KEYS.GET_INGREDIENTS],
-            queryFn:getIncredients
+            queryFn:()=>getIncredients(language)
         });
     };

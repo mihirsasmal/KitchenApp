@@ -99,9 +99,10 @@ export async function addRecipe(recipe:IRecipe) {
             CuisineType:recipe.cuisineType,
             CuisineRegion:recipe.regionOfCuisine,
             MealType:recipe.mealType,
-            Ingredients:recipe.ingredients,
-            Steps:recipe.steps, 
-            
+            Ingredients:recipe.language === 'english'? recipe.ingredients : '',
+            Steps: recipe.language === 'english'?recipe.steps: '',   
+            IngredientsOdia:recipe.language === 'odiya'? recipe.ingredients : '',
+            StepsOdia: recipe.language === 'odiya'?recipe.steps: '',           
             ImageId: uploadedFile.$id
         }
         )
@@ -144,19 +145,31 @@ export async function editRecipe(recipe:IUpdateRecipe) {
 
         }
         
-
-        const updatedRecipe = await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipe.recipeId,
+        
+        const updatedRecipe = recipe.language === 'english'? await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipe.recipeId,
         {
             RecipeName:recipe.name,
             CuisineType:recipe.cuisineType,
             CuisineRegion:recipe.regionOfCuisine,
             MealType:recipe.mealType,
-            Ingredients:recipe.ingredients,
-            Steps:recipe.steps,
+            Ingredients: recipe.ingredients ,
+            Steps: recipe.steps,  
             ImageUrl:image.imageUrl,
             ImageId: image.imageId
         }
-        )
+        ) :  await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipe.recipeId,
+        {
+            RecipeName:recipe.name,
+            CuisineType:recipe.cuisineType,
+            CuisineRegion:recipe.regionOfCuisine,
+            MealType:recipe.mealType,
+            
+            IngredientsOdia:recipe.ingredients,
+            StepsOdia:recipe.steps,
+            ImageUrl:image.imageUrl,
+            ImageId: image.imageId
+        }
+        ) 
 
         if(!updatedRecipe) {
             await deleteFile(recipe.imageId);
@@ -440,13 +453,13 @@ export async function searchSavedRecipes(searchValue:string, userId:string) {
             }
         }
 
-export async function getIncredients() {
+export async function getIncredients(language:string) {
 
             try{
         
                 const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb')
 
-                const allIngredients = allRecipe.documents.flatMap((x)=>{ if(x.Ingredients) return x.Ingredients; });
+                const allIngredients = allRecipe.documents.flatMap((x)=>{ if(x.Ingredients && language==='english') return x.Ingredients; if(x.Ingredients && language==='odiya') return x.IngredientsOdia; });
                 
                  const allUniqueIngredients =  [...new Set(allIngredients)];
     

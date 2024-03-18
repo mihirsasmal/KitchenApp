@@ -3,8 +3,9 @@ import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView, Theme, darkDefaultTheme, lightDefaultTheme, useCreateBlockNote  } from "@blocknote/react";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/react/style.css";
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { UseFormReturn, useForm } from "react-hook-form";
+
 
 // Base theme
 const lightRedTheme = {
@@ -115,10 +116,36 @@ const lightRedTheme = {
 
 const Editor = ( {content, onValueChange}:{content:string, onValueChange:(content:string)=>void}) => {
 
-    const editor = content!==''? useCreateBlockNote({initialContent:JSON.parse(content) as PartialBlock[]}):useCreateBlockNote();
+  const [initialContent, setInitialContent] = useState<
+  PartialBlock[] | undefined | "loading"
+>("loading");
+
+useEffect(() => {
+ 
+    setInitialContent(JSON.parse(content) as PartialBlock[]);
+  ;
+}, []);
+
+console.log(content)
+
+var editor = useMemo(() => {
+  if (initialContent === "loading") {
+    return undefined;
+  }
+  return BlockNoteEditor.create({ initialContent });
+}, [initialContent]);
+
+if (editor === undefined) {
+  return "Loading content...";
+}
+if(initialContent!==JSON.parse(content) as PartialBlock[]) 
+{
+  editor = BlockNoteEditor.create({ initialContent:JSON.parse(content) as PartialBlock[] });
+}
+
     return <BlockNoteView editor={editor} theme= {darkFormTheme} onChange={() => {
 
-      content= JSON.stringify(editor.document);
+      content= JSON.stringify(editor?.document);
       onValueChange(content)
 
     }} />;
@@ -127,9 +154,33 @@ const Editor = ( {content, onValueChange}:{content:string, onValueChange:(conten
 export default Editor
 
 export const EditorView = ({content}:{content:string})=>{
+  const [initialContent, setInitialContent] = useState<
+    PartialBlock[] | undefined | "loading"
+  >("loading");
 
-  const editor = content!==''? useCreateBlockNote({initialContent:JSON.parse(content) as PartialBlock[]}):useCreateBlockNote();
-    return <BlockNoteView editor={editor} theme= {darkRedTheme} editable ={false}
+  useEffect(() => {
+   
+      setInitialContent(JSON.parse(content) as PartialBlock[]);
+    ;
+  }, []);
+
+  console.log(content)
+
+  var editor = useMemo(() => {
+    if (initialContent === "loading") {
+      return undefined;
+    }
+    return BlockNoteEditor.create({ initialContent });
+  }, [initialContent]);
+ 
+  if (editor === undefined) {
+    return "Loading content...";
+  }
+  if(initialContent!==JSON.parse(content) as PartialBlock[]) 
+  {
+    editor = BlockNoteEditor.create({ initialContent:JSON.parse(content) as PartialBlock[] });
+  }
+    return <BlockNoteView editor={editor} theme= {darkRedTheme} editable ={false} 
 
      />;
 
