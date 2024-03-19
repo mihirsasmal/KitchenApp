@@ -457,13 +457,13 @@ export async function getIncredients(language:string) {
 
             try{
         
-                const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb')
-
-                const allIngredients = allRecipe.documents.flatMap((x)=>{ if(x.Ingredients && language==='english') return x.Ingredients; if(x.Ingredients && language==='odiya') return x.IngredientsOdia; });
+                const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[ Query.limit(250)])
+                
+                const allIngredients = allRecipe.documents.flatMap((x)=>{ if(x.Ingredients && language==='english') { return x.Ingredients;} if(x.IngredientsOdia && language==='odiya') {  return x.IngredientsOdia; }});
                 
                  const allUniqueIngredients =  [...new Set(allIngredients)];
     
-                console.log(allUniqueIngredients);
+                
      
                 if(!allIngredients) {
                     

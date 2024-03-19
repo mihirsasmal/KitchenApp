@@ -330,11 +330,13 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                     options={ingredientOption(getIngredients as string[])}
                     placeholder="Ingredients..."
                     creatable
-                    emptyIndicator={
+                    emptyIndicator={isPending?
+                      <p className="py-2 text-center text-lg leading-10 text-muted-foreground">Loading...</p>:
                       <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
                         no results found.
                       </p>
                     }
+                    
                     className="shad-input"
                   />                                                                                                                                                                                                                                                                                                                              
                   
@@ -351,9 +353,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                 <FormLabel className="shad-form_label">Steps</FormLabel>
                 <FormControl>
                   <Editor content={field.value}   onValueChange={(value) => {
-                    console.log('inside onchange')
                           form.setValue("steps", value);
-                          console.log('after updating value')
                     }} isEditorUpdateRequired ={languageValue}/>
                 </FormControl>
                 <FormMessage className="shad-form_message" />

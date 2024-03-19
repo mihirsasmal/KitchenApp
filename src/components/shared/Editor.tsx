@@ -116,12 +116,12 @@ const lightRedTheme = {
 
 const Editor = ( {content, onValueChange, isEditorUpdateRequired}:{content:string, onValueChange:(content:string)=>void, isEditorUpdateRequired:string}) => {
 
-  console.log(content)
+
   const editor = content? useCreateBlockNote({initialContent:JSON.parse(content) as PartialBlock[]},[isEditorUpdateRequired]):useCreateBlockNote({},[isEditorUpdateRequired]);
-  console.log(editor.document)
+
   
     return <BlockNoteView editor={editor} theme= {darkFormTheme} onChange={() => {
-      console.log('updated editor')
+
       content= JSON.stringify(editor.document);
       onValueChange(content)
 
