@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from '@/components/ui/button';
 import TableView,{ columns} from '@/components/shared/TableView';
+import ThumbnailView from '@/components/shared/ThumbnailView';
 
 
 
@@ -69,29 +70,7 @@ const YourRecipes = () => {
          {
          position==='Table View' ?(
           <TableView columns ={columns} data={recipes as any} />
-         ):(
-          <div className='flex flex-wrap gap-9 w-full maz-w-5xl mb-7'>
-          <ul className='w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-7 max-w-5xl'>
-          {recipes.map((recipe)=>(
-              <li key = {recipe.$id} className='relative min-w-80 h-80'> {recipe.RecipeName}
-              <Link to = {`/recipe/${recipe.$id}`} className='grid-post_link'>{ recipe.ImageUrl ? (
-              <img src = {recipe.ImageUrl} alt='recipe' className= 'h-full w-full object-cover'/>): (<></>)}
-              </Link>
-              <div className='grid-post_user'>
-                  {(
-                      <div className='flex items-center justify-start gap-2 flex-1'> 
-                      <img src = {recipe.creator.ImageUrl} alt = 'creator' className='h-8 w-8 rounded-full'/>
-                      <p className=' line-clamp-1'> {recipe.creator.name}</p>
-                      <p className='subtle-semibold lg:small-regular'>{formatDate(recipe.$createdAt)}</p>
-                      </div>
-                  )}
-                  {<RecipeActions recipe = {recipe} userId = {user.id}/>}
-              </div>
-              </li>
-          ))}
-      </ul>
-    
-          </div>
+         ):( <ThumbnailView recipes={recipes as any} userId={user.id}/>
           )}
           </div>
           </div>
