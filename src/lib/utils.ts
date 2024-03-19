@@ -28,7 +28,7 @@ if (diffInSeconds < 60) {
     formattedDate = date.toLocaleDateString(); // Or any other format if you prefer
 }
 
-console.log(formattedDate);
+
 return formattedDate;
 };
 
