@@ -31,7 +31,7 @@ export async function createUserAccount(user:INewUser) {
 export async function saveUserToDB( user:{
      name:string,  username:string, accountId: string, email:string,  ImageUrl: URL }) {
     try{
-        const newUser = await databases.createDocument('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499',ID.unique(), user);
+        const newUser = await databases.createDocument(appwriteConfig.databaseId,appwriteConfig.userCollectionId,ID.unique(), user);
 
         return newUser;
     }
@@ -56,7 +56,7 @@ export async function getCurrentUser() {
     try{
         const currentAccount = await account.get();        
 
-         const currentUser = await databases.listDocuments('65d8126fe7df1bb5e5e3','65d8e9ca49daa05e1499',[Query.equal('accountId', [currentAccount.$id])]);
+         const currentUser = await databases.listDocuments(appwriteConfig.databaseId,appwriteConfig.userCollectionId,[Query.equal('accountId', [currentAccount.$id])]);
 
         if(!currentUser) throw Error;
 
@@ -92,7 +92,7 @@ export async function addRecipe(recipe:IRecipe) {
         };
 
  
-        const newRecipe = await databases.createDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', ID.unique(),
+        const newRecipe = await databases.createDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, ID.unique(),
         {
             creator:recipe.userId,
             RecipeName:recipe.name,
@@ -146,7 +146,7 @@ export async function editRecipe(recipe:IUpdateRecipe) {
         }
         
         
-        const updatedRecipe = recipe.language === 'english'? await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipe.recipeId,
+        const updatedRecipe = recipe.language === 'english'? await databases.updateDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, recipe.recipeId,
         {
             RecipeName:recipe.name,
             CuisineType:recipe.cuisineType,
@@ -157,7 +157,7 @@ export async function editRecipe(recipe:IUpdateRecipe) {
             ImageUrl:image.imageUrl,
             ImageId: image.imageId
         }
-        ) :  await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipe.recipeId,
+        ) :  await databases.updateDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, recipe.recipeId,
         {
             RecipeName:recipe.name,
             CuisineType:recipe.cuisineType,
@@ -189,7 +189,7 @@ export async function deleteRecipe(recipeId:string, imageId:string) {
 
     try{
 
-        await databases.deleteDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb', recipeId)
+        await databases.deleteDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, recipeId)
 
            if(imageId) await deleteFile(imageId);
           
@@ -204,7 +204,7 @@ export async function deleteRecipe(recipeId:string, imageId:string) {
 export async function uploadFile(file:File) {
     try{
         const uploadedFile = await storage.createFile(
-            '65d811e43bbce2b5f5ae',
+            appwriteConfig.storageId,
             ID.unique(),
             file
         );
@@ -219,7 +219,7 @@ export async function uploadFile(file:File) {
 export function getFilePreview(fileId:string) {
     try{
         const uploadedFile = storage.getFilePreview(
-            '65d811e43bbce2b5f5ae',
+            appwriteConfig.storageId,
             fileId,
             2000,2000,'top',100
         );
@@ -235,7 +235,7 @@ export function getFilePreview(fileId:string) {
 export async function deleteFile(fileId:string) {
     try{
         await storage.deleteFile(
-            '65d811e43bbce2b5f5ae',
+            appwriteConfig.storageId,
             fileId
         );
         return {status:'ok'};
@@ -249,7 +249,7 @@ export async function deleteFile(fileId:string) {
 export async function getRecentRecipe() {
     try{
 
-        const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb')
+        const allRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId)
 
         if(!allRecipe) {
             
@@ -266,7 +266,7 @@ export async function getRecentRecipe() {
 export async function getRecipeById(recipeId:string) {
     try{
 
-        const recipe = await databases.getDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',recipeId);
+        const recipe = await databases.getDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,recipeId);
 
         if(!recipe) {
             
@@ -283,7 +283,7 @@ export async function getRecipeById(recipeId:string) {
 export async function getRecipeByUser(userId:string) {
     try{
 
-        const recipeOfUser = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.equal('creator', [userId])])
+        const recipeOfUser = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,[Query.equal('creator', [userId])])
 
 
         
@@ -303,7 +303,7 @@ export async function getRecipeByUser(userId:string) {
 export async function likeRecipe(recipeId:string, likesArray:string[]) {
     try{
 
-        const updatedRecipe = await databases.updateDocument('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',recipeId,{
+        const updatedRecipe = await databases.updateDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,recipeId,{
             likes:likesArray
         })
 
@@ -322,7 +322,7 @@ export async function likeRecipe(recipeId:string, likesArray:string[]) {
 export async function saveRecipe(recipeId:string, userId:string) {
     try{
 
-        const updatedRecipe = await databases.createDocument('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',ID.unique(),{
+        const updatedRecipe = await databases.createDocument(appwriteConfig.databaseId, appwriteConfig.savesCollectionId,ID.unique(),{
             users:userId,
             recipe:recipeId
         })
@@ -342,7 +342,7 @@ export async function saveRecipe(recipeId:string, userId:string) {
 export async function deleteSavedRecipe(saveRecordId:string) {
     try{
 
-        const deleteStatusCode = await databases.deleteDocument('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',saveRecordId)
+        const deleteStatusCode = await databases.deleteDocument(appwriteConfig.databaseId, appwriteConfig.savesCollectionId,saveRecordId)
 
         if(!deleteStatusCode) {
             
@@ -367,7 +367,7 @@ export async function getSavedRecipeByUser(userId:string, pageParam:number) {
     try{
 
 
-        const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',queries)
+        const allSavedRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.savesCollectionId,queries)
 
         const savedRecipeOfUser = allSavedRecipe.documents.map(x=>{return {...x.recipe,savedId : x.$id}});
 
@@ -394,7 +394,7 @@ if(pageParam) {
 
     try{
 
-        const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',queries); 
+        const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries); 
 
         if(!recipe) {
             
@@ -412,7 +412,7 @@ export async function searchRecipes(searchValue:string) {
     console.log('insideSearchfunction -1');
         try{
     
-            const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[Query.search('RecipeName',searchValue)]); // currently ANd OR option not available in Appwrite query so using only recipename
+            const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,[Query.search('RecipeName',searchValue)]); // currently ANd OR option not available in Appwrite query so using only recipename
             // const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
 
             // const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
@@ -435,7 +435,7 @@ export async function searchSavedRecipes(searchValue:string, userId:string) {
             try{
         
                 //const recipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252',[Query.equal('users', [userId]),Query.search('RecipeName',searchValue),Query.search('Ingredients',searchValue)]); // Appwrite realtion search doesnot work
-                const allSavedRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65d8e9e3e92945c89252')
+                const allSavedRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.savesCollectionId)
 
                 const savedRecipeOfUser = allSavedRecipe.documents.filter(x=>x.users.$id === userId).map(x=>x.recipe);
     
@@ -457,7 +457,7 @@ export async function getIncredients(language:string) {
 
             try{
         
-                const allRecipe = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb',[ Query.limit(250)])
+                const allRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,[ Query.limit(250)])
                 
                 const allIngredients = allRecipe.documents.flatMap((x)=>{ if(x.Ingredients && language==='english') { return x.Ingredients;} if(x.IngredientsOdia && language==='odiya') {  return x.IngredientsOdia; }});
                 
