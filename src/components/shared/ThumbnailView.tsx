@@ -4,7 +4,7 @@ import RecipeActions from './RecipeActions'
 import { Link } from 'react-router-dom'
 import { Models } from 'appwrite'
 
-const ThumbnailView = ({recipes, userId}:{recipes:Models.Document, userId:string}) => {
+const ThumbnailView = ({recipes, userId}:{recipes:Models.Document[], userId:string}) => {
   return (
     <div className='flex flex-wrap gap-9 w-full maz-w-5xl mb-7'>
     <ul className='w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-7 max-w-5xl'>

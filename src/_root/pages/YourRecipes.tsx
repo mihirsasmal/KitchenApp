@@ -1,14 +1,7 @@
-import GridRecipeList from '@/components/shared/GridRecipeList';
 import Loader from '@/components/shared/Loader';
-import RecipeActions from '@/components/shared/RecipeActions';
-import RecipeStats from '@/components/shared/RecipeStats';
-import SearchResults from '@/components/shared/SearchResults';
 import { useUserContext } from '@/context/AuthContext';
-import useDebounce from '@/hooks/useDebounce';
-import { useGetRecipeByUserMutation, useGetSavedRecipeByUserMutation, useSearchSavedRecipeMutation } from '@/lib/react-query/queriesAndMutation';
-import { formatDate } from '@/lib/utils';
+import { useGetRecipeByUserMutation } from '@/lib/react-query/queriesAndMutation';
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +14,8 @@ import {
 import { Button } from '@/components/ui/button';
 import TableView,{ columns} from '@/components/shared/TableView';
 import ThumbnailView from '@/components/shared/ThumbnailView';
+import ListView from '@/components/shared/ListView';
+import { Models } from 'appwrite';
 
 
 
@@ -68,9 +63,10 @@ const YourRecipes = () => {
    </DropdownMenu>
    </div>
          {
-         position==='Table View' ?(
+         position==='Table View' && (
           <TableView columns ={columns} data={recipes as any} />
-         ):( <ThumbnailView recipes={recipes as any} userId={user.id}/>
+         )|| position==='Thumbnail View' && ( <ThumbnailView recipes={recipes as Models.Document[]} userId={user.id}/>
+          ) || position==='List View' && ( <ListView recipes={recipes as Models.Document[]} />
           )}
           </div>
           </div>

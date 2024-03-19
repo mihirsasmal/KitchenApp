@@ -1,5 +1,5 @@
+import ListView from '@/components/shared/ListView';
 import Loader from '@/components/shared/Loader'
-import RecipeCard from '@/components/shared/RecipeCard';
 import { useGetRecentRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { Models } from 'appwrite';
 
@@ -14,11 +14,7 @@ const Home = () => {
           {isRecipeLoading && !recipes ?(
             <Loader/>
           ) : (
-            <ul className='sm:w-full flex-start flex-col gap-9 w-full'>
-              {(recipes as any)?.documents.map((recipe:Models.Document)=>(
-                <RecipeCard recipe={recipe} key={recipe.$id}/>
-              ))}
-            </ul>
+            <ListView recipes={(recipes as Models.DocumentList<Models.Document>).documents}/>
           )}
         </div>
       </div>
