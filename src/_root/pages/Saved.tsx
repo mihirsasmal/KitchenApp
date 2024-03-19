@@ -10,7 +10,7 @@ import { useInView } from 'react-intersection-observer';
 const Saved = () => {
   const {ref, inView} = useInView();
   const {user} = useUserContext();
- const {data:recipes, isPending,  fetchNextPage,isFetchingNextPage, hasNextPage} = useGetSavedRecipeByUserMutation(user.id);
+ const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetSavedRecipeByUserMutation(user.id);
  useEffect (()=>{
   if(inView) fetchNextPage();
 },[inView, fetchNextPage]);
@@ -18,7 +18,7 @@ const Saved = () => {
   const debouncedValue = useDebounce(searchValue, 500);
  const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchSavedRecipeMutation(debouncedValue, user.id);
 
- if(isPending) {
+ if(!recipes) {
 
   return(
     <div className='flex-center w-full h-full'>
@@ -45,7 +45,7 @@ const Saved = () => {
             value = {searchValue}
             onChange = {(e)=>setSearchValue(e.target.value)}/>
           </div>
-          
+          <hr className='border w-full border-dark-4/80 ' />
           <div className='flex flex-wrap gap-9 w-full maz-w-5xl mt-16 mb-7'>
           <ul className='grid-container'>
             {shouldShowSearchResults?(

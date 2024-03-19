@@ -6,6 +6,7 @@ export enum QUERY_KEYS {
   GET_USER_RECIPES = "getUserRecipes",
   GET_FILE_PREVIEW = "getFilePreview",
   GET_INGREDIENTS = 'getIngredients',
+  GET_SAVED_RECIPE_BY_USER = 'getSavedRecipesByUser',
   //  SEARCH KEYS
   SEARCH_RECIPES = "getSearchRecipes",
       // AUTH KEYS
