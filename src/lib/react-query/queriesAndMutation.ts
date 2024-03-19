@@ -218,7 +218,7 @@ export const useGetRecentRecipeMutation = ()=> {
 
     export const useGetIngredientsMutation = (language:string)=> {
         return useQuery ({
-            queryKey: [QUERY_KEYS.GET_INGREDIENTS],
+            queryKey: [QUERY_KEYS.GET_INGREDIENTS, language],
             queryFn:()=>getIncredients(language)
         });
     };

@@ -114,38 +114,15 @@ const lightRedTheme = {
     dark: darkRedTheme,
   };
 
-const Editor = ( {content, onValueChange}:{content:string, onValueChange:(content:string)=>void}) => {
+const Editor = ( {content, onValueChange, isEditorUpdateRequired}:{content:string, onValueChange:(content:string)=>void, isEditorUpdateRequired:string}) => {
 
-  const [initialContent, setInitialContent] = useState<
-  PartialBlock[] | undefined | "loading"
->("loading");
-
-useEffect(() => {
- 
-    setInitialContent(JSON.parse(content) as PartialBlock[]);
-  ;
-}, []);
-
-console.log(content)
-
-var editor = useMemo(() => {
-  if (initialContent === "loading") {
-    return undefined;
-  }
-  return BlockNoteEditor.create({ initialContent });
-}, [initialContent]);
-
-if (editor === undefined) {
-  return "Loading content...";
-}
-if(initialContent!==JSON.parse(content) as PartialBlock[]) 
-{
-  editor = BlockNoteEditor.create({ initialContent:JSON.parse(content) as PartialBlock[] });
-}
-
+  console.log(content)
+  const editor = content? useCreateBlockNote({initialContent:JSON.parse(content) as PartialBlock[]},[isEditorUpdateRequired]):useCreateBlockNote({},[isEditorUpdateRequired]);
+  console.log(editor.document)
+  
     return <BlockNoteView editor={editor} theme= {darkFormTheme} onChange={() => {
-
-      content= JSON.stringify(editor?.document);
+      console.log('updated editor')
+      content= JSON.stringify(editor.document);
       onValueChange(content)
 
     }} />;
@@ -161,10 +138,10 @@ export const EditorView = ({content}:{content:string})=>{
   useEffect(() => {
    
       setInitialContent(JSON.parse(content) as PartialBlock[]);
-    ;
+
   }, []);
 
-  console.log(content)
+
 
   var editor = useMemo(() => {
     if (initialContent === "loading") {
@@ -172,6 +149,7 @@ export const EditorView = ({content}:{content:string})=>{
     }
     return BlockNoteEditor.create({ initialContent });
   }, [initialContent]);
+
  
   if (editor === undefined) {
     return "Loading content...";

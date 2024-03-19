@@ -39,14 +39,14 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
   const { user } = useUserContext();
     const navigate = useNavigate();
     const [languageValue, setLanguageValue] = useState("english");
-  const { mutateAsync: addRecipe, isPending: isAddingRecipe } =
+      const { mutateAsync: addRecipe, isPending: isAddingRecipe } =
     useAddRecipeMutation();
 
   const { mutateAsync: editRecipe, isPending: isEditingRecipe } =
     useUpdateRecipeMutation();
 
   const { data: getIngredients, isPending } = useGetIngredientsMutation(languageValue);
- 
+
   const ingredientOption = (ingredients: string[]): Option[] => {
     if (!ingredients) return [];
 
@@ -67,7 +67,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
       cuisineType: recipe ? recipe.CuisineType : "",
       regionOfCuisine: recipe ? recipe.CuisineRegion : "",
       ingredients: recipe ? ingredientOption(recipe.Ingredients) : undefined,
-      steps: recipe ? recipe.Steps : "",
+      steps: recipe ? recipe.Steps : undefined,
       file: [],
     },
   });
@@ -154,13 +154,23 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       if (value) {
                         setLanguageValue(value);
                         form.setValue("language", value);
+                        
                         if(value==='english')
+                        {
+                       
+                        if(action==="Update") 
                         {form.setValue('ingredients',ingredientOption(recipe?.Ingredients))
-                        form.setValue("steps", recipe?.Steps);
+                        form.setValue("steps", recipe?.Steps);}
+                        
                         }
                         if(value==='odiya')
+                        {
+                         
+                        if(action==="Update") 
                         {form.setValue('ingredients',ingredientOption(recipe?.IngredientsOdia))
-                        form.setValue("steps", recipe?.StepsOdia);
+                        console.log(recipe?.IngredientsOdia)
+                        form.setValue("steps", recipe?.StepsOdia);}
+                        
                         }
                       }
                     }}
@@ -326,7 +336,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       </p>
                     }
                     className="shad-input"
-                  />
+                  />                                                                                                                                                                                                                                                                                                                              
                   
                 </FormControl>
                 
@@ -340,9 +350,11 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
               <FormItem>
                 <FormLabel className="shad-form_label">Steps</FormLabel>
                 <FormControl>
-                  <Editor content={field.value}  onValueChange={(value) => {
+                  <Editor content={field.value}   onValueChange={(value) => {
+                    console.log('inside onchange')
                           form.setValue("steps", value);
-                    }}/>
+                          console.log('after updating value')
+                    }} isEditorUpdateRequired ={languageValue}/>
                 </FormControl>
                 <FormMessage className="shad-form_message" />
               </FormItem>
