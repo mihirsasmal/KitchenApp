@@ -54,37 +54,12 @@ const Explore = () => {
             alt = 'search' />
             <input 
             type = 'text'
-            placeholder='search'
+            placeholder='Search by Recipe Name or Ingredients'
             className='explore-search w-full'
             value = {searchValue}
             onChange = {(e)=>setSearchValue(e.target.value)}/>
           </div>
-          <div className='flex-between w-full max-w-5xl mt-16 mb-7'>
-          <h3 className='body-bold md:h3-bold'>Popular Today</h3>
-          <div className='flex-center gap-3 bg-darek-3 rounded-cl px-4 py-2 cursor-pointer'>
-            
-             <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button className='gap-2'><p className = 'small-medium md:base-medium text-light-2'>{position}</p>
-            <img 
-            src = 'assets/icons/filter.svg'
-            width={20}
-            height = {20}
-            alt= 'filter'
-             /></Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>View</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-          <DropdownMenuRadioItem value="List View">List</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="Thumbnail View">Thumbnail</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="Table View">Table</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-          </div>
-          </div>
+          <hr className='border w-full border-dark-4/80 ' />
           <div className='flex flex-wrap gap-9 w-full maz-w-5xl'>
           <ul className='grid-container'>
             {shouldShowSearchResults?(
