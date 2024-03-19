@@ -53,18 +53,18 @@ const RecipeDetails =  () => {
                    {formatDate(recipe.$createdAt)}</p> </div>)}          
             
            <hr className='border w-full border-dark-4/80' />
-           <div className = 'flex flex-col items-start justify-start  gap-5'> 
+           <div className = 'flex flex-col items-start justify-start gap-3'> 
            <div className = 'flex items-start justify-start  '> 
            <p className='flex font-sans text-2xl'>Meal Type </p>
-           <p className='px-20 flex font-thin text-2xl'>{recipe.MealType}</p>
+           <p className='px-20 pt-1 flex font-thin text-2xl'>{recipe.MealType}</p>
            </div>
            <div className = 'flex items-start justify-start  '> 
            <p className='flex justify-start items-start font-sans text-2xl'>Cuisine </p>
-           <p className='px-28 font-thin text-2xl'>{recipe.CuisineType}</p>
+           <p className='px-28 pt-1 font-thin text-2xl'>{recipe.CuisineType}</p>
            </div>
            <div className = 'flex items-start justify-start  '> 
             {recipe.CuisineRegion?(<div className = 'flex items-start justify-start  '> <p className='flex justify-start items-start font-sans text-2xl'>Cuisine Region </p>
-           <p className='px-8 font-thin text-2xl'>{recipe.CuisineRegion}</p></div>):<></>}
+           <p className='px-8 pt-1 font-thin text-2xl'>{recipe.CuisineRegion}</p></div>):<></>}
             </div>                  
            <div className = 'flex-col items-start justify-start gap-5'> 
            <p className='flex justify-start items-start font-sans text-2xl'>Language </p>
