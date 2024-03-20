@@ -22,12 +22,17 @@ import { useInView } from 'react-intersection-observer';
 
 const YourRecipes = () => {
   const {ref, inView} = useInView();
+  const tableRecipe:any[]= [];
   const {user} = useUserContext();
  const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetRecipeByUserMutation(user.id);
- useEffect (()=>{
-  if(inView) fetchNextPage();
-},[inView, fetchNextPage]);
  const [position, setPosition] = useState("Thumbnail View");
+ useEffect (()=>{
+ if (position === 'Table View' && hasNextPage)
+   { fetchNextPage(); }
+  else if(inView) fetchNextPage();
+
+},[inView, fetchNextPage, isFetchingNextPage]);
+ 
 
  if(!recipes) {
 
@@ -37,6 +42,9 @@ const YourRecipes = () => {
     </div>
   )
  }
+
+
+recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
 
   return (
 
@@ -62,25 +70,30 @@ const YourRecipes = () => {
        <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
          <DropdownMenuRadioItem value="List View">List</DropdownMenuRadioItem>
          <DropdownMenuRadioItem value="Thumbnail View">Thumbnail</DropdownMenuRadioItem>
-         {/* <DropdownMenuRadioItem value="Table View">Table</DropdownMenuRadioItem> enable it after adding infinite table*/}
+         <DropdownMenuRadioItem value="Table View">Table</DropdownMenuRadioItem> 
        </DropdownMenuRadioGroup>
      </DropdownMenuContent>
    </DropdownMenu>
    </div>
          {recipes.pages.map((item,index)=>(
-         position==='Table View' && (
-          <TableView key={`page-${index}`} columns ={columns} data={item as any} />
-         )|| position==='Thumbnail View' && ( <ThumbnailView key={`page-${index}`} recipes={item as Models.Document[]} userId={user.id}/>
+          position==='Thumbnail View' && ( <ThumbnailView key={`page-${index}`} recipes={item as Models.Document[]} userId={user.id}/>
           ) || position==='List View' && ( <ListView key={`page-${index}`} recipes={item as Models.Document[]} />
           )
         ))}
+
+        {
+          !isFetchingNextPage &&  !hasNextPage &&
+            position==='Table View' && (
+             <TableView  columns ={columns} data={tableRecipe as any} />
+            )
+        }
           { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
                   Loading... <Loader />
                   </div>: hasNextPage ? (
                   <div ref = {ref} className = 'mt-10'> 
                   <Loader />
                   </div>
-                ): <div className = 'mt-10'> 
+                ): position !=='Table View' && <div className = 'mt-10'> 
                 <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
                 </div>}
 
