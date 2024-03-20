@@ -1,22 +1,23 @@
 import { EditorView } from '@/components/shared/Editor';
 import Loader from '@/components/shared/Loader';
+import RecipeActions from '@/components/shared/RecipeActions';
 import RecipeStats from '@/components/shared/RecipeStats';
-import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetRecipeByIdMutation } from '@/lib/react-query/queriesAndMutation'
 import { formatDate } from '@/lib/utils';
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const RecipeDetails =  () => {
   const {id} = useParams();
   const {user} = useUserContext();
   const {data:recipes, isPending} = useGetRecipeByIdMutation(id ||'');
+
   const recipe = recipes as any;
-  const handleDeleteRecipe =()=>{};
+
   const [languageValue, setLanguageValue] = useState('english');
-  const [steps, setSteps] = useState(recipe?.Steps);
+
  const [ingredients, setIngredients] = useState(recipe?.Ingredients);
 
   return (
@@ -32,21 +33,7 @@ const RecipeDetails =  () => {
                 (<div className = 'flex  justify-between w-full '> 
                   <p className='subtle-semibold lg:small-regular flex justify-center items-center gap-2 text-light-3'>
                          {formatDate(recipe.$createdAt)}</p>
-                <div className='flex items-end justify-end  ml-auto '>
-                  <Link to={`/update-recipe/${recipe.$id}`} className='px-4 py-2'>
-                  <img src='/assets/icons/edit.svg' alt='edit' width={24} height={24} />
-                </Link><Button
-                  onClick = {handleDeleteRecipe}
-                  variant = 'ghost'
-                  className={`ghost_details-delete_btn ${user.id !==recipe.creator.$id && 'hidden'}`}
-                >
-                  <img 
-                  src = '/assets/icons/delete.svg'
-                  alt='delete'
-                  width = {24}
-                  height = {24}
-                  />
-                  </Button></div>
+                         <RecipeActions recipe = {recipe} userId = {user.id}/>
                   </div>
             ):( <div className = 'flex  justify-between w-full '> 
             <p className='subtle-semibold lg:small-regular flex justify-center items-center mx-auto gap-2 text-light-3'>by {recipe.creator.name} - 
@@ -76,11 +63,11 @@ const RecipeDetails =  () => {
                         setLanguageValue(value);
                         if(value==='english')
                         {setIngredients(recipe?.Ingredients);
-                        setSteps(recipe?.Steps);}
+                        }
                         if(value==='odiya')
                         {setIngredients(recipe?.IngredientsOdia)
                           
-                          setSteps(recipe?.StepsOdia);}
+                          }
                          
                       }
                     }}
