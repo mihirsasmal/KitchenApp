@@ -280,10 +280,17 @@ export async function getRecipeById(recipeId:string) {
     }
 }
 
-export async function getRecipeByUser(userId:string) {
+export async function getRecipeByUser(userId:string, pageParam:number) {
+
+    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(12),Query.equal('creator', [userId])]
+    if(pageParam) {
+
+        queries.push (Query.cursorAfter(pageParam.toString()));
+    }
+
     try{
 
-        const recipeOfUser = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,[Query.equal('creator', [userId])])
+        const recipeOfUser = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries)
 
 
         

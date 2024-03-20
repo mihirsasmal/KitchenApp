@@ -1,7 +1,7 @@
 import Loader from '@/components/shared/Loader';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetRecipeByUserMutation } from '@/lib/react-query/queriesAndMutation';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,15 +16,20 @@ import TableView,{ columns} from '@/components/shared/TableView';
 import ThumbnailView from '@/components/shared/ThumbnailView';
 import ListView from '@/components/shared/ListView';
 import { Models } from 'appwrite';
+import { useInView } from 'react-intersection-observer';
 
 
 
 const YourRecipes = () => {
+  const {ref, inView} = useInView();
   const {user} = useUserContext();
- const {data:recipes, isPending} = useGetRecipeByUserMutation(user.id);
+ const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetRecipeByUserMutation(user.id);
+ useEffect (()=>{
+  if(inView) fetchNextPage();
+},[inView, fetchNextPage]);
  const [position, setPosition] = useState("Thumbnail View");
 
- if(isPending) {
+ if(!recipes) {
 
   return(
     <div className='flex-center w-full h-full'>
@@ -57,17 +62,28 @@ const YourRecipes = () => {
        <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
          <DropdownMenuRadioItem value="List View">List</DropdownMenuRadioItem>
          <DropdownMenuRadioItem value="Thumbnail View">Thumbnail</DropdownMenuRadioItem>
-         <DropdownMenuRadioItem value="Table View">Table</DropdownMenuRadioItem>
+         {/* <DropdownMenuRadioItem value="Table View">Table</DropdownMenuRadioItem> enable it after adding infinite table*/}
        </DropdownMenuRadioGroup>
      </DropdownMenuContent>
    </DropdownMenu>
    </div>
-         {
+         {recipes.pages.map((item,index)=>(
          position==='Table View' && (
-          <TableView columns ={columns} data={recipes as any} />
-         )|| position==='Thumbnail View' && ( <ThumbnailView recipes={recipes as Models.Document[]} userId={user.id}/>
-          ) || position==='List View' && ( <ListView recipes={recipes as Models.Document[]} />
-          )}
+          <TableView key={`page-${index}`} columns ={columns} data={item as any} />
+         )|| position==='Thumbnail View' && ( <ThumbnailView key={`page-${index}`} recipes={item as Models.Document[]} userId={user.id}/>
+          ) || position==='List View' && ( <ListView key={`page-${index}`} recipes={item as Models.Document[]} />
+          )
+        ))}
+          { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
+                  Loading... <Loader />
+                  </div>: hasNextPage ? (
+                  <div ref = {ref} className = 'mt-10'> 
+                  <Loader />
+                  </div>
+                ): <div className = 'mt-10'> 
+                <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
+                </div>}
+
           </div>
           </div>
 

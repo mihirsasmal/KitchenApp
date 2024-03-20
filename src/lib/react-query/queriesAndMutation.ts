@@ -214,10 +214,18 @@ export const useGetRecentRecipeMutation = ()=> {
     };
 
     export const useGetRecipeByUserMutation = (userId:string)=> {
-        return useQuery ({
-            queryKey: [QUERY_KEYS.GET_USER_RECIPES],
-            queryFn: ()=>getRecipeByUser(userId),
-            enabled:!!userId
+        return useInfiniteQuery ({
+            queryKey: ['getRecipeByUserId'],
+            queryFn: async({pageParam})=>getRecipeByUser(userId, pageParam),
+            enabled:!!userId,
+            initialPageParam:0,
+            //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
+            getNextPageParam: (lastPage:any)=> {
+                if(lastPage && lastPage.length === 0) return null;
+
+                const lastId = lastPage[lastPage.length - 1].$id;
+                return lastId;
+            }
         });
     };
 
