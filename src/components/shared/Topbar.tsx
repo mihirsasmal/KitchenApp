@@ -3,6 +3,7 @@ import { useLogoutAccountMutation } from "@/lib/react-query/queriesAndMutation";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
+import { ModeToggle } from "./ModeToggle";
 
 const Topbar = () => {
   const { mutate: logout, isSuccess } = useLogoutAccountMutation();
@@ -19,7 +20,8 @@ const Topbar = () => {
           <img src="/assets/react.svg" alt="logo" width={50} height={50} />
         </Link>
 
-        <div className="flex gap-4">
+        <div className="flex gap-1">
+        <ModeToggle/>
           <Button
             variant="ghost"
             className="shad-button_ghost"
