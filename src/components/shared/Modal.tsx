@@ -6,7 +6,7 @@ import Loader from './Loader';
 
 const Modal = ({open, onClose, recipe}:{open:boolean, onClose:()=>void, recipe:Models.Document}) => {
   const {mutate:deleteRecipe, isPending:isDeletingRecipe} = useDeleteRecipeMutation();
-  const handleDeleteRecipe = ()=>{
+  const handleDeleteRecipe = ()=>{ 
     deleteRecipe({recipeId:recipe.$id, imageId:recipe.ImageId});
 }
 
@@ -16,9 +16,14 @@ const Modal = ({open, onClose, recipe}:{open:boolean, onClose:()=>void, recipe:M
         className = {`fixed inset-0 flex justify-center items-center transition-colors ${open ?'visible bg-black/20':'invisible'}`}>
           <div className={`bg-white rounded-xl shadow p-6 transition-all ${open ?'scale-100 opacity-100' : 'scale-125 opacity-0'}`}
            onClick={(e)=>e.stopPropagation()}>
-            <button className=' absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600' onClick = {onClose}> X</button>
+            <Button className=' absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600' onClick = {onClose}> X</Button>
            
-            <div className='text-center w-56'>
+            
+
+                  {isDeletingRecipe?
+                    ( <div className='text-center w-56 h-56 bg-dark-1'>
+                    <Loader />
+                    </div>):(<div className='text-center w-56'>
             <img 
                   src = '/assets/icons/delete.svg'
                   alt='delete'
@@ -34,16 +39,7 @@ const Modal = ({open, onClose, recipe}:{open:boolean, onClose:()=>void, recipe:M
                     <Button className='bg-gray-400 w-full' onClick={onClose}>Cancel</Button>
                   </div>
                   
-                  </div>
-
-                  {isDeletingRecipe?
-                    (
-                    
-                        <div className='text-center w-56 h-56'>
-                    <Loader />
-                    </div>
-                    
-                    ):<></>
+                  </div>)
             }
             </div>
     </div>
