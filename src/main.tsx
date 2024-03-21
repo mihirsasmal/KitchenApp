@@ -5,10 +5,11 @@ import App from './App'
 import AuthProvider from './context/AuthContext';
 import './globals.css'
 import QueryProvider from './lib/react-query/QueryProvider';
+import { ThemeProvider } from './components/shared/ThemeProvider';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 
-    <BrowserRouter> <QueryProvider>
-    <AuthProvider><App /></AuthProvider></QueryProvider></BrowserRouter>
+    <BrowserRouter> <QueryProvider><ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <AuthProvider><App /></AuthProvider></ThemeProvider></QueryProvider></BrowserRouter>
 
 );

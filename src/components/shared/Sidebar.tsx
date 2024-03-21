@@ -5,6 +5,7 @@ import { INavLink } from "@/types";
 import { useEffect } from "react";
 import { Link, NavLink, useNavigate , useLocation} from "react-router-dom";
 import { Button } from "../ui/button";
+import { ModeToggle } from "./ModeToggle";
 
 const Sidebar = () => {
     const {pathname} = useLocation();
@@ -59,6 +60,7 @@ const Sidebar = () => {
         </ul>
 
             </div>
+            <div className="flex gap-9">            
             <Button
              variant="ghost"
             className="shad-button_ghost"
@@ -67,7 +69,8 @@ const Sidebar = () => {
             <img src="/assets/icons/logout.svg" alt="logout" />
             <p className="small-medium lg:base-medium">Logout</p>
           </Button>
-
+          <ModeToggle/>
+          </div>
             </nav>
   )
 }
