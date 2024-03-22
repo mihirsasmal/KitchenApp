@@ -13,9 +13,10 @@ import Modal from './Modal';
 type RecipeActionProps = {
     recipe:Models.Document;
     userId:string;
+    navigateBack?:boolean
 }
 
-const RecipeActions = ({recipe, userId}:RecipeActionProps) => {
+const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
 
     const {mutate:deleteRecipe, isPending:isDeletingRecipe} = useDeleteRecipeMutation();
 
@@ -50,7 +51,7 @@ const handleDeleteRecipe = ()=>{
             ):( <></>)}
             
             </div>
-            <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe}>
+            <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe} navigateBack={navigateBack}>
                 
             
                 

@@ -81,21 +81,21 @@ export async function logoutAccount() {
 
 export async function addRecipe(recipe:IRecipe) {
     try{
-        const uploadedFile = await uploadFile(recipe.file[0]) as Models.File;
+
+        const uploadedFile = recipe.file.length !==0 ?await uploadFile(recipe.file[0]) as Models.File:undefined;
         
-        if(!uploadedFile) throw Error;
+        
 
-        const fileUrl = getFilePreview(uploadedFile.$id);
+        const fileUrl = uploadedFile? getFilePreview(uploadedFile.$id):undefined;
 
-        if(!fileUrl) {
+        if(uploadedFile && !fileUrl) {
           await deleteFile(uploadedFile.$id);
             throw Error
         };
 
         const emptyStep = `[{"id": "${uuidv4()}","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[],"children":[]}]`
- 
-        const newRecipe = await databases.createDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, ID.unique(),
-        {
+
+        const recipeToSave = {
             creator:recipe.userId,
             RecipeName:recipe.name,
             CuisineType:recipe.cuisineType,
@@ -104,13 +104,19 @@ export async function addRecipe(recipe:IRecipe) {
             Ingredients:recipe.language === 'english'? recipe.ingredients : [],
             Steps: recipe.language === 'english'?recipe.steps: emptyStep,   
             IngredientsOdia:recipe.language === 'odiya'? recipe.ingredients : [],
-            StepsOdia: recipe.language === 'odiya'?recipe.steps: emptyStep,           
-            ImageId: uploadedFile.$id,
-            ImageUrl:fileUrl as URL
+            StepsOdia: recipe.language === 'odiya'?recipe.steps: emptyStep,  
         }
+ 
+        
+        const newRecipe = await databases.createDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, ID.unique(),(fileUrl?
+        {
+           ...recipeToSave,          
+            ImageId: uploadedFile?.$id ,
+            ImageUrl:fileUrl as URL
+        }:recipeToSave)
         )
 
-        if(!newRecipe) {
+        if(!newRecipe && uploadedFile) {
             await deleteFile(uploadedFile.$id);
             throw Error
         }

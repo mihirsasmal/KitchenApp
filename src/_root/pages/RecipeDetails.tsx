@@ -35,7 +35,7 @@ const RecipeDetails =  () => {
                 (<div className = 'flex  justify-between w-full '> 
                   <p className='subtle-semibold lg:small-regular flex justify-center items-center gap-2 dark:text-light-3 text-dark-4'>
                          {formatDate(recipe.$createdAt)}</p>
-                         <RecipeActions recipe = {recipe} userId = {user.id}/>
+                         <RecipeActions recipe = {recipe} userId = {user.id} navigateBack={true}/>
                   </div>
             ):( <div className = 'flex  justify-between w-full '> 
             <p className='subtle-semibold lg:small-regular flex justify-center items-center mx-auto gap-2 dark:text-light-3 text-dark-4'>by {recipe.creator.name} - 

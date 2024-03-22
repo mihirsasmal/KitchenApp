@@ -64,7 +64,7 @@ recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
            alt= 'filter'
             /></Button>
      </DropdownMenuTrigger>
-     <DropdownMenuContent className="w-56">
+     <DropdownMenuContent className="w-56  dark:text-light-2 text-dark-4 bg-light-3 dark:bg-dark-2">
        <DropdownMenuLabel>View</DropdownMenuLabel>
        <DropdownMenuSeparator />
        <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>

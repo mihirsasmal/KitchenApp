@@ -3,11 +3,14 @@ import { Button } from '../ui/button'
 import { useDeleteRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { Models } from 'appwrite';
 import Loader from './Loader';
+import { useNavigate } from 'react-router-dom';
 
-const Modal = ({open, onClose, recipe}:{open:boolean, onClose:()=>void, recipe:Models.Document}) => {
+const Modal = ({open, onClose, recipe, navigateBack}:{open:boolean, onClose:()=>void, recipe:Models.Document, navigateBack?:boolean}) => {
+  const navigate = useNavigate();
   const {mutate:deleteRecipe, isPending:isDeletingRecipe} = useDeleteRecipeMutation();
   const handleDeleteRecipe = ()=>{ 
     deleteRecipe({recipeId:recipe.$id, imageId:recipe.ImageId});
+    if(navigateBack) navigate(-1);
 }
 
   return (
