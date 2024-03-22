@@ -58,10 +58,10 @@ const lightRedTheme = {
     },
   } satisfies Theme;
 
-  const lightDarkTheme = {
+  const darkFormTheme = {
     colors: {
       editor: {
-        text: "#222222",
+        text: "#9B9B9B",
         background: "#1F1F22",
       },
       menu: {
@@ -93,30 +93,43 @@ const lightRedTheme = {
     fontFamily: "Helvetica Neue, sans-serif",
   } satisfies Theme;
 
-  const darkFormTheme = {
-    ...lightDarkTheme,
+  
+  const lightFormTheme = {
     colors: {
-      ...lightDarkTheme.colors,
       editor: {
-        text: "#9B9B9B",
-        background: "#1F1F22",
+        text: "#5C5C7B",
+        background: "#DCDBDB",
       },
-      sideMenu: "#9B9B9B",
-      highlights: darkDefaultTheme.colors!.highlights,
+      menu: {
+        text: "#5C5C7B",
+        background: "#EFEFEF",
+      },
+      tooltip: {
+        text: "#5C5C7B",
+        background: "#DCDBDB",
+      },
+      hovered: {
+        text: "#09090A",
+        background: "#DCDBDB",
+      },
+      selected: {
+        text: "#000000",
+        background: "#000000",
+      },
+      disabled: {
+        text: "#9b0000",
+        background: "#7d0000",
+      },
+      shadow: "#DCDBDB",
+      border: "#DCDBDB",
+      sideMenu: "#A3A3B0",
+      highlights: lightDefaultTheme.colors!.highlights,
     },
+    borderRadius: 4,
+    fontFamily: "Helvetica Neue, sans-serif",
   } satisfies Theme;
-   
-  // The combined "red theme",
-  // we pass this to BlockNoteView and then the editor will automatically
-  // switch between lightRedTheme / darkRedTheme based on the system theme
-  const redTheme = {
-    light: lightRedTheme,
-    dark: darkRedTheme,
-  };
-const customTheme = {
-  light:lightDefaultTheme,
-  dark:darkDefaultTheme
-}
+
+ 
 
 
 const Editor = ( {content, onValueChange, isEditorUpdateRequired, theme}:{content:string, onValueChange:(content:string)=>void, isEditorUpdateRequired:string, theme:string}) => {
@@ -125,7 +138,7 @@ const Editor = ( {content, onValueChange, isEditorUpdateRequired, theme}:{conten
   const editor = content? useCreateBlockNote({initialContent:JSON.parse(content) as PartialBlock[]},[isEditorUpdateRequired]):useCreateBlockNote({},[isEditorUpdateRequired]);
 
   
-    return <BlockNoteView editor={editor} theme= {theme==='dark'?darkFormTheme:lightDefaultTheme} onChange={() => {
+    return <BlockNoteView editor={editor} theme= {theme==='dark'?darkFormTheme:lightFormTheme} onChange={() => {
 
       content= JSON.stringify(editor.document);
       onValueChange(content)

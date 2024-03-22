@@ -243,7 +243,7 @@
   }
 
   .leftsidebar-link {
-    @apply rounded-lg base-medium hover:bg-gradient-to-r from-violet-600 to-indigo-600 transition;
+    @apply rounded-lg base-medium hover:bg-gradient-to-r from-violet-600 to-indigo-600 hover:text-off-white transition;
   }
 
   /* Post Card */
