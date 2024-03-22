@@ -1,6 +1,7 @@
 import { INewUser, IRecipe, IUpdateRecipe } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import {ID,  Models, Query} from 'appwrite';
+import { v4 as uuidv4 } from 'uuid';
 
 
 export async function createUserAccount(user:INewUser) {
@@ -91,6 +92,7 @@ export async function addRecipe(recipe:IRecipe) {
             throw Error
         };
 
+        const emptyStep = `[{"id": "${uuidv4()}","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[],"children":[]}]`
  
         const newRecipe = await databases.createDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, ID.unique(),
         {
@@ -99,10 +101,10 @@ export async function addRecipe(recipe:IRecipe) {
             CuisineType:recipe.cuisineType,
             CuisineRegion:recipe.regionOfCuisine,
             MealType:recipe.mealType,
-            Ingredients:recipe.language === 'english'? recipe.ingredients : '',
-            Steps: recipe.language === 'english'?recipe.steps: '',   
-            IngredientsOdia:recipe.language === 'odiya'? recipe.ingredients : [''],
-            StepsOdia: recipe.language === 'odiya'?recipe.steps: '',           
+            Ingredients:recipe.language === 'english'? recipe.ingredients : [],
+            Steps: recipe.language === 'english'?recipe.steps: emptyStep,   
+            IngredientsOdia:recipe.language === 'odiya'? recipe.ingredients : [],
+            StepsOdia: recipe.language === 'odiya'?recipe.steps: emptyStep,           
             ImageId: uploadedFile.$id
         }
         )

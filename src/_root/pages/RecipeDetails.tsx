@@ -1,7 +1,8 @@
-import { EditorView } from '@/components/shared/Editor';
+import Editor from '@/components/shared/Editor';
 import Loader from '@/components/shared/Loader';
 import RecipeActions from '@/components/shared/RecipeActions';
 import RecipeStats from '@/components/shared/RecipeStats';
+import { useTheme } from '@/components/shared/ThemeProvider';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetRecipeByIdMutation } from '@/lib/react-query/queriesAndMutation'
@@ -10,6 +11,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const RecipeDetails =  () => {
+  const { theme } = useTheme()
   const {id} = useParams();
   const {user} = useUserContext();
   const {data:recipes, isPending} = useGetRecipeByIdMutation(id ||'');
@@ -112,12 +114,12 @@ const RecipeDetails =  () => {
            
             <p className='flex justify-start items-start font-sans text-2xl'>Ingredients </p>
             <ul className='flex-col px-32'> 
-                   {ingredients?.map((x:string)=>{return (<li key={x} className='dark:text-light-3 text-dark-1 '><span className='flex gap-5 pt-3'><img src = '/assets/icons/bulletPoint.jpeg' alt='bulletIcon' className='h-10 w-10 rounded-full'/> <span className='pt-1 font-thin text-2xl'>{x}</span></span></li>)})} </ul>
+                   {ingredients?.map((x:string)=>{return (<li key={x} className='dark:text-light-3 text-dark-1 '><span className='flex gap-5 pt-3'><img src = {theme=='dark'?'/assets/icons/bulletPoint.jpeg':'/assets/icons/bulletLight.jpeg'} alt='bulletIcon' className='h-10 w-10 rounded-full'/> <span className='pt-1 font-thin text-2xl'>{x}</span></span></li>)})} </ul>
                    </div>
                    <div className = 'flex flex-col items-start justify-start w-full lg:gap-2 md:gap-5 sm:gap-9 gap-9'> 
                    <p className='flex justify-start items-start font-sans text-2xl'>Steps  </p>   
-                  {languageValue ==='english' ? <div className='flex lg:px-20 justify-start items-start gap-2 font-thin text-2xl'> <EditorView content={recipe?.Steps}/> </div> : 
-                   <div className='flex lg:px-20 justify-start items-start gap-2 font-thin text-2xl'> <EditorView content={recipe?.StepsOdia}/> </div> }
+                   <div className='flex lg:px-20 justify-start items-start gap-2 font-thin text-2xl'> <Editor content={languageValue ==='english' ? recipe?.Steps :recipe?.StepsOdia}   onValueChange={() => {}} isEditorUpdateRequired ={languageValue}  theme={theme} editable ={false}/> </div> 
+                    
                    </div>
                    {recipe.ImageUrl?<div className='w-fit lg:w-2/4 lg:px-32 md:w-full sm:w-5/6 pb-5'><img src={recipe.ImageUrl} alt = 'image'  /></div> :<></>}
            <hr className='border w-full border-dark-4/80 ' />

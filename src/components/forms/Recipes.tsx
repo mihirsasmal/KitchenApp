@@ -355,7 +355,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                 <FormControl>
                   <Editor content={field.value}   onValueChange={(value) => {
                           form.setValue("steps", value);
-                    }} isEditorUpdateRequired ={languageValue}  theme={theme}/>
+                    }} isEditorUpdateRequired ={languageValue}  theme={theme} editable ={true}/>
                 </FormControl>
                 <FormMessage className="shad-form_message" />
               </FormItem>
