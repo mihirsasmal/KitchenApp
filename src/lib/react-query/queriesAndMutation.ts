@@ -42,7 +42,7 @@ export const useDeleteRecipeMutation = ()=> {
     const queryClient = useQueryClient();
     return useMutation ({
         mutationFn: ({recipeId, imageId}:{recipeId:string; imageId: string}) => deleteRecipe(recipeId,imageId),
-        onSuccess:()=> {console.log('deleted from herer')
+        onSuccess:()=> {
             queryClient.invalidateQueries ({
                 queryKey: [QUERY_KEYS.GET_RECENT_RECIPES]
             })
@@ -72,7 +72,7 @@ export const useDeleteRecipeMutation = ()=> {
             queryClient.invalidateQueries ({
                 queryKey: ['getRecipeByUserId']
             })
-            console.log('deleted from herer aslo')
+            
             }
     });
 }; 
@@ -164,18 +164,6 @@ export const useGetRecentRecipeMutation = ()=> {
             onSuccess:(data:any)=> {
                 queryClient.invalidateQueries ({
                     queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, data?.$id]
-                })
-                }
-        });
-    };
-
-    export const usedeleteRecipeMutation = ()=> {
-        const queryClient = useQueryClient();
-        return useMutation ({
-            mutationFn: ({recipeId,imageId}:{recipeId:string, imageId:string}) => deleteRecipe(recipeId, imageId),
-            onSuccess:()=> {
-                queryClient.invalidateQueries ({
-                    queryKey: [QUERY_KEYS.GET_RECENT_RECIPES]
                 })
                 }
         });

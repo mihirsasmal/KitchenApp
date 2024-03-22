@@ -19,8 +19,8 @@ const FileUploader = ({fieldChange, mediaUrl}:FileUploaderProps) => {
       const {getRootProps, getInputProps} = useDropzone({onDrop})
 
       return (
-        <div {...getRootProps()} className='flex flex-center flex-xol dark:bg-dark-3 bg-light-3 rounded-xl cursor-pointer'>
-          <input {...getInputProps()} className='xursor-pointer'/>
+        <div {...getRootProps()} className='flex flex-center flex-col dark:bg-dark-3 bg-light-3 rounded-xl cursor-pointer'>
+          <input {...getInputProps()} className='cursor-pointer'/>
           {
             fileUrl ?
               (<>
