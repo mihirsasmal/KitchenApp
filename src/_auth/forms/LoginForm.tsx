@@ -61,7 +61,7 @@ const LoginForm = () => {
     <Form {...form}>
       <div className='sm:w-420 flex-center flex-col'>
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12"> Log in to your account</h2>
-        <p className="text-light-3 small-medium md:base-regular mt-2"> Please enter your details</p>
+        <p className="text-light-4 dark:text-light-6 small-medium md:base-regular mt-2"> Please enter your details</p>
       
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
         
@@ -99,7 +99,7 @@ const LoginForm = () => {
             </div>
           ): 'Login'}
           </Button>
-          <p className="text-small-regular text-light-2 text-center mt-2"> Don't have an account yet?
+          <p className="text-small-regular text-light-4 dark:text-light-2 text-center mt-2"> Don't have an account yet?
           <Link to= '/createaccount' className=" text-primary-500 text-small-semibold ml-1">Create Account</Link>
           </p>
       </form>

@@ -19,7 +19,7 @@ const FileUploader = ({fieldChange, mediaUrl}:FileUploaderProps) => {
       const {getRootProps, getInputProps} = useDropzone({onDrop})
 
       return (
-        <div {...getRootProps()} className='flex flex-center flex-xol bg-dark-3 rounded-xl cursor-pointer'>
+        <div {...getRootProps()} className='flex flex-center flex-xol dark:bg-dark-3 bg-light-3 rounded-xl cursor-pointer'>
           <input {...getInputProps()} className='xursor-pointer'/>
           {
             fileUrl ?
@@ -40,7 +40,7 @@ const FileUploader = ({fieldChange, mediaUrl}:FileUploaderProps) => {
                   height={77}
                   alt= 'file-upload'
                   />
-                  <h3 className='base-medium text-light-2 nb-2 mt-6'>Drag Photo here</h3>
+                  <h3 className='base-medium dark:text-light-2 text-light-4 nb-2 mt-6'>Drag Photo here</h3>
                   <p className='text-light-4 small-regular mb-6'> SVG, PNG, JPG</p>
 
                   <Button className = 'shad-button_dark_4'>Select from Computer</Button>

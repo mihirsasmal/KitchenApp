@@ -32,7 +32,7 @@ const Saved = () => {
     <div className='explore-container'>
       <div className='explore-inner_container'>
         <h2 className = 'h3-bold md:h2-bold w-full'> Search Saved Recipes</h2>
-        <div className='flex gap-1 px-4 w-full rounded-lg bg-dark-4'>
+        <div className='flex gap-1 px-4 w-full rounded-lg dark:bg-dark-4 bg-light-3'>
           <img 
            src = '/assets/icons/search.svg'
             width ={24}
@@ -54,7 +54,7 @@ const Saved = () => {
               searchedRecipes = {searchedRecipes as any}
               />
             ) : shouldShowRecipes? (
-              <p className='text-light-4 mt-10 text-center w-full'> End of Recipes</p>
+              <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> End of Recipes</p>
             ) : recipes.pages.map((item,index)=>(
               <GridRecipeList key={`page-${index}`} recipes = {item} />
             ))}
@@ -67,7 +67,7 @@ const Saved = () => {
                   <Loader />
                   </div>
                 ): !shouldShowSearchResults && (<div className = 'mt-10'> 
-                <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
+                <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> No more Recipes to Load</p>
                 </div>)}
           </div>
           </div>

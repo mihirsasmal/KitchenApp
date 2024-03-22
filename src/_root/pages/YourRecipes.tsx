@@ -48,7 +48,7 @@ recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
 
   return (
 
-      <div className='flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 custom-scrollbar'>
+      <div className='home-container'>
         <div className='max-w-5xl flex-start flex-col gap-9 justify-start w-full'>
         <div className='flex items-end justify-end w-full'>
         <h2 className = 'h3-bold md:h2-bold w-full'> Your Recipes</h2>      
@@ -56,7 +56,7 @@ recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
             
             <DropdownMenu>
      <DropdownMenuTrigger asChild>
-       <Button className='gap-2 '><p className = 'small-medium md:base-medium text-light-2'>{position}</p>
+       <Button className='gap-2 '><p className = 'small-medium md:base-medium dark:text-light-2 text-dark-4'>{position}</p>
            <img 
            src = 'assets/icons/filter.svg'
            width={20}
@@ -94,7 +94,7 @@ recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
                   <Loader />
                   </div>
                 ): position !=='Table View' && <div className = 'mt-10'> 
-                <p className='text-light-4 mt-10 text-center w-full'> No more Recipes to Load</p>
+                <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> No more Recipes to Load</p>
                 </div>}
 
           </div>

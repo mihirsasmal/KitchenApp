@@ -30,10 +30,10 @@ const Sidebar = () => {
               className="h-14 w-14 rounded-full"
             />        
         <div className="flex flex-col">
-            <p className="text-white">
+            <p className="dark:text-white text-slate-800">
                 {user.name}
             </p>
-            <p className="small-regular text-light-3">
+            <p className="small-regular dark:text-light-6 text-slate-500">
              @{user.username}
             </p>
         </div>
@@ -42,7 +42,7 @@ const Sidebar = () => {
             {sidebarLinks.map((link:INavLink)=> {
                 const isActive = pathname=== link.route;
                 return (
-                    <li key ={link.label} className={`leftsidebar-link group ${isActive && 'bg-primary-500'}`} >
+                    <li key ={link.label} className={`leftsidebar-link group ${isActive && 'bg-primary-500 text-light-1'}`} >
                          <NavLink to={link.route}
                           className='flex gap-4 items-center p-4'>
                              <img 

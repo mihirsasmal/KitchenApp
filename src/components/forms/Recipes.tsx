@@ -26,6 +26,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useState } from "react";
 import MultipleSelector, { Option } from "../shared/MultipleSelector";
 import Editor from "../shared/Editor";
+import { useTheme } from "../shared/ThemeProvider";
 
 type RecipeFormProps = {
   recipe?: Models.Document;
@@ -33,8 +34,8 @@ type RecipeFormProps = {
 };
 
 const Recipes = ({ recipe, action }: RecipeFormProps) => {
-  //const isCreatingAccount = false;
-
+  
+  const { theme } = useTheme()
   const { toast } = useToast();
   const { user } = useUserContext();
     const navigate = useNavigate();
@@ -180,8 +181,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       aria-label="Toggle english"
                       className={
                         languageValue === "english"
-                          ? "bg-slate-900"
-                          : "bg-gray-400"
+                          ? "dark:bg-slate-900 bg-light-5" 
+                          : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
                     >
                       English
@@ -191,8 +192,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       aria-label="Toggle odiya"
                       className={
                         languageValue === "odiya"
-                          ? "bg-slate-900"
-                          : "bg-gray-400"
+                        ? "dark:bg-slate-900 bg-light-5" 
+                        : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
                     >
                       Odiya
@@ -203,8 +204,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       disabled = {true}
                       className={
                         languageValue === "kannada"
-                          ? "bg-slate-900"
-                          : "bg-gray-400"
+                        ? "dark:bg-slate-900 bg-light-5" 
+                        : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
                     >
                       Kannada
@@ -271,8 +272,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       aria-label="Toggle MainCourse"
                       className={
                         mealTypeValue === "MainCourse"
-                          ? "bg-slate-900"
-                          : "bg-gray-400"
+                          ? "dark:bg-slate-900 bg-light-5" 
+                          : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
                     >
                       Main Course
@@ -282,8 +283,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       aria-label="Toggle Breakfast"
                       className={
                         mealTypeValue === "Breakfast"
-                          ? "bg-slate-900"
-                          : "bg-gray-400"
+                          ?  "dark:bg-slate-900 bg-light-5" 
+                          : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
                     >
                       Breakfast
@@ -293,8 +294,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       aria-label="Toggle Dessert"
                       className={
                         mealTypeValue === "Dessert"
-                          ? "bg-slate-900"
-                          : "bg-gray-400"
+                          ?  "dark:bg-slate-900 bg-light-5" 
+                          : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
                     >
                       Dessert
@@ -304,8 +305,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       aria-label="Toggle Snacks"
                       className={
                         mealTypeValue === "Snacks"
-                          ? "bg-slate-900"
-                          : "bg-gray-400"
+                          ?  "dark:bg-slate-900 bg-light-5" 
+                          : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
                     >
                       Snacks
@@ -332,7 +333,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                     creatable
                     emptyIndicator={isPending?
                       <p className="py-2 text-center text-lg leading-10 text-muted-foreground">Loading...</p>:
-                      <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                      <p className="text-center text-lg leading-10 text-gray-400 dark:text-gray-400">
                         no results found.
                       </p>
                     }
@@ -354,7 +355,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                 <FormControl>
                   <Editor content={field.value}   onValueChange={(value) => {
                           form.setValue("steps", value);
-                    }} isEditorUpdateRequired ={languageValue}/>
+                    }} isEditorUpdateRequired ={languageValue}  theme={theme}/>
                 </FormControl>
                 <FormMessage className="shad-form_message" />
               </FormItem>

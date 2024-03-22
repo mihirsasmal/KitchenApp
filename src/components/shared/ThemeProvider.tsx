@@ -30,6 +30,12 @@ export function ThemeProvider({
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
 
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', function (evt) {    
+    const latestSysTheme = evt.matches ? 'dark' : 'light';
+    if(theme !== latestSysTheme)
+        setTheme(latestSysTheme)
+  });
+
   useEffect(() => {
     const root = window.document.documentElement
 
