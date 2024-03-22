@@ -105,7 +105,8 @@ export async function addRecipe(recipe:IRecipe) {
             Steps: recipe.language === 'english'?recipe.steps: emptyStep,   
             IngredientsOdia:recipe.language === 'odiya'? recipe.ingredients : [],
             StepsOdia: recipe.language === 'odiya'?recipe.steps: emptyStep,           
-            ImageId: uploadedFile.$id
+            ImageId: uploadedFile.$id,
+            ImageUrl:fileUrl as URL
         }
         )
 
