@@ -63,7 +63,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
     resolver: zodResolver(recipeSubmitValidation),
     defaultValues: {
       name: recipe ? recipe.RecipeName : "",
-      language: recipe ? recipe?.language : "english",
+      language: languageValue,
       mealType: recipe ? recipe.MealType : "MainCourse",
       cuisineType: recipe ? recipe.CuisineType : "",
       regionOfCuisine: recipe ? recipe.CuisineRegion : "",
@@ -144,7 +144,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
           <FormField
             control={form.control}
             name="language"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Language</FormLabel>
                 <FormControl>
@@ -180,7 +180,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       value="english"
                       aria-label="Toggle english"
                       className={
-                        languageValue === "english"
+                        field.value === "english"
                           ? "dark:bg-slate-900 bg-light-5" 
                           : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
@@ -191,7 +191,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       value="odiya"
                       aria-label="Toggle odiya"
                       className={
-                        languageValue === "odiya"
+                        field.value === "odiya"
                         ? "dark:bg-slate-900 bg-light-5" 
                         : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
@@ -203,7 +203,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       aria-label="Toggle kannada"
                       disabled = {true}
                       className={
-                        languageValue === "kannada"
+                        field.value === "kannada"
                         ? "dark:bg-slate-900 bg-light-5" 
                         : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
                       }
