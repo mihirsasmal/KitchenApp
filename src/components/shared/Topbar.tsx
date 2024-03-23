@@ -12,7 +12,7 @@ const Topbar = () => {
     if (isSuccess) navigate(0);
   }, [isSuccess]);
 
-  const { user } = useUserContext();
+  const { user, isAuthenticated} = useUserContext();
   return (
     <section className="topbar">
       <div className="flex-between py-4 px-5">
@@ -22,6 +22,7 @@ const Topbar = () => {
 
         <div className="flex gap-1">
         <ModeToggle/>
+        {isAuthenticated?<>
           <Button
             variant="ghost"
             className="shad-button_ghost"
@@ -37,7 +38,7 @@ const Topbar = () => {
               alt="profile"
               className="h-8 w-8 rounded-full"
             />
-          </Link>
+          </Link></>:<></>}
         </div>
       </div>
     </section>

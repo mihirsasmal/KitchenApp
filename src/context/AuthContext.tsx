@@ -58,8 +58,8 @@ const navigate = useNavigate();
 useEffect(()=>{
     if(localStorage.getItem('cookieFallback')==='[]'
      || localStorage.getItem('cookieFallback')===null
-     ) navigate('/login') 
- checkAuthUser();
+     ) navigate('/') 
+ else checkAuthUser();
 },[]);
 const value = {
     user, setUser, isLoading, isAuthenticated, setIsAuthenticated, setIsLoading, checkAuthUser

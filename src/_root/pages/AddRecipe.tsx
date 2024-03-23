@@ -1,7 +1,16 @@
 import Recipes from '@/components/forms/Recipes'
-import React from 'react'
+import { useUserContext } from '@/context/AuthContext';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const AddRecipe = () => {
+  const {isAuthenticated} = useUserContext();
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(!isAuthenticated)
+    { navigate('/login') }
+  },[])
+  
   return (
     <div className='flex flex-1'>
         <div className='common-container'>

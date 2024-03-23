@@ -6,10 +6,16 @@ import useDebounce from '@/hooks/useDebounce';
 import { useGetSavedRecipeByUserMutation, useSearchSavedRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer';
+import { useNavigate } from 'react-router-dom';
 
 const Saved = () => {
+  const {user, isAuthenticated} = useUserContext();
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(!isAuthenticated)
+    {navigate('/login') }
+  },[])
   const {ref, inView} = useInView();
-  const {user} = useUserContext();
  const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetSavedRecipeByUserMutation(user.id);
  useEffect (()=>{
   if(inView) fetchNextPage();

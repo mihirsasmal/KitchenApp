@@ -17,13 +17,19 @@ import ThumbnailView from '@/components/shared/ThumbnailView';
 import ListView from '@/components/shared/ListView';
 import { Models } from 'appwrite';
 import { useInView } from 'react-intersection-observer';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const YourRecipes = () => {
+  const {user, isAuthenticated} = useUserContext();
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(!isAuthenticated)
+    { navigate('/login') }
+  },[])
   const {ref, inView} = useInView();
-  const tableRecipe:any[]= [];
-  const {user} = useUserContext();
+  const tableRecipe:any[]= []; 
  const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetRecipeByUserMutation(user.id);
  const [position, setPosition] = useState("Thumbnail View");
  useEffect (()=>{

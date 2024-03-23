@@ -15,20 +15,22 @@ const Sidebar = () => {
     if (isSuccess) navigate(0);
   }, [isSuccess]);
 
-  const { user } = useUserContext();
+  const { user, isAuthenticated } = useUserContext();
   return (
     <nav className='leftsidebar'>
         <div className='flex flex-col gap-11'>
+        
         <Link to="/" className="flex gap-3 items-center">
           <img src="/assets/react.svg" alt="logo" width={10} height={10} />
         </Link>
+        {isAuthenticated?
         <Link to={`/profile/${user.id}`} className=' flex gap-3 items-center'>
         
         <img
               src={user.imageUrl || "assets/icons/profile-placeholder.svg"}
               alt="profile"
               className="h-14 w-14 rounded-full"
-            />        
+            />    
         <div className="flex flex-col">
             <p className="dark:text-white text-slate-800">
                 {user.name}
@@ -37,7 +39,7 @@ const Sidebar = () => {
              @{user.username}
             </p>
         </div>
-        </Link>
+        </Link>    :<></>}
         <ul className="flex flex-col gap-6">
             {sidebarLinks.map((link:INavLink)=> {
                 const isActive = pathname=== link.route;
@@ -61,14 +63,14 @@ const Sidebar = () => {
 
             </div>
             <div className="flex gap-9">            
-            <Button
+            {isAuthenticated?<Button
              variant="ghost"
             className="shad-button_ghost"
             onClick={() => logout()}
           >
             <img src="/assets/icons/logout.svg" alt="logout" />
             <p className="small-medium lg:base-medium">Logout</p>
-          </Button>
+          </Button> :<></>}
           <ModeToggle/>
           </div>
             </nav>
