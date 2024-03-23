@@ -4,10 +4,12 @@ import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { ModeToggle } from "./ModeToggle";
+import { useTheme } from "./ThemeProvider";
 
 const Topbar = () => {
   const { mutate: logout, isSuccess } = useLogoutAccountMutation();
   const navigate = useNavigate();
+  const { theme } = useTheme()
   useEffect(() => {
     if (isSuccess) navigate(0);
   }, [isSuccess]);
@@ -17,7 +19,7 @@ const Topbar = () => {
     <section className="topbar">
       <div className="flex-between py-4 px-5">
         <Link to="/" className="flex gap-3 item-center">
-          <img src="/assets/react.svg" alt="logo" width={50} height={50} />
+          <img src={theme==='dark'?"/assets/icons/KitchenLogoDark.jpeg":"/assets/icons/KitchenLogo.jpeg"} alt="logo" width={75} height={75} />
         </Link>
 
         <div className="flex gap-1">

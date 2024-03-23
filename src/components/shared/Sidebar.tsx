@@ -6,11 +6,13 @@ import { useEffect } from "react";
 import { Link, NavLink, useNavigate , useLocation} from "react-router-dom";
 import { Button } from "../ui/button";
 import { ModeToggle } from "./ModeToggle";
+import { useTheme } from "./ThemeProvider";
 
 const Sidebar = () => {
     const {pathname} = useLocation();
   const { mutate: logout, isSuccess } = useLogoutAccountMutation();
   const navigate = useNavigate();
+  const { theme } = useTheme()
   useEffect(() => {
     if (isSuccess) navigate(0);
   }, [isSuccess]);
@@ -20,8 +22,8 @@ const Sidebar = () => {
     <nav className='leftsidebar'>
         <div className='flex flex-col gap-11'>
         
-        <Link to="/" className="flex gap-3 items-center">
-          <img src="/assets/react.svg" alt="logo" width={10} height={10} />
+        <Link to="/" className="flex gap-3 justify-center items-center">
+          <img src= {theme==='dark'?"/assets/icons/KitchenLogoDark.jpeg":"/assets/icons/KitchenLogo.jpeg"} alt="logo" width={100} height={100} />
         </Link>
         {isAuthenticated?
         <Link to={`/profile/${user.id}`} className=' flex gap-3 items-center'>
