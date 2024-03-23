@@ -1,7 +1,7 @@
 import { useUserContext } from "@/context/AuthContext";
 import { useLogoutAccountMutation } from "@/lib/react-query/queriesAndMutation";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { ModeToggle } from "./ModeToggle";
 
@@ -11,7 +11,7 @@ const Topbar = () => {
   useEffect(() => {
     if (isSuccess) navigate(0);
   }, [isSuccess]);
-
+  const {pathname} = useLocation();
   const { user, isAuthenticated} = useUserContext();
   return (
     <section className="topbar">
@@ -38,7 +38,9 @@ const Topbar = () => {
               alt="profile"
               className="h-8 w-8 rounded-full"
             />
-          </Link></>:<></>}
+          </Link></>:(pathname !== '/login'?<Button type="button" className="shad-button_primary whitespace-nowrap" onClick={() => {
+                navigate("/login");
+              }} >Login</Button>:<></>)}
         </div>
       </div>
     </section>

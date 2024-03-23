@@ -39,7 +39,9 @@ const Sidebar = () => {
              @{user.username}
             </p>
         </div>
-        </Link>    :<></>}
+        </Link> :(pathname !== '/login'?<Button type="button" className="shad-button_primary whitespace-nowrap" onClick={() => {
+                navigate("/login");
+              }} >Login</Button>:<></>)}
         <ul className="flex flex-col gap-6">
             {sidebarLinks.map((link:INavLink)=> {
                 const isActive = pathname=== link.route;
