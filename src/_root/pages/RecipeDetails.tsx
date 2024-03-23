@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetRecipeByIdMutation } from '@/lib/react-query/queriesAndMutation'
 import { formatDate } from '@/lib/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const RecipeDetails =  () => {
@@ -20,10 +20,23 @@ const RecipeDetails =  () => {
 
   const [languageValue, setLanguageValue] = useState('english');
 
- const [ingredients, setIngredients] = useState(recipe?.Ingredients);
+  const [ingredients, setIngredients] = useState(recipe?.Ingredients);
 
+  useEffect(()=>{
+    setIngredients(recipe?.Ingredients)
+  },[recipe])
+
+  if(!recipes) {
+
+    return(
+      <div className='flex-center w-full h-full'>
+        <Loader />
+      </div>
+    )
+   }
+   
   return (
-    <div className='flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar items-center-container'>
+    <div className='flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 dark:custom-scrollbar lightCustom-scrollbar '>
       {isPending? <Loader /> :(
         <div className=' dark:bg-dark-2 bg-light-3 flex flex-col gap-5 lg:gap-1 flex-1 items-start p-8 rounded-[30px]'> 
          <div className = 'flex flex-col items-center justify-center  w-full'>
