@@ -10,8 +10,8 @@ const ThumbnailView = ({recipes, userId}:{recipes:Models.Document[], userId:stri
     <ul className='w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-7 max-w-5xl'>
     {recipes.map((recipe:any)=>(
         <li key = {recipe.$id} className='relative min-w-80 h-80'> {recipe.RecipeName}
-        <Link to = {`/recipe/${recipe.$id}`} className='grid-post_link'>{ recipe.ImageUrl ? (
-        <img src = {recipe.ImageUrl} alt='recipe' className= 'h-full w-full object-cover'/>): (<></>)}
+        <Link to = {`/recipe/${recipe.$id}`} className='grid-post_link'>
+        <img src = {recipe.ImageUrl || 'assets/icons/recipeDefaultImageThumbnail.jpeg'} alt='recipe' className= 'h-full w-full object-cover'/>
         </Link>
         <div className='grid-post_user'>
             {(

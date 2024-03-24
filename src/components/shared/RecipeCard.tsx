@@ -18,7 +18,7 @@ const {user} = useUserContext();
             <div className = 'flex items-center gap-3'>
                 <Link to={`/recipe/${recipe.$id}`}>
                     <img 
-                    src = {recipe.ImageUrl || 'assets/icons/profile-placeholder.svg'}
+                    src = {recipe.ImageUrl || 'assets/icons/recipeDefaultImage.jpeg'}
                     alt = 'Recipe Image'
                 className='aspect-auto w-32 lg:h-32'
             />

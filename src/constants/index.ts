@@ -10,7 +10,7 @@ export const sidebarLinks = [
       label: "Explore",
     },
     {
-      imgURL: "/assets/icons/people.svg",
+      imgURL: "/assets/icons/yourRecipe.svg",
       route: "/yourRecipes",
       label: "Your Recipes",
     },
@@ -20,7 +20,7 @@ export const sidebarLinks = [
       label: "Saved",
     },
     {
-      imgURL: "/assets/icons/gallery-add.svg",
+      imgURL: "/assets/icons/addRecipe.svg",
       route: "/addRecipe",
       label: "Add",
     },
@@ -38,7 +38,7 @@ export const sidebarLinks = [
       label: "Explore",
     },
     {
-      imgURL: "/assets/icons/people.svg",
+      imgURL: "/assets/icons/yourRecipe.svg",
       route: "/yourRecipes",
       label: "Your Recipes",
     },
@@ -48,7 +48,7 @@ export const sidebarLinks = [
       label: "Saved",
     },
     {
-      imgURL: "/assets/icons/gallery-add.svg",
+      imgURL: "/assets/icons/addRecipe.svg",
       route: "/addRecipe",
       label: "Add",
     },

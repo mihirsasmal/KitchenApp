@@ -134,7 +134,7 @@ const RecipeDetails =  () => {
                    <div className='flex lg:px-20 justify-start items-start gap-2 font-thin text-2xl'> <Editor content={languageValue ==='english' ? recipe?.Steps :recipe?.StepsOdia}   onValueChange={() => {}} isEditorUpdateRequired ={languageValue}  theme={theme} editable ={false}/> </div> 
                     
                    </div>
-                   {recipe.ImageUrl?<div className='w-fit lg:w-2/4 lg:px-32 md:w-full sm:w-5/6 pb-5'><img src={recipe.ImageUrl} alt = 'image'  /></div> :<></>}
+                   <div className='w-fit lg:w-2/4 lg:px-32 md:w-full sm:w-5/6 pb-5'><img src={recipe.ImageUrl || '/assets/icons/recipeDefaultImage.jpeg'} alt = 'image'  /></div> 
            <hr className='border w-full border-dark-4/80 ' />
             <RecipeStats recipe={recipe} userId={user.id}/>
         </div>

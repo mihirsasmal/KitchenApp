@@ -18,7 +18,7 @@ const GridRecipeList = ({recipes, showUser = true, showStats = true}:GridRecipeL
           recipes.map((recipe)=>(
               <li key = {recipe.$id} className='relative min-w-80 h-80'> {recipe.RecipeName}
               <Link to = {`/recipe/${recipe.$id}`} className='grid-post_link'>
-              <img src = {recipe.ImageUrl} alt='recipe' className= 'h-full w-full object-cover'/>
+              <img src = {recipe.ImageUrl || 'assets/icons/recipeDefaultImage.jpeg'} alt='recipe' className= 'h-full w-full object-cover'/>
               </Link>
               <div className='grid-post_user'>
                   {showUser && (

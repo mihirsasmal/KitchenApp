@@ -30,7 +30,7 @@ const Topbar = () => {
             className="shad-button_ghost"
             onClick={() => logout()}
           >
-            <img src="/assets/react.svg" alt="logout" width={10} height={10} />
+            <img src="/assets/icons/logout.svg" alt="logout" width={20} height={20} />
             Logout
           </Button>
 
