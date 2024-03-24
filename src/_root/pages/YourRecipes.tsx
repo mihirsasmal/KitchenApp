@@ -22,12 +22,12 @@ import { useNavigate } from 'react-router-dom';
 
 
 const YourRecipes = () => {
-  const {user, isAuthenticated} = useUserContext();
+  const {user, isLoading, isAuthenticated} = useUserContext();
   const navigate = useNavigate();
   useEffect(()=>{
-    if(!isAuthenticated)
-    { navigate('/login') }
-  },[])
+    if(!isLoading && !isAuthenticated )
+    { navigate('/login') }}
+  ,[isLoading])
   const {ref, inView} = useInView();
   const tableRecipe:any[]= []; 
  const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetRecipeByUserMutation(user.id);

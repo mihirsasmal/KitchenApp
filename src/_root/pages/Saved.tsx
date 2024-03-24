@@ -9,12 +9,12 @@ import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 
 const Saved = () => {
-  const {user, isAuthenticated} = useUserContext();
+  const {user,isLoading, isAuthenticated} = useUserContext();
   const navigate = useNavigate();
   useEffect(()=>{
-    if(!isAuthenticated)
+    if(!isLoading && !isAuthenticated)
     {navigate('/login') }
-  },[])
+  },[isLoading])
   const {ref, inView} = useInView();
  const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetSavedRecipeByUserMutation(user.id);
  useEffect (()=>{

@@ -4,12 +4,12 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const AddRecipe = () => {
-  const {isAuthenticated} = useUserContext();
+  const {isLoading,isAuthenticated} = useUserContext();
   const navigate = useNavigate();
   useEffect(()=>{
-    if(!isAuthenticated)
+    if(!isLoading &&!isAuthenticated)
     { navigate('/login') }
-  },[])
+  },[isLoading])
   
   return (
     <div className='flex flex-1'>
