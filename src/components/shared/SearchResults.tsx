@@ -1,5 +1,4 @@
 import { Models } from 'appwrite';
-import React from 'react'
 import GridRecipeList from './GridRecipeList';
 import Loader from './Loader';
 type SearchResultProps = {

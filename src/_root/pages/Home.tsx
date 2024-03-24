@@ -5,7 +5,7 @@ import { Models } from 'appwrite';
 
 const Home = () => {
 
-  const {data:recipes, isPending:isRecipeLoading, isError:isErrorRecipes} = useGetRecentRecipeMutation();
+  const {data:recipes, isPending:isRecipeLoading} = useGetRecentRecipeMutation();
   return (
     <div className='flex flex-1'>
       <div className='home-container'>

@@ -4,6 +4,7 @@ import SearchResults from '@/components/shared/SearchResults';
 import { useUserContext } from '@/context/AuthContext';
 import useDebounce from '@/hooks/useDebounce';
 import { useGetSavedRecipeByUserMutation, useSearchSavedRecipeMutation } from '@/lib/react-query/queriesAndMutation';
+import { Models } from 'appwrite';
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
@@ -62,7 +63,7 @@ const Saved = () => {
             ) : shouldShowRecipes? (
               <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> End of Recipes</p>
             ) : recipes.pages.map((item,index)=>(
-              <GridRecipeList key={`page-${index}`} recipes = {item} />
+              <GridRecipeList key={`page-${index}`} recipes = {item as Models.Document[]} />
             ))}
             </ul>
           </div>

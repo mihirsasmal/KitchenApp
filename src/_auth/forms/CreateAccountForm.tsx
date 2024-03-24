@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,14 +19,13 @@ import { useCreateUserAccountMutation, useLoginAccountMutation } from "@/lib/rea
 import { useUserContext } from "@/context/AuthContext";
 
 const CreateAccountForm = () => {
-  //const isCreatingAccount = false;
 
   const { toast } = useToast();
- const {checkAuthUser, isLoading:isUserLoading} = useUserContext();
+ const {checkAuthUser} = useUserContext();
  const navigate = useNavigate();
   const {mutateAsync:createUserAccount, isPending:isCreatingAccount} = useCreateUserAccountMutation();
 
-  const {mutateAsync: loginAccount, isPending:isLoggedIn} = useLoginAccountMutation();
+  const {mutateAsync: loginAccount} = useLoginAccountMutation();
   // 1. Define your form.
   const form = useForm<z.infer<typeof createAccountValidation>>({
     resolver: zodResolver(createAccountValidation),

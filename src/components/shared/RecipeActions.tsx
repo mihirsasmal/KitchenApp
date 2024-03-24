@@ -1,10 +1,5 @@
-import { useUserContext } from '@/context/AuthContext';
-import { useDeleteRecipeMutation, useDeleteSavedRecipeMutation, useGetCurrentUserMutation, useLikeRecipeMutation, useSaveRecipeMutation } from '@/lib/react-query/queriesAndMutation';
-import { checkIsLiked } from '@/lib/utils';
 import { Models } from 'appwrite';
-import React, { useEffect, useState } from 'react'
-import { REPL_MODE_SLOPPY } from 'repl';
-import Loader from './Loader';
+import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import Modal from './Modal';
@@ -18,14 +13,8 @@ type RecipeActionProps = {
 
 const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
 
-    const {mutate:deleteRecipe, isPending:isDeletingRecipe} = useDeleteRecipeMutation();
-
     const[open, setOpen] = useState(false);
 
-
-const handleDeleteRecipe = ()=>{
-    deleteRecipe({recipeId:recipe.$id, imageId:recipe.ImageId});
-}
 
   return (
     <div className='flex justify-between items-center z-20'>
@@ -51,18 +40,8 @@ const handleDeleteRecipe = ()=>{
             ):( <></>)}
             
             </div>
-            <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe} navigateBack={navigateBack}>
-                
-            
-                
-
-                  
+            <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe} navigateBack={navigateBack}>                
             </Modal>
-
-            
-                    
-                    
-            
   </div>
   )
 }

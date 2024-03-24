@@ -1,6 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react'
 import { IContextType, IUser } from '@/types';
-import { account } from '@/lib/appwrite/config';
 import { getCurrentUser } from '@/lib/appwrite/api';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,6 +1,5 @@
 import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
-import { LucideSatelliteDish } from 'lucide-react';
 import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';
 

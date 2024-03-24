@@ -3,19 +3,9 @@ import Loader from '@/components/shared/Loader';
 import SearchResults from '@/components/shared/SearchResults';
 import useDebounce from '@/hooks/useDebounce';
 import { useGetRecipeMutation, useSearchRecipeMutation } from '@/lib/react-query/queriesAndMutation';
+import { Models } from 'appwrite';
 import { useEffect, useState } from 'react'
 import {useInView} from 'react-intersection-observer';
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from '@/components/ui/button';
 
 
 const Explore = () => {
@@ -28,8 +18,6 @@ const Explore = () => {
   const [searchValue, setSearchValue] = useState('');
   const debouncedValue = useDebounce(searchValue, 500);
  const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchRecipeMutation(debouncedValue);
- const [position, setPosition] = useState("Thumbnail View");
-
 
  if(!recipes) {
 
@@ -71,7 +59,7 @@ const Explore = () => {
               <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> End of Recipes</p>
             ) : recipes.pages.map((item,index)=>(
               
-              <GridRecipeList key={`page-${index}`} recipes = {item} />
+              <GridRecipeList key={`page-${index}`} recipes = {item as Models.Document[]} />
              
             ))}
              </ul>

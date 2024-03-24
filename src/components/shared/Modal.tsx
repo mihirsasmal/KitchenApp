@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button } from '../ui/button'
 import { useDeleteRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { Models } from 'appwrite';

@@ -2,7 +2,6 @@ import Recipes from '@/components/forms/Recipes'
 import Loader from '@/components/shared/Loader';
 import { useGetRecipeByIdMutation } from '@/lib/react-query/queriesAndMutation';
 import { Models } from 'appwrite';
-import React from 'react'
 import { useParams } from 'react-router-dom';
 
 const EditRecipe = () => {

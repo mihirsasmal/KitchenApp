@@ -1,5 +1,4 @@
 import { formatDate } from '@/lib/utils'
-import React from 'react'
 import RecipeActions from './RecipeActions'
 import { Link } from 'react-router-dom'
 import { Models } from 'appwrite'
