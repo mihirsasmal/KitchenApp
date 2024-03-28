@@ -258,7 +258,7 @@ export async function deleteFile(fileId:string) {
 export async function getRecentRecipe() {
     try{
 
-        const allRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId)
+        const allRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, [Query.orderDesc('$createdAt'),Query.limit(12)])
 
         if(!allRecipe) {
             

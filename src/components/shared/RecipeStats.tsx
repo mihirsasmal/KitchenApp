@@ -53,7 +53,7 @@ const handleSaveRecipe = (e:React.MouseEvent)=>{
 }
 
   return (
-    <div className='flex justify-between items-center z-20'>
+    <div className='flex justify-center items-center z-20'>
         <div className='flex gap-2 mr-5'>
         <p className='small-medium lg:base-medium'>Likes {likes.length}</p>
             <img 

@@ -86,9 +86,17 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
         imageId: recipe?.imageId,
         imageUrl: recipe?.imageUrl,
       });
-      if (!updateRecipe) {
-        toast({ title: "Something went wrong, Please try again." });
+      if (!(updateRecipe as any).$id) {
+        return toast({
+          title: "Recipe Submission failed. "+(updateRecipe as any).message 
+          ,     
+            className: 'dark:bg-rose-500 bg-rose-400',
+        });
       }
+      toast({
+        title: "Recipe Submitted",
+        className: 'dark:bg-green-500 bg-green-400',
+      });
 
       return navigate(`/recipe/${recipe.$id}`);
     }
@@ -99,13 +107,16 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
       userId: user.id,
     });
 
-    if (!newRecipe) {
+    if (!(newRecipe as any).$id) {
       return toast({
-        title: "Recipe Submission failed. Please try again",
+        title: "Recipe Submission failed. "+(newRecipe as any).message 
+        ,     
+          className: 'dark:bg-rose-500 bg-rose-400',
       });
     }
     toast({
       title: "Recipe Submitted",
+      className: 'dark:bg-green-500 bg-green-400',
     });
 
     navigate("/");
@@ -182,7 +193,7 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                       className={
                         field.value === "english"
                           ? "dark:bg-slate-900 bg-light-5" 
-                          : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500"
+                          : "dark:bg-gray-400 bg-gray-300 dark:text-slate-500 text-slate-500 "
                       }
                     >
                       English

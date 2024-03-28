@@ -25,7 +25,7 @@ export const createAccountValidation = z.object({
     cuisineType: z.string().optional(),
     regionOfCuisine: z.string().optional(),
     ingredients: z.array(optionSchema).min(1,{message:'Minimum one ingredient must be selected'}),
-    steps: z.string().min(2,{message:'Steps must be at least 2 characters'}).max(5000),
+    steps: z.string().min(2,{message:'Steps must be at least 2 characters'}),
     file: z.custom<File[]>()
   });
   
