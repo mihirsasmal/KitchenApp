@@ -255,16 +255,22 @@ export async function deleteFile(fileId:string) {
     }
 }
 
-export async function getRecentRecipe() {
+export async function getRecentRecipe(pageParam:number) {
+
+    const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12)]
+    if(pageParam) {
+
+        queries.push (Query.cursorAfter(pageParam.toString()));
+    }
     try{
 
-        const allRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, [Query.orderDesc('$createdAt'),Query.limit(12)])
+        const allRecipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, queries)
 
         if(!allRecipe) {
             
             throw Error
         }
-        return allRecipe;
+        return allRecipe.documents;
     }
     catch(error) {
         console.log(error)

@@ -77,9 +77,18 @@ export const useDeleteRecipeMutation = ()=> {
 }; 
 
 export const useGetRecentRecipeMutation = ()=> {
-        return useQuery ({
+        return useInfiniteQuery ({
             queryKey: [QUERY_KEYS.GET_RECENT_RECIPES],
-            queryFn: getRecentRecipe
+            queryFn:  async({pageParam})=> getRecentRecipe(pageParam),
+            initialPageParam:0,
+            //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
+
+            getNextPageParam : (lastPage:any)=> {
+                if(lastPage && lastPage.length === 0) return null;
+
+                const lastId = lastPage[lastPage.length - 1].$id;
+                return lastId;
+            }
         });
     }; 
 
