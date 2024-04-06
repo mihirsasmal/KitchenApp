@@ -52,6 +52,10 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
     if (!ingredients) return [];
 
     const allIngredients = (ingredients as any).map((x: string) => {
+      if(languageValue==='english') {
+        return {label:x.charAt(0).toUpperCase()+x.slice(1), value:x}
+      }
+      
       return { label: x, value: x };
     });
 

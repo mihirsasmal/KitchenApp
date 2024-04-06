@@ -127,7 +127,7 @@ const RecipeDetails =  () => {
            
             <p className='flex justify-start items-start font-sans text-2xl'>Ingredients </p>
             <ul className='flex-col px-32'> 
-                   {ingredients?.map((x:string)=>{return (<li key={x} className='dark:text-light-3 text-dark-1 '><span className='flex gap-5 pt-3'><img src = {theme=='dark'?'/assets/icons/bulletPoint.jpeg':'/assets/icons/bulletLight.jpeg'} alt='bulletIcon' className='h-10 w-10 rounded-full'/> <span className='pt-1 font-thin text-2xl'>{x}</span></span></li>)})} </ul>
+                   {ingredients?.map((x:string)=>{return (<li key={x} className='dark:text-light-3 text-dark-1 '><span className='flex gap-5 pt-3'><img src = {theme=='dark'?'/assets/icons/bulletPoint.jpeg':'/assets/icons/bulletLight.jpeg'} alt='bulletIcon' className='h-10 w-10 rounded-full'/> <span className='pt-1 font-thin text-2xl'>{languageValue === "english"?x.charAt(0).toUpperCase()+x.slice(1):x}</span></span></li>)})} </ul>
                    </div>
                    <div className = 'flex flex-col items-start justify-start w-full lg:gap-2 md:gap-5 sm:gap-9 gap-9'> 
                    <p className='flex justify-start items-start font-sans text-2xl'>Steps  </p>   
