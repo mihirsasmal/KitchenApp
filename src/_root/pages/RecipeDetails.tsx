@@ -58,15 +58,15 @@ const RecipeDetails =  () => {
            <div className = 'flex flex-col items-start justify-start gap-3'> 
            <div className = 'flex items-start justify-start  '> 
            <p className='flex font-sans text-2xl'>Meal Type </p>
-           <p className='px-20 pt-1 flex font-thin text-2xl'>{recipe.MealType}</p>
+           <p className='px-20 pt-1 flex font-light text-2xl'>{recipe.MealType}</p>
            </div>
            <div className = 'flex items-start justify-start  '> 
            <p className='flex justify-start items-start font-sans text-2xl'>Cuisine </p>
-           <p className='px-28 pt-1 font-thin text-2xl'>{recipe.CuisineType}</p>
+           <p className='px-28 pt-1 font-light text-2xl'>{recipe.CuisineType}</p>
            </div>
            <div className = 'flex items-start justify-start  '> 
             {recipe.CuisineRegion?(<div className = 'flex items-start justify-start  '> <p className='flex justify-start items-start font-sans text-2xl'>Cuisine Region </p>
-           <p className='px-8 pt-1 font-thin text-2xl'>{recipe.CuisineRegion}</p></div>):<></>}
+           <p className='px-8 pt-1 font-light text-2xl'>{recipe.CuisineRegion}</p></div>):<></>}
             </div>                  
            <div className = 'flex-col items-start justify-start gap-5'> 
            <p className='flex justify-start items-start font-sans text-2xl'>Language </p>
@@ -127,7 +127,7 @@ const RecipeDetails =  () => {
            
             <p className='flex justify-start items-start font-sans text-2xl'>Ingredients </p>
             <ul className='flex-col px-32'> 
-                   {ingredients?.map((x:string)=>{return (<li key={x} className='dark:text-light-3 text-dark-1 '><span className='flex gap-5 pt-3'><img src = {theme=='dark'?'/assets/icons/bulletPoint.jpeg':'/assets/icons/bulletLight.jpeg'} alt='bulletIcon' className='h-10 w-10 rounded-full'/> <span className='pt-1 font-thin text-2xl'>{languageValue === "english"?x.charAt(0).toUpperCase()+x.slice(1):x}</span></span></li>)})} </ul>
+                   {ingredients?.map((x:string)=>{return (<li key={x} className='dark:text-light-3 text-dark-1 '><span className='flex gap-5 pt-3'><img src = {theme=='dark'?'/assets/icons/bulletPoint.jpeg':'/assets/icons/bulletLight.jpeg'} alt='bulletIcon' className='h-10 w-10 rounded-full'/> <span className='pt-1 font-light text-2xl'>{languageValue === "english"?x.charAt(0).toUpperCase()+x.slice(1):x}</span></span></li>)})} </ul>
                    </div>
                    <div className = 'flex flex-col items-start justify-start w-full lg:gap-2 md:gap-5 sm:gap-9 gap-9'> 
                    <p className='flex justify-start items-start font-sans text-2xl'>Steps  </p>   
