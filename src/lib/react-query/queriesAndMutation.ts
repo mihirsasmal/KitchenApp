@@ -41,7 +41,10 @@ export const useDeleteRecipeMutation = ()=> {
     const queryClient = useQueryClient();
     return useMutation ({
         mutationFn: ({recipeId, imageId}:{recipeId:string; imageId: string}) => deleteRecipe(recipeId,imageId),
-        onSuccess:()=> {
+        onSuccess:(data: unknown, variables: {
+            recipeId: string;
+            imageId: string;
+        }, context: unknown)=> {
             queryClient.invalidateQueries ({
                 queryKey: [QUERY_KEYS.GET_RECENT_RECIPES]
             })
@@ -61,7 +64,7 @@ export const useDeleteRecipeMutation = ()=> {
             })
 
             queryClient.invalidateQueries ({
-                queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID]
+                queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, variables.recipeId]
             })
 
             queryClient.invalidateQueries ({
@@ -158,8 +161,8 @@ export const useGetRecentRecipeMutation = ()=> {
     }; 
 
     export const useGetRecipeByIdMutation = (recipeId:string)=> {
-        return useQuery ({
-            queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID],
+        return useQuery ({            
+            queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, recipeId],
             queryFn: ()=>getRecipeById(recipeId),
             enabled:!!recipeId
         });
