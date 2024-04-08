@@ -20,7 +20,7 @@ const Sidebar = () => {
   const { user, isAuthenticated } = useUserContext();
   return (
     <nav className='leftsidebar'>
-        <div className='flex flex-col gap-11'>
+        <div className='flex flex-col gap-2'>
         
         <Link to="/" className="flex gap-3 justify-center items-center">
           <img src= {theme==='dark'?"/assets/icons/KitchenLogoDark.jpeg":"/assets/icons/KitchenLogo.jpeg"} alt="logo" width={100} height={100} />
@@ -44,7 +44,7 @@ const Sidebar = () => {
         </Link> :(pathname !== '/login'?<Button type="button" className="shad-button_primary whitespace-nowrap" onClick={() => {
                 navigate("/login");
               }} >Login</Button>:<></>)}
-        <ul className="flex flex-col gap-6">
+        <ul className="flex flex-col gap-1">
             {sidebarLinks.map((link:INavLink)=> {
                 const isActive = pathname=== link.route;
                 return (

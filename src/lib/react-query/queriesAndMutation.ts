@@ -41,10 +41,10 @@ export const useDeleteRecipeMutation = ()=> {
     const queryClient = useQueryClient();
     return useMutation ({
         mutationFn: ({recipeId, imageId}:{recipeId:string; imageId: string}) => deleteRecipe(recipeId,imageId),
-        onSuccess:(data: unknown, variables: {
+        onSuccess:(_data: unknown, variables: {
             recipeId: string;
             imageId: string;
-        }, context: unknown)=> {
+        }, _context: unknown)=> {
             queryClient.invalidateQueries ({
                 queryKey: [QUERY_KEYS.GET_RECENT_RECIPES]
             })
