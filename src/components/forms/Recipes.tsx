@@ -352,8 +352,8 @@ const Recipes = ({ recipe, action }: RecipeFormProps) => {
                         no results found.
                       </p>
                     }
-                    
-                    className="shad-input"
+                    badgeClassName="dark:bg-light-4 bg-light-5"
+                    className="dark:bg-dark-4 bg-light-3 dark:placeholder:text-light-4 placeholder:text-light-5"
                   />                                                                                                                                                                                                                                                                                                                              
                   
                 </FormControl>
