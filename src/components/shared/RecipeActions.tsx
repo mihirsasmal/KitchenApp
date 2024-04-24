@@ -17,6 +17,8 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
     const[open, setOpen] = useState(false);
     const[shareOpen, setShareOpen] = useState(false);
 
+    const sharedUser = recipe.share.filter((x:any)=>{const tempSharedUser = JSON.parse(x); if(tempSharedUser.userId=== userId) return x;}).map((x:any)=>JSON.parse(x));
+    
   return (
     <div className='flex justify-between items-center z-20'>
         <div className='flex gap-2 mr-5'>
@@ -53,7 +55,10 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
                   </Button>
                   
                   </div>
-            ):( <></>)}
+            ):((sharedUser.length>0 && sharedUser[0].canEdit)? (<div  className ='flex-center'>
+            <Link to={`/update-recipe/${recipe.$id}`}>
+            <img src='/assets/icons/edit.svg' alt='edit' width={20} height={20} />
+          </Link> </div>):(<></>))}
             
             </div>
             <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe} navigateBack={navigateBack}>                

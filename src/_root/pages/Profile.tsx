@@ -1,7 +1,7 @@
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <div>Profile :- Page will be updated Soon</div>
   )
 }
 

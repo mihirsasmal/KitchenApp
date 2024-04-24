@@ -15,6 +15,11 @@ export const sidebarLinks = [
       label: "Your Recipes",
     },
     {
+      imgURL: "/assets/icons/people.svg",
+      route: "/shared",
+      label: "Shared",
+    },
+    {
       imgURL: "/assets/icons/bookmark.svg",
       route: "/saved",
       label: "Saved",
@@ -41,6 +46,11 @@ export const sidebarLinks = [
       imgURL: "/assets/icons/yourRecipe.svg",
       route: "/yourRecipes",
       label: "Your Recipes",
+    },
+    {
+      imgURL: "/assets/icons/people.svg",
+      route: "/shared",
+      label: "Shared",
     },
     {
       imgURL: "/assets/icons/bookmark.svg",

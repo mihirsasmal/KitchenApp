@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom'
 import Modal from './Modal'
 import { Input } from '../ui/input'
 import ShareModal from './ShareModal'
+import { useUserContext } from '@/context/AuthContext'
 
 export type RecipeTableView = {
     $id:string
@@ -125,12 +126,12 @@ export const columns:ColumnDef<RecipeTableView>[] = [
     id: "actions",
     cell: ({ row }) => {
       const recipe = row.original;
-
+      const {user} = useUserContext();
       const[open, setOpen] = useState(false);
       const[shareOpen, setShareOpen] = useState(false);
-
- 
-      return (
+      const sharedUser = (recipe as any).share.filter((x:any)=>{const tempSharedUser = JSON.parse(x); if(tempSharedUser.userId=== user.id) return x;}).map((x:any)=>JSON.parse(x));
+      
+      return ( (user.id ===(recipe as any).creator.$id)  ?
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -164,7 +165,21 @@ export const columns:ColumnDef<RecipeTableView>[] = [
           <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe as any}></Modal>
           <ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipe={recipe as any}></ShareModal>
         </DropdownMenu>
-        
+        : (sharedUser.length>0 && sharedUser[0].canEdit)? <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">            
+          <DropdownMenuItem>
+          <Link to={`/update-recipe/${recipe.$id}`}>
+              <img src = '/assets/icons/edit.svg' alt = 'edit' width={20} height = {20}/>                
+          </Link>
+          </DropdownMenuItem>         
+        </DropdownMenuContent>
+      </DropdownMenu>:<></>
       )
     },
     enableSorting: false,

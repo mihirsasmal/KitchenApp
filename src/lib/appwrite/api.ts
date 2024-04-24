@@ -377,6 +377,33 @@ export async function getRecipeByUser(userId:string, pageParam:number) {
     }
 }
 
+export async function getSharedRecipeOfUser(userId:string, pageParam:number) {
+
+    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(12),Query.search('share', userId)]
+    if(pageParam) {
+
+        queries.push (Query.cursorAfter(pageParam.toString()));
+    }
+
+    try{
+
+        const recipeOfUser = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries)
+
+
+        
+
+        if(!recipeOfUser) {
+            
+            throw Error
+        }
+        return recipeOfUser.documents;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
 export async function likeRecipe(recipeId:string, likesArray:string[]) {
     try{
 

@@ -1,6 +1,6 @@
 import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
-import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchUser, shareRecipe } from '../appwrite/api'
+import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, getSharedRecipeOfUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchUser, shareRecipe } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';
 
 export const useCreateUserAccountMutation = ()=> {
@@ -291,6 +291,22 @@ export const useGetRecentRecipeMutation = ()=> {
         return useInfiniteQuery ({
             queryKey: ['getRecipeByUserId'],
             queryFn: async({pageParam})=>getRecipeByUser(userId, pageParam),
+            enabled:!!userId,
+            initialPageParam:0,
+            //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
+            getNextPageParam: (lastPage:any)=> {
+                if(lastPage && lastPage.length === 0) return null;
+
+                const lastId = lastPage[lastPage.length - 1].$id;
+                return lastId;
+            }
+        });
+    };
+
+    export const useGetSharedRecipeOfUserMutation = (userId:string)=> {
+        return useInfiniteQuery ({
+            queryKey: ['getSharedRecipeOfUser'],
+            queryFn: async({pageParam})=>getSharedRecipeOfUser(userId, pageParam),
             enabled:!!userId,
             initialPageParam:0,
             //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
