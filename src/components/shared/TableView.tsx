@@ -141,8 +141,8 @@ export const columns:ColumnDef<RecipeTableView>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">            
             <DropdownMenuItem>
-            <Link to={`/update-recipe/${recipe.$id}`}>
-                <img src = '/assets/icons/edit.svg' alt = 'edit' width={20} height = {20}/>                
+            <Link to={`/update-recipe/${recipe.$id}`} className='p-0.5'>
+                <img src = '/assets/icons/edit.svg' alt = 'edit' width={20} height = {20} />                
             </Link>
             </DropdownMenuItem>
             <DropdownMenuItem  onClick={()=>setOpen(true)}>
