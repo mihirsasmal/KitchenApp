@@ -1,6 +1,6 @@
-import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
+import { INewUser, IRecipe, ISharedUsers, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
-import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes } from '../appwrite/api'
+import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchUser, shareRecipe } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';
 
 export const useCreateUserAccountMutation = ()=> {
@@ -160,6 +160,30 @@ export const useGetRecentRecipeMutation = ()=> {
         });
     }; 
 
+    export const useGetAllUsersMutation = ()=> {
+        return useInfiniteQuery ({
+            queryKey:['getAllUsers'],
+            queryFn: async({pageParam})=>getAllUsers(pageParam),
+            initialPageParam:0,
+            //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
+
+            getNextPageParam : (lastPage:any)=> {
+                if(lastPage && lastPage.length === 0) return null;
+
+                const lastId = lastPage[lastPage.length - 1].$id;
+                return lastId;
+            }
+        })
+    }; 
+
+    export const useSearchUserMutation = (searchValue:string)=> {
+        return useQuery({
+            queryKey: ['searchUser', searchValue],
+            queryFn: ()=> searchUser(searchValue),
+            enabled: !! searchValue
+        });
+    };
+
     export const useGetRecipeByIdMutation = (recipeId:string)=> {
         return useQuery ({            
             queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, recipeId],
@@ -175,6 +199,40 @@ export const useGetRecentRecipeMutation = ()=> {
             onSuccess:(data:any)=> {
                 queryClient.invalidateQueries ({
                     queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, data?.$id]
+                })
+                }
+        });
+    };
+
+    export const useUpdateSharedUserOfRecipeMutation = ()=> {
+        const queryClient = useQueryClient();
+        return useMutation ({
+            mutationFn: ({recipeId, sharedUsers}:{recipeId:string, sharedUsers:string[]}) => shareRecipe(recipeId,sharedUsers),
+            onSuccess:(data:any)=> {
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, data?.$id]
+                })
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_RECENT_RECIPES]
+                })
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_RECIPES]
+                })
+                
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_USER_RECIPES]
+                })
+    
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_INFINITE_RECIPES]
+                })
+    
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_SAVED_RECIPE_BY_USER]
+                })
+    
+                queryClient.invalidateQueries ({
+                    queryKey: ['getRecipeByUserId']
                 })
                 }
         });

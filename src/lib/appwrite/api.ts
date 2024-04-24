@@ -1,4 +1,4 @@
-import { INewUser, IRecipe, IUpdateRecipe } from "@/types";
+import { INewUser, IRecipe, ISharedUsers, IUpdateRecipe } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import {ID,  Models, Query} from 'appwrite';
 import { v4 as uuidv4 } from 'uuid';
@@ -62,6 +62,43 @@ export async function getCurrentUser() {
         if(!currentUser) throw Error;
 
         return currentUser.documents[0];
+    }
+    catch(error) {
+        console.log(error)
+      }
+}
+
+export async function getAllUsers(pageParam:number) {
+
+    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10)]
+    if(pageParam) {
+
+        queries.push (Query.cursorAfter(pageParam.toString()));
+    }
+    try{
+   
+
+         const allUsers = await databases.listDocuments(appwriteConfig.databaseId,appwriteConfig.userCollectionId,queries);
+
+        if(!allUsers) throw Error;
+
+        return allUsers.documents;
+    }
+    catch(error) {
+        console.log(error)
+      }
+}
+
+export async function searchUser(searchValue:string) {
+
+    try{
+   
+
+         const allUsers = await databases.listDocuments(appwriteConfig.databaseId,appwriteConfig.userCollectionId,[Query.search('email',searchValue)]);
+
+        if(!allUsers) throw Error;
+
+        return allUsers.documents;
     }
     catch(error) {
         console.log(error)
@@ -218,6 +255,24 @@ export async function uploadFile(file:File) {
             file
         );
         return uploadedFile;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function shareRecipe(recipeId:string,sharedUsers:string[]) {
+   
+    try{
+        const updatedRecipe =  await databases.updateDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, recipeId,
+        {
+            share:sharedUsers
+        }
+        ) ;
+        
+        // console.log(updatedRecipe)
+        return updatedRecipe;
     }
     catch(error) {
         console.log(error)

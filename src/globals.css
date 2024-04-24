@@ -151,7 +151,7 @@
   }
 
   .explore-search {
-    @apply h-12 dark:bg-dark-4 bg-light-3 border-none dark:placeholder:text-light-4 placeholder:text-light-5 focus-visible:ring-0 focus-visible:ring-offset-0 ring-offset-0 !important;
+    @apply h-12 dark:bg-dark-4 bg-light-3 border-none dark:placeholder:text-light-4 placeholder:text-light-5 focus-visible:ring-0 outline-none focus-visible:ring-offset-0 ring-offset-0 !important;
   }
 
   /* Home */

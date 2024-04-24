@@ -38,17 +38,13 @@ export type INavLink = {
     ingredients?: string[];
     steps?: string;
     imageId: string;
-    imageUrl: URL;    
+    imageUrl: URL;  
+    share?:ISharedUsers[]  
   };
   
-  export type IUpdatePost = {
-    postId: string;
-    caption: string;
-    imageId: string;
-    imageUrl: URL;
-    file: File[];
-    location?: string;
-    tags?: string;
+  export type ISharedUsers = {
+    userId: string;
+    canEdit:boolean;
   };
   
   export type IUser = {

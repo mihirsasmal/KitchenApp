@@ -24,6 +24,7 @@ import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Modal from './Modal'
 import { Input } from '../ui/input'
+import ShareModal from './ShareModal'
 
 export type RecipeTableView = {
     $id:string
@@ -126,6 +127,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
       const recipe = row.original;
 
       const[open, setOpen] = useState(false);
+      const[shareOpen, setShareOpen] = useState(false);
 
  
       return (
@@ -150,8 +152,17 @@ export const columns:ColumnDef<RecipeTableView>[] = [
                   height = {24}
                   />
             </DropdownMenuItem>
+            <DropdownMenuItem  onClick={()=>setShareOpen(true)}>
+            <img 
+                  src = '/assets/icons/share.svg'
+                  alt='share'
+                  width = {24}
+                  height = {24}
+                  />
+            </DropdownMenuItem>
           </DropdownMenuContent>
           <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe as any}></Modal>
+          <ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipe={recipe as any}></ShareModal>
         </DropdownMenu>
         
       )

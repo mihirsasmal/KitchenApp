@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import Modal from './Modal';
+import ShareModal from './ShareModal';
 
 
 type RecipeActionProps = {
@@ -14,7 +15,7 @@ type RecipeActionProps = {
 const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
 
     const[open, setOpen] = useState(false);
-
+    const[shareOpen, setShareOpen] = useState(false);
 
   return (
     <div className='flex justify-between items-center z-20'>
@@ -36,12 +37,28 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
                   width = {24}
                   height = {24}
                   />
-                  </Button></div>
+                  </Button>
+
+                  <Button
+                  onClick = {()=>setShareOpen(true)}
+                  variant = 'ghost'
+                  className={`ghost_details-delete_btn p-0 ${userId !==recipe.creator.$id && 'hidden'}`}
+                >
+                  <img 
+                  src = '/assets/icons/share.svg'
+                  alt='share'
+                  width = {24}
+                  height = {24}
+                  />
+                  </Button>
+                  
+                  </div>
             ):( <></>)}
             
             </div>
             <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe} navigateBack={navigateBack}>                
             </Modal>
+            <ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipe={recipe as any}></ShareModal>
   </div>
   )
 }
