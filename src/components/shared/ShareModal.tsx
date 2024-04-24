@@ -3,7 +3,7 @@ import { useSearchUserMutation, useUpdateSharedUserOfRecipeMutation } from '@/li
 import { Models } from 'appwrite';
 import Loader from './Loader';
 import { useNavigate } from 'react-router-dom';
-import MultipleSelector, { Option } from './MultipleSelector';
+import MultipleSelector from './MultipleSelector';
 import { useState } from 'react';
 import { Switch } from "@/components/ui/switch"
 import useDebounce from '@/hooks/useDebounce';

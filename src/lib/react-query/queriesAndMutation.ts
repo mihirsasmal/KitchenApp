@@ -1,4 +1,4 @@
-import { INewUser, IRecipe, ISharedUsers, IUpdateRecipe } from '@/types'
+import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
 import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchUser, shareRecipe } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';

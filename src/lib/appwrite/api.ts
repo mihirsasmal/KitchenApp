@@ -1,4 +1,4 @@
-import { INewUser, IRecipe, ISharedUsers, IUpdateRecipe } from "@/types";
+import { INewUser, IRecipe, IUpdateRecipe } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import {ID,  Models, Query} from 'appwrite';
 import { v4 as uuidv4 } from 'uuid';
