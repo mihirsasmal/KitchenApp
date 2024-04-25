@@ -1,6 +1,6 @@
 import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
-import { addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, getSharedRecipeOfUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchUser, shareRecipe } from '../appwrite/api'
+import { UpdatePublishStatusOfRecipe, addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, getSharedRecipeOfUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchUser, shareRecipe } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';
 
 export const useCreateUserAccountMutation = ()=> {
@@ -208,6 +208,40 @@ export const useGetRecentRecipeMutation = ()=> {
         const queryClient = useQueryClient();
         return useMutation ({
             mutationFn: ({recipeId, sharedUsers}:{recipeId:string, sharedUsers:string[]}) => shareRecipe(recipeId,sharedUsers),
+            onSuccess:(data:any)=> {
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, data?.$id]
+                })
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_RECENT_RECIPES]
+                })
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_RECIPES]
+                })
+                
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_USER_RECIPES]
+                })
+    
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_INFINITE_RECIPES]
+                })
+    
+                queryClient.invalidateQueries ({
+                    queryKey: [QUERY_KEYS.GET_SAVED_RECIPE_BY_USER]
+                })
+    
+                queryClient.invalidateQueries ({
+                    queryKey: ['getRecipeByUserId']
+                })
+                }
+        });
+    };
+
+    export const useUpdatePublishStatusOfRecipeMutation = ()=> {
+        const queryClient = useQueryClient();
+        return useMutation ({
+            mutationFn: ({recipeId, publish}:{recipeId:string, publish:boolean}) => UpdatePublishStatusOfRecipe(recipeId,publish),
             onSuccess:(data:any)=> {
                 queryClient.invalidateQueries ({
                     queryKey: [QUERY_KEYS.GET_RECIPES_BY_ID, data?.$id]

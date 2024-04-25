@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import Modal from './Modal';
 import ShareModal from './ShareModal';
+import PublishModal from './PublishModal';
 
 
 type RecipeActionProps = {
@@ -16,6 +17,7 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
 
     const[open, setOpen] = useState(false);
     const[shareOpen, setShareOpen] = useState(false);
+    const[publishOpen, setPublishOpen] = useState(false);
 
     const sharedUser = recipe.share.filter((x:any)=>{const tempSharedUser = JSON.parse(x); if(tempSharedUser.userId=== userId) return x;}).map((x:any)=>JSON.parse(x));
     
@@ -53,6 +55,19 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
                   height = {24}
                   />
                   </Button>
+
+                  <Button
+                  onClick = {()=>setPublishOpen(true)}
+                  variant = 'ghost'
+                  className={`ghost_details-delete_btn px-2 pb-1 ${userId !==recipe.creator.$id && 'hidden'}`}
+                >
+                  <img 
+                  src = '/assets/icons/publish.svg'
+                  alt='publish'
+                  width = {32}
+                  height = {32}
+                  />
+                  </Button>
                   
                   </div>
             ):((sharedUser.length>0 && sharedUser[0].canEdit)? (<div  className ='flex-center'>
@@ -64,6 +79,7 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
             <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe} navigateBack={navigateBack}>                
             </Modal>
             <ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipe={recipe as any}></ShareModal>
+            <PublishModal open={publishOpen} onClose={()=>setPublishOpen(false)} recipe={recipe as any}></PublishModal>
   </div>
   )
 }

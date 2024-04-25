@@ -26,6 +26,7 @@ import Modal from './Modal'
 import { Input } from '../ui/input'
 import ShareModal from './ShareModal'
 import { useUserContext } from '@/context/AuthContext'
+import PublishModal from './PublishModal'
 
 export type RecipeTableView = {
     $id:string
@@ -77,6 +78,10 @@ export const columns:ColumnDef<RecipeTableView>[] = [
           </Button>
         )
       },
+      cell:({row})=>{
+        const recipe = row.original;
+        return (recipe as any).Publish?'Published':'Private';
+    }
 },
 {
     accessorKey:'creator.name',
@@ -129,6 +134,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
       const {user} = useUserContext();
       const[open, setOpen] = useState(false);
       const[shareOpen, setShareOpen] = useState(false);
+      const[publishOpen, setPublishOpen] = useState(false);
       const sharedUser = (recipe as any).share.filter((x:any)=>{const tempSharedUser = JSON.parse(x); if(tempSharedUser.userId=== user.id) return x;}).map((x:any)=>JSON.parse(x));
       
       return ( (user.id ===(recipe as any).creator.$id)  ?
@@ -161,9 +167,18 @@ export const columns:ColumnDef<RecipeTableView>[] = [
                   height = {24}
                   />
             </DropdownMenuItem>
+            <DropdownMenuItem  onClick={()=>setShareOpen(true)}>
+            <img 
+                  src = '/assets/icons/publish.svg'
+                  alt='share'
+                  width = {32}
+                  height = {32}
+                  />
+            </DropdownMenuItem>
           </DropdownMenuContent>
           <Modal open={open} onClose={()=>setOpen(false)} recipe={recipe as any}></Modal>
           <ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipe={recipe as any}></ShareModal>
+          <PublishModal open={publishOpen} onClose={()=>setPublishOpen(false)} recipe={recipe as any}></PublishModal>
         </DropdownMenu>
         : (sharedUser.length>0 && sharedUser[0].canEdit)? <DropdownMenu>
         <DropdownMenuTrigger asChild>

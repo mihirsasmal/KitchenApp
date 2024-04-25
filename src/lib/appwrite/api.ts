@@ -269,9 +269,23 @@ export async function shareRecipe(recipeId:string,sharedUsers:string[]) {
         {
             share:sharedUsers
         }
-        ) ;
-        
-        // console.log(updatedRecipe)
+        );
+        return updatedRecipe;
+    }
+    catch(error) {
+        console.log(error)
+        return error;
+    }
+}
+
+export async function UpdatePublishStatusOfRecipe(recipeId:string,publish:boolean) {
+   
+    try{
+        const updatedRecipe =  await databases.updateDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, recipeId,
+        {
+            Publish:publish
+        }
+        );
         return updatedRecipe;
     }
     catch(error) {
@@ -361,10 +375,6 @@ export async function getRecipeByUser(userId:string, pageParam:number) {
     try{
 
         const recipeOfUser = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries)
-
-
-        
-
         if(!recipeOfUser) {
             
             throw Error
@@ -388,10 +398,6 @@ export async function getSharedRecipeOfUser(userId:string, pageParam:number) {
     try{
 
         const recipeOfUser = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries)
-
-
-        
-
         if(!recipeOfUser) {
             
             throw Error
