@@ -27,6 +27,7 @@ import { Input } from '../ui/input'
 import ShareModal from './ShareModal'
 import { useUserContext } from '@/context/AuthContext'
 import PublishModal from './PublishModal'
+import { Checkbox } from "@/components/ui/checkbox"
 
 export type RecipeTableView = {
     $id:string
@@ -48,6 +49,28 @@ interface DataTableProps<TData, TValue> {
  
 
 export const columns:ColumnDef<RecipeTableView>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
 {
     accessorKey:'RecipeName',
     id:'RecipeName',
@@ -212,6 +235,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
       )
       const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
+    const [rowSelection, setRowSelection] = React.useState({})
     const table = useReactTable({
         data,
         columns,
@@ -222,10 +246,12 @@ export const columns:ColumnDef<RecipeTableView>[] = [
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      rowSelection,
     },
       })
   return (
@@ -330,6 +356,10 @@ export const columns:ColumnDef<RecipeTableView>[] = [
           Next
         </Button>
       </div>
+      <div className="flex-1 text-sm text-muted-foreground">
+  {table.getFilteredSelectedRowModel().rows.length} of{" "}
+  {table.getFilteredRowModel().rows.length} row(s) selected.
+</div>
     </div>
   )
 }
