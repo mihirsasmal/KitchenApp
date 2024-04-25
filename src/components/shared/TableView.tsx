@@ -391,7 +391,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
   {table.getFilteredRowModel().rows.length} row(s) selected.
 </div>
 <ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipeList={selectedRecipe as any}></ShareModal>
-          <PublishModal open={publishOpen} onClose={()=>setPublishOpen(false)} recipe={selectedRecipe as any}></PublishModal>
+          <PublishModal open={publishOpen} onClose={()=>setPublishOpen(false)} recipeList={selectedRecipe as any}></PublishModal>
     </div>
     
   )
