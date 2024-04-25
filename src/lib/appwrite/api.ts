@@ -326,7 +326,7 @@ export async function deleteFile(fileId:string) {
 
 export async function getRecentRecipe(pageParam:number) {
 
-    const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12)]
+    const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12),Query.equal('Publish', true)]
     if(pageParam) {
 
         queries.push (Query.cursorAfter(pageParam.toString()));
@@ -495,7 +495,7 @@ export async function getSavedRecipeByUser(userId:string, pageParam:number) {
 
 export async function getInfiniteRecipes({pageParam}:{pageParam:number}) {
 
-const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10)]
+const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10),Query.equal('Publish', true)]
 
 if(pageParam) {
 
@@ -522,7 +522,7 @@ export async function searchRecipes(searchValue:string) {
     console.log('insideSearchfunction -1');
         try{
     
-            const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,[Query.search('RecipeName',searchValue)]); // currently ANd OR option not available in Appwrite query so using only recipename
+            const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,[Query.search('RecipeName',searchValue),Query.equal('Publish', true)]); // currently ANd OR option not available in Appwrite query so using only recipename
             // const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
 
             // const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
