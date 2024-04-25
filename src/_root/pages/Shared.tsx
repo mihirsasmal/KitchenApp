@@ -1,6 +1,6 @@
 import Loader from '@/components/shared/Loader';
 import { useUserContext } from '@/context/AuthContext';
-import { useGetRecipeByUserMutation, useGetSharedRecipeOfUserMutation } from '@/lib/react-query/queriesAndMutation';
+import { useGetSharedRecipeOfUserMutation } from '@/lib/react-query/queriesAndMutation';
 import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
