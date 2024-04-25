@@ -190,7 +190,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
                   height = {24}
                   />
             </DropdownMenuItem>
-            <DropdownMenuItem  onClick={()=>setShareOpen(true)}>
+            <DropdownMenuItem  onClick={()=>setPublishOpen(true)}>
             <img 
                   src = '/assets/icons/publish.svg'
                   alt='share'
@@ -254,6 +254,10 @@ export const columns:ColumnDef<RecipeTableView>[] = [
       rowSelection,
     },
       })
+
+      const[shareOpen, setShareOpen] = useState(false);
+      const[publishOpen, setPublishOpen] = useState(false);
+      const [selectedRecipe, setSelectedRecipe] = useState([]);
   return (
     <div className='w-full'>
         <div className="flex items-center gap-3 py-4">
@@ -264,7 +268,33 @@ export const columns:ColumnDef<RecipeTableView>[] = [
             table.getColumn("RecipeName")?.setFilterValue(event.target.value)
           }
           className="shad-input "
-        />
+        /> 
+        {table.getFilteredSelectedRowModel().rows.length>0?<> <Button
+                  onClick = {()=>setShareOpen(true)}
+                  variant = 'ghost'
+                  className={'ghost_details-delete_btn p-0 '}
+                >
+                  <img 
+                  src = '/assets/icons/share.svg'
+                  alt='share'
+                  width = {32}
+                  height = {32}
+                  />
+                  </Button>
+
+                  <Button
+                  onClick = {()=>{setSelectedRecipe(table.getFilteredSelectedRowModel().rows.map((x)=>{ return x.original as any}) as any); console.log(table.getFilteredSelectedRowModel().rows[0].original); setPublishOpen(true); }}
+                  variant = 'ghost'
+                  className={'ghost_details-delete_btn px-2 pb-1 '}
+                >
+                  <img 
+                  src = '/assets/icons/publish.svg'
+                  alt='publish'
+                  width = {35}
+                  height = {35}
+                  />
+                  </Button> 
+                  </>:<></>}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -360,7 +390,10 @@ export const columns:ColumnDef<RecipeTableView>[] = [
   {table.getFilteredSelectedRowModel().rows.length} of{" "}
   {table.getFilteredRowModel().rows.length} row(s) selected.
 </div>
+<ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipeList={selectedRecipe as any}></ShareModal>
+          <PublishModal open={publishOpen} onClose={()=>setPublishOpen(false)} recipe={selectedRecipe as any}></PublishModal>
     </div>
+    
   )
 }
 

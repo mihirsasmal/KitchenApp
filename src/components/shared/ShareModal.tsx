@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Switch } from "@/components/ui/switch"
 import useDebounce from '@/hooks/useDebounce';
 
-const ShareModal = ({open, onClose, recipe, navigateBack}:{open:boolean, onClose:()=>void, recipe:Models.Document, navigateBack?:boolean}) => {
+const ShareModal = ({open, onClose, recipe, navigateBack, recipeList}:{open:boolean, onClose:()=>void, recipe?:Models.Document, navigateBack?:boolean, recipeList?:Models.Document[]}) => {
   const navigate = useNavigate();
   const {mutate:shareRecipe, isPending:isSharedUserUpdating} = useUpdateSharedUserOfRecipeMutation();
 
@@ -20,14 +20,16 @@ const debouncedValue = useDebounce(searchValue, 500);
  const [selectedUsers, setSelectedUsers] = useState([]);
 
  const handleShareRecipe = async()=>{ 
-  
+  if(recipe && !recipeList)
+  recipeList = [recipe];
+recipeList?.map(async (recipeItem)=>{
   if (selectedUsers.length > 0) {
     // console.log("came here");
     // selectedUsers.map((x: any) => console.log(x.value));
     // console.log(recipe);
     let existingSharedUsers: any = [];
-    if (recipe.share.length > 0) {
-      existingSharedUsers = recipe.share.map((x: any) => {
+    if (recipeItem.share.length > 0) {
+      existingSharedUsers = recipeItem?.share.map((x: any) => {
         return JSON.parse(x);
       });
     }
@@ -64,10 +66,11 @@ const debouncedValue = useDebounce(searchValue, 500);
     // console.log(commonUsers);
 
     await shareRecipe({
-      recipeId: recipe.$id,
+      recipeId: recipeItem?.$id as string,
       sharedUsers: [...commonUsers, ...sharedUsers],
     });
   }
+});
 
 
   setSelectedUsers([]);
