@@ -22,24 +22,21 @@ const debouncedValue = useDebounce(searchValue, 500);
  const handleShareRecipe = async()=>{ 
   if(recipe && !recipeList)
   recipeList = [recipe];
-recipeList?.map(async (recipeItem)=>{
+
+  await recipeList?.map(async (recipeItem)=>{
   if (selectedUsers.length > 0) {
-    // console.log("came here");
-    // selectedUsers.map((x: any) => console.log(x.value));
-    // console.log(recipe);
+
     let existingSharedUsers: any = [];
     if (recipeItem.share.length > 0) {
       existingSharedUsers = recipeItem?.share.map((x: any) => {
         return JSON.parse(x);
       });
     }
-    // console.log(existingSharedUsers);
+
     let filteredExistingUsers: any = [];
     const sharedUsers = selectedUsers.map((x: any) => {
       const filteredUser = existingSharedUsers.filter((item: any) => {
         if (item?.userId === x.value) {
-          // console.log(item.userId);
-          // console.log(x.value);
           return item;
         }
       });
@@ -51,8 +48,7 @@ recipeList?.map(async (recipeItem)=>{
       const users = { userId: x.value, canEdit: allowEdit };
       return JSON.stringify(users);
     });
-    // console.log(sharedUsers);
-    // console.log(filteredExistingUsers);
+
     const commonUsers = existingSharedUsers
       .filter((x: any) => {
         if (
@@ -63,15 +59,15 @@ recipeList?.map(async (recipeItem)=>{
           return x;
       })
       .map((x: any) => JSON.stringify(x));
-    // console.log(commonUsers);
 
-    await shareRecipe({
+
+    const updatedRecipe = await shareRecipe({
       recipeId: recipeItem?.$id as string,
       sharedUsers: [...commonUsers, ...sharedUsers],
     });
+    return updatedRecipe;
   }
 });
-
 
   setSelectedUsers([]);
   setAllowEdit(false);
@@ -113,7 +109,7 @@ recipeList?.map(async (recipeItem)=>{
                       value = {selectedUsers}
                       onChange={(e)=>{setSelectedUsers(e as any)}}
                     placeholder="Enter User Email"                   
-                    emptyIndicator={isSharedUserUpdating?
+                    emptyIndicator={isSearchFetching?
                       <p className="py-2 text-center text-lg leading-10 text-muted-foreground">Loading...</p>:
                       <p className="text-center text-lg leading-10 text-gray-400 dark:text-gray-400">
                         no results found.
@@ -141,7 +137,7 @@ recipeList?.map(async (recipeItem)=>{
                   </div>
                   </div>
                   <div className='flex py-2 gap-4'>
-                    <Button className='bg-blue-500 w-full' onClick = {handleShareRecipe}>Share</Button>
+                    <Button className='bg-blue-500 w-full' onClick = {async()=>await handleShareRecipe()}>Share</Button>
                     <Button className='bg-gray-400 w-full' onClick={()=>{setSelectedUsers([]);   setAllowEdit(false); onClose();}}>Cancel</Button>
                   </div>
                   

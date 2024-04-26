@@ -32,7 +32,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 export type RecipeTableView = {
     $id:string
     RecipeName: string
-    status:"Draft" | "Submitted" | "Approved" | "Published"
+    status:string
+    shared:string
     lastUpdatedBy :string
     lastUpdatedOn :Date
     likes:number
@@ -105,6 +106,25 @@ export const columns:ColumnDef<RecipeTableView>[] = [
         const recipe = row.original;
         return (recipe as any).Publish?'Published':'Private';
     }
+},
+{
+  accessorKey:'shared',
+  id:'Shared',
+  header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Shared
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell:({row})=>{
+      const recipe = row.original;
+      return (recipe as any).share.length>0?'Shared':'';
+  }
 },
 {
     accessorKey:'creator.name',
@@ -270,7 +290,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
           className="shad-input "
         /> 
         {table.getFilteredSelectedRowModel().rows.length>0?<> <Button
-                  onClick = {()=>setShareOpen(true)}
+                  onClick = {()=>{setSelectedRecipe(table.getFilteredSelectedRowModel().rows.map((x)=>{ return x.original as any}) as any);  setShareOpen(true) }}
                   variant = 'ghost'
                   className={'ghost_details-delete_btn p-0 '}
                 >
@@ -283,7 +303,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
                   </Button>
 
                   <Button
-                  onClick = {()=>{setSelectedRecipe(table.getFilteredSelectedRowModel().rows.map((x)=>{ return x.original as any}) as any); console.log(table.getFilteredSelectedRowModel().rows[0].original); setPublishOpen(true); }}
+                  onClick = {()=>{setSelectedRecipe(table.getFilteredSelectedRowModel().rows.map((x)=>{ return x.original as any}) as any);  setPublishOpen(true); }}
                   variant = 'ghost'
                   className={'ghost_details-delete_btn px-2 pb-1 '}
                 >
@@ -326,12 +346,12 @@ export const columns:ColumnDef<RecipeTableView>[] = [
       </div>
     <div className="rounded-md border">
       <Table>
-        <TableHeader>
+        <TableHeader >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="text-center">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -350,6 +370,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="text-center"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
@@ -390,8 +411,8 @@ export const columns:ColumnDef<RecipeTableView>[] = [
   {table.getFilteredSelectedRowModel().rows.length} of{" "}
   {table.getFilteredRowModel().rows.length} row(s) selected.
 </div>
-<ShareModal open={shareOpen} onClose={()=>setShareOpen(false)} recipeList={selectedRecipe as any}></ShareModal>
-          <PublishModal open={publishOpen} onClose={()=>setPublishOpen(false)} recipeList={selectedRecipe as any}></PublishModal>
+<ShareModal open={shareOpen} onClose={()=>{setShareOpen(false); setRowSelection({})}} recipeList={selectedRecipe as any}></ShareModal>
+          <PublishModal open={publishOpen} onClose={()=>{setPublishOpen(false); setRowSelection({})}} recipeList={selectedRecipe as any}></PublishModal>
     </div>
     
   )
