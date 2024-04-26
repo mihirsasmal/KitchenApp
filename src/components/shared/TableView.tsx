@@ -28,6 +28,7 @@ import ShareModal from './ShareModal'
 import { useUserContext } from '@/context/AuthContext'
 import PublishModal from './PublishModal'
 import { Checkbox } from "@/components/ui/checkbox"
+import { DataTablePagination } from './TablePagination'
 
 export type RecipeTableView = {
     $id:string
@@ -389,30 +390,10 @@ export const columns:ColumnDef<RecipeTableView>[] = [
         </TableBody>
       </Table>      
     </div>
-    <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
-      <div className="flex-1 text-sm text-muted-foreground">
-  {table.getFilteredSelectedRowModel().rows.length} of{" "}
-  {table.getFilteredRowModel().rows.length} row(s) selected.
-</div>
+    
 <ShareModal open={shareOpen} onClose={()=>{setShareOpen(false); setRowSelection({})}} recipeList={selectedRecipe as any}></ShareModal>
           <PublishModal open={publishOpen} onClose={()=>{setPublishOpen(false); setRowSelection({})}} recipeList={selectedRecipe as any}></PublishModal>
+          <DataTablePagination table={table} />
     </div>
     
   )
