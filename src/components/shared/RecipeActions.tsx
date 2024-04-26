@@ -10,10 +10,11 @@ import PublishModal from './PublishModal';
 type RecipeActionProps = {
     recipe:Models.Document;
     userId:string;
-    navigateBack?:boolean
+    navigateBack?:boolean;
+    isVerticalRequired?:boolean;
 }
 
-const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
+const RecipeActions = ({recipe, userId, navigateBack, isVerticalRequired: isSmallDevice}:RecipeActionProps) => {
 
     const[open, setOpen] = useState(false);
     const[shareOpen, setShareOpen] = useState(false);
@@ -26,7 +27,7 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
         <div className='flex gap-2 mr-5'>
         {(userId ===recipe.creator.$id) ? 
                 (
-                <div  className ='flex-center'>
+                <div  className ={`flex-center ${isSmallDevice && 'flex-col'} lg:flex-row md:flex-row`}>
                   <Link to={`/update-recipe/${recipe.$id}`}>
                   <img src='/assets/icons/edit.svg' alt='edit' width={20} height={20} />
                 </Link>
@@ -46,7 +47,7 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
                   <Button
                   onClick = {()=>setShareOpen(true)}
                   variant = 'ghost'
-                  className={`ghost_details-delete_btn p-0 ${userId !==recipe.creator.$id && 'hidden'}`}
+                  className={`ghost_details-delete_btn p-0 ${isSmallDevice && 'lg:pb-0 pb-3'} ${userId !==recipe.creator.$id && 'hidden'}`}
                 >
                   <img 
                   src = '/assets/icons/share.svg'
@@ -59,7 +60,7 @@ const RecipeActions = ({recipe, userId, navigateBack}:RecipeActionProps) => {
                   <Button
                   onClick = {()=>setPublishOpen(true)}
                   variant = 'ghost'
-                  className={`ghost_details-delete_btn px-2 pb-1 ${userId !==recipe.creator.$id && 'hidden'}`}
+                  className={`ghost_details-delete_btn px-2 pb-1 ${isSmallDevice && 'lg:pb-1 pb-8'} ${userId !==recipe.creator.$id && 'hidden'}`}
                 >
                   <img 
                   src = '/assets/icons/publish.svg'
