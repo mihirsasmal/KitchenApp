@@ -1,6 +1,6 @@
 import { INewUser, IRecipe, IUpdateRecipe } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import {ID,  Models, Query} from 'appwrite';
+import {ID,  ImageGravity,  Models, Query} from 'appwrite';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -44,7 +44,7 @@ export async function saveUserToDB( user:{
 
 export async function loginAccount(user:{email:string, password:string}) {
     try{
-        const session = await account.createEmailSession(user.email,user.password);
+        const session = await account.createEmailPasswordSession(user.email,user.password);
         return session;
     }
     catch(error) {
@@ -299,7 +299,7 @@ export function getFilePreview(fileId:string) {
         const uploadedFile = storage.getFilePreview(
             appwriteConfig.storageId,
             fileId,
-            2000,2000,'top',100
+            2000,2000,ImageGravity.Top,100
         );
         console.log(uploadedFile);
         return uploadedFile;
