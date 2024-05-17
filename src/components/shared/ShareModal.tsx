@@ -27,7 +27,8 @@ const debouncedValue = useDebounce(searchValue, 500);
   if (selectedUsers.length > 0) {
 
     let existingSharedUsers: any = [];
-    if (recipeItem.share.length > 0) {
+    const sharedValue = JSON.parse(recipeItem.shared);
+    if (sharedValue.length > 0) {
       existingSharedUsers = recipeItem?.share.map((x: any) => {
         return JSON.parse(x);
       });

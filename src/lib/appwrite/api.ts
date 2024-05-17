@@ -267,7 +267,7 @@ export async function shareRecipe(recipeId:string,sharedUsers:string[]) {
     try{
         const updatedRecipe =  await databases.updateDocument(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId, recipeId,
         {
-            share:sharedUsers
+            shared:`[${sharedUsers}]`
         }
         );
         return updatedRecipe;
@@ -326,7 +326,7 @@ export async function deleteFile(fileId:string) {
 
 export async function getRecentRecipe(pageParam:number) {
 
-    const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12),Query.equal('Publish', true)]
+    const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12), Query.or([Query.equal('Publish', true),Query.contains('shared', '65fff6909f118a7ef7bb')])]
     if(pageParam) {
 
         queries.push (Query.cursorAfter(pageParam.toString()));
@@ -389,7 +389,7 @@ export async function getRecipeByUser(userId:string, pageParam:number) {
 
 export async function getSharedRecipeOfUser(userId:string, pageParam:number) {
 
-    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(12),Query.search('share', userId)]
+    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(12),Query.contains('shared', userId)]
     if(pageParam) {
 
         queries.push (Query.cursorAfter(pageParam.toString()));
