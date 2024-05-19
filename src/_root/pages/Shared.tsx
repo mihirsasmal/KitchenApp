@@ -1,6 +1,6 @@
 import Loader from '@/components/shared/Loader';
 import { useUserContext } from '@/context/AuthContext';
-import { useGetSharedRecipeOfUserMutation } from '@/lib/react-query/queriesAndMutation';
+import { useGetSharedRecipeOfUserMutation, useSearchRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
@@ -18,6 +18,8 @@ import ListView from '@/components/shared/ListView';
 import { Models } from 'appwrite';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
+import useDebounce from '@/hooks/useDebounce';
+import SearchResults from '@/components/shared/SearchResults';
 
 
 
@@ -40,6 +42,10 @@ const Shared = () => {
 },[inView, fetchNextPage, isFetchingNextPage]);
  
 
+const [searchValue, setSearchValue] = useState('');
+  const debouncedValue = useDebounce(searchValue, 500);
+ const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchRecipeMutation(user?.id, debouncedValue);
+ 
  if(!recipes) {
 
   return(
@@ -49,16 +55,31 @@ const Shared = () => {
   )
  }
 
-
+ const shouldShowSearchResults = searchValue !=='';
+ const shouldShowRecipes = !shouldShowSearchResults && (recipes as any).pages.every((item:any)=> item.length === 0)
+ 
 recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
 
   return (
 
       <div className='home-container'>
         <div className='max-w-5xl flex-start flex-col gap-9 justify-start w-full'>
-        <div className='flex items-end justify-end w-full'>
-        <h2 className = 'h3-bold md:h2-bold w-full'> Shared Recipes</h2>      
-        
+        <div className='flex items-end justify-end gap-5 w-full'>
+        <h2 className = 'h3-bold md:h2-bold w-full'> Shared Recipes</h2>    
+
+        <div className='flex gap-1 px-4 w-full rounded-lg dark:bg-dark-4 bg-light-3'>
+          <img 
+           src = '/assets/icons/search.svg'
+            width ={24}
+            height = {24}
+            alt = 'search' />
+            <input 
+            type = 'text'
+            placeholder='Search by Recipe Name or Ingredients'
+            className='explore-search w-full'
+            value = {searchValue}
+            onChange = {(e)=>setSearchValue(e.target.value)}/>
+          </div>
             
             <DropdownMenu>
      <DropdownMenuTrigger asChild>
@@ -81,18 +102,28 @@ recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
      </DropdownMenuContent>
    </DropdownMenu>
    </div>
-         {recipes.pages.map((item,index)=>(
+        {shouldShowSearchResults?(
+              <SearchResults 
+              isSearchFetching = {isSearchFetching}
+              searchedRecipes = {searchedRecipes as any}
+              position ={position}
+              userId={user.id}
+              />
+            ) : shouldShowRecipes? (
+              <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> End of Recipes</p>
+            ) : position!=='Table View'?
+         (recipes.pages.map((item,index)=>(
           position==='Thumbnail View' && ( <ThumbnailView key={`page-${index}`} recipes={item as Models.Document[]} userId={user.id}/>
           ) || position==='List View' && ( <ListView key={`page-${index}`} recipes={item as Models.Document[]} />
           )
-        ))}
+        ))) :
 
-        {
+        (
           !isFetchingNextPage &&  !hasNextPage &&
             position==='Table View' && (
              <TableView  columns ={columns} data={tableRecipe as any} />
             )
-        }
+        )}
           { isFetchingNextPage?<div ref = {ref} className = 'mt-10'> 
                   Loading... <Loader />
                   </div>: hasNextPage ? (
