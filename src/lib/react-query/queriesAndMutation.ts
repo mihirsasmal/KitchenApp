@@ -1,6 +1,6 @@
 import { INewUser, IRecipe, IUpdateRecipe } from '@/types'
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery} from '@tanstack/react-query'
-import { UpdatePublishStatusOfRecipe, addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, getSharedRecipeOfUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchUser, shareRecipe } from '../appwrite/api'
+import { UpdatePublishStatusOfRecipe, addRecipe, createUserAccount, deleteRecipe, deleteSavedRecipe, editRecipe, getAllUsers, getCurrentUser, getIncredients, getInfiniteRecipes, getRecentRecipe, getRecipeById, getRecipeByUser, getSavedRecipeByUser, getSharedRecipeOfUser, likeRecipe, loginAccount, logoutAccount, saveRecipe, searchRecipes, searchSavedRecipes, searchSharedRecipes, searchUser, searchUsersRecipes, shareRecipe } from '../appwrite/api'
 import { QUERY_KEYS } from './queryKeys';
 
 export const useCreateUserAccountMutation = ()=> {
@@ -296,6 +296,23 @@ export const useGetRecentRecipeMutation = (userId:string)=> {
             enabled: !! searchValue
         });
     };
+
+    export const useSearchUsersRecipeMutation = (userId:string, searchValue:string)=> {
+        return useQuery({
+            queryKey: [QUERY_KEYS.SEARCH_RECIPES, searchValue],
+            queryFn: ()=> searchUsersRecipes(userId,searchValue),
+            enabled: !! searchValue
+        });
+    };
+
+    export const useSearchSharedRecipeMutation = (userId:string, searchValue:string)=> {
+        return useQuery({
+            queryKey: [QUERY_KEYS.SEARCH_RECIPES, searchValue],
+            queryFn: ()=> searchSharedRecipes(userId,searchValue),
+            enabled: !! searchValue
+        });
+    };
+
 
     export const useGetSavedRecipeByUserMutation = (userId:string)=> {
         return useInfiniteQuery ({

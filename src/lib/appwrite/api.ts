@@ -559,6 +559,54 @@ export async function searchRecipes(userId:string, searchValue:string) {
         }
     }
 
+    export async function searchUsersRecipes(userId:string, searchValue:string) { 
+        try{
+    
+            const queries:any[] = [Query.search('RecipeName',searchValue),Query.equal("creator", userId)]
+           
+
+            const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries); // currently ANd OR option not available in Appwrite query so using only recipename
+            // const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
+
+            // const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
+ 
+            if(!recipe) {
+                
+                throw Error
+            }
+            //return {documents:recipe}; // return only recipe when query issue is fixed
+            return recipe
+        }
+        catch(error) {
+            console.log(error)
+            return error;
+        }
+    }
+
+    export async function searchSharedRecipes(userId:string, searchValue:string) { 
+        try{
+    
+            const queries:any[] = [Query.search('RecipeName',searchValue),Query.contains('shared', userId)]
+           
+
+            const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries); // currently ANd OR option not available in Appwrite query so using only recipename
+            // const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
+
+            // const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));
+ 
+            if(!recipe) {
+                
+                throw Error
+            }
+            //return {documents:recipe}; // return only recipe when query issue is fixed
+            return recipe
+        }
+        catch(error) {
+            console.log(error)
+            return error;
+        }
+    }
+
 export async function searchSavedRecipes(searchValue:string, userId:string) {
 
             try{

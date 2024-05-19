@@ -1,6 +1,6 @@
 import Loader from '@/components/shared/Loader';
 import { useUserContext } from '@/context/AuthContext';
-import { useGetRecipeByUserMutation, useSearchRecipeMutation } from '@/lib/react-query/queriesAndMutation';
+import { useGetRecipeByUserMutation, useSearchUsersRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { useEffect, useState } from 'react'
 import {
   DropdownMenu,
@@ -44,7 +44,7 @@ const YourRecipes = () => {
 
 const [searchValue, setSearchValue] = useState('');
   const debouncedValue = useDebounce(searchValue, 500);
- const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchRecipeMutation(user?.id, debouncedValue);
+ const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchUsersRecipeMutation(user?.id, debouncedValue);
  
  if(!recipes) {
 
