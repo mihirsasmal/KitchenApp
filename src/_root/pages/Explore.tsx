@@ -1,6 +1,7 @@
 import GridRecipeList from '@/components/shared/GridRecipeList';
 import Loader from '@/components/shared/Loader';
 import SearchResults from '@/components/shared/SearchResults';
+import { useUserContext } from '@/context/AuthContext';
 import useDebounce from '@/hooks/useDebounce';
 import { useGetRecipeMutation, useSearchRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { Models } from 'appwrite';
@@ -10,14 +11,15 @@ import {useInView} from 'react-intersection-observer';
 
 const Explore = () => {
   const {ref, inView} = useInView();
- const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetRecipeMutation();
+  const {user} = useUserContext();
+ const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetRecipeMutation(user?.id);
  useEffect (()=>{
   if(inView) fetchNextPage();
 },[inView, fetchNextPage]);
 
   const [searchValue, setSearchValue] = useState('');
   const debouncedValue = useDebounce(searchValue, 500);
- const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchRecipeMutation(debouncedValue);
+ const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchRecipeMutation(user?.id, debouncedValue);
 
  if(!recipes) {
 

@@ -498,9 +498,15 @@ export async function getSavedRecipeByUser(userId:string, pageParam:number) {
     }
 }
 
-export async function getInfiniteRecipes({pageParam}:{pageParam:number}) {
+export async function getInfiniteRecipes({userId, pageParam}:{userId:string,pageParam:number}) {
 
-const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(10),Query.equal('Publish', true)]
+    const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
+
+    if (userId)
+      queries.push( Query.or([ Query.equal("Publish", true), Query.contains("shared", userId),]));
+    else 
+      queries.push(Query.equal("Publish", true));
+
 
 if(pageParam) {
 
@@ -523,11 +529,19 @@ if(pageParam) {
     }
 }
 
-export async function searchRecipes(searchValue:string) {
-    console.log('insideSearchfunction -1');
+export async function searchRecipes(userId:string, searchValue:string) { 
+
+    
+
         try{
     
-            const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,[Query.search('RecipeName',searchValue),Query.equal('Publish', true)]); // currently ANd OR option not available in Appwrite query so using only recipename
+            const queries:any[] = [Query.search('RecipeName',searchValue)]
+            if(userId) 
+                queries.push (Query.or([Query.equal('Publish', true),Query.contains('shared', userId)]));
+            else
+                queries.push (Query.equal('Publish', true));
+
+            const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries); // currently ANd OR option not available in Appwrite query so using only recipename
             // const recipes = await databases.listDocuments('65d8126fe7df1bb5e5e3', '65da9e8506e228dce6bb');
 
             // const recipe = recipes.documents.filter((x:any)=>x.RecipeName.includes(searchValue) || x.Ingredients.includes(searchValue));

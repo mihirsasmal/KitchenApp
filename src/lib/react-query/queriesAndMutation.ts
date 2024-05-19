@@ -272,11 +272,11 @@ export const useGetRecentRecipeMutation = (userId:string)=> {
         });
     };
 
-    export const useGetRecipeMutation = ()=> {
+    export const useGetRecipeMutation = (userId:string)=> {
 
         return useInfiniteQuery ({
             queryKey:[QUERY_KEYS.GET_INFINITE_RECIPES],
-            queryFn: async({pageParam})=>getInfiniteRecipes({pageParam}),
+            queryFn: async({pageParam})=>getInfiniteRecipes({userId,pageParam}),
             initialPageParam:0,
             //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
 
@@ -289,10 +289,10 @@ export const useGetRecentRecipeMutation = (userId:string)=> {
         })
     };
 
-    export const useSearchRecipeMutation = (searchValue:string)=> {
+    export const useSearchRecipeMutation = (userId:string, searchValue:string)=> {
         return useQuery({
             queryKey: [QUERY_KEYS.SEARCH_RECIPES, searchValue],
-            queryFn: ()=> searchRecipes(searchValue),
+            queryFn: ()=> searchRecipes(userId,searchValue),
             enabled: !! searchValue
         });
     };
