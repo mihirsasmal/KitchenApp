@@ -1,5 +1,6 @@
 import ListView from '@/components/shared/ListView';
 import Loader from '@/components/shared/Loader'
+import { useUserContext } from '@/context/AuthContext';
 import { useGetRecentRecipeMutation } from '@/lib/react-query/queriesAndMutation';
 import { Models } from 'appwrite';
 import { useEffect } from 'react';
@@ -7,7 +8,8 @@ import { useInView } from 'react-intersection-observer';
 
 const Home = () => {
   const {ref, inView} = useInView();
-  const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage, isPending:isRecipeLoading} = useGetRecentRecipeMutation();
+  const {user} = useUserContext();
+  const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage, isPending:isRecipeLoading} = useGetRecentRecipeMutation(user?.id);
   useEffect (()=>{
     if(inView) fetchNextPage();
   },[inView, fetchNextPage]);

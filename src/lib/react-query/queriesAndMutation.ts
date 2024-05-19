@@ -79,10 +79,10 @@ export const useDeleteRecipeMutation = ()=> {
     });
 }; 
 
-export const useGetRecentRecipeMutation = ()=> {
+export const useGetRecentRecipeMutation = (userId:string)=> {
         return useInfiniteQuery ({
             queryKey: [QUERY_KEYS.GET_RECENT_RECIPES],
-            queryFn:  async({pageParam})=> getRecentRecipe(pageParam),
+            queryFn:  async({pageParam})=> getRecentRecipe(userId,pageParam),
             initialPageParam:0,
             //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,
 

@@ -324,9 +324,14 @@ export async function deleteFile(fileId:string) {
     }
 }
 
-export async function getRecentRecipe(pageParam:number) {
+export async function getRecentRecipe(userId:string,pageParam:number) {
 
-    const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12), Query.or([Query.equal('Publish', true),Query.contains('shared', '65fff6909f118a7ef7bb')])]
+    const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12)];
+    if(userId) 
+        queries.push (Query.or([Query.equal('Publish', true),Query.contains('shared', userId)]));
+    else
+        queries.push (Query.equal('Publish', true));
+      
     if(pageParam) {
 
         queries.push (Query.cursorAfter(pageParam.toString()));
