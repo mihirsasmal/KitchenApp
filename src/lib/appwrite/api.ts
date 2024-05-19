@@ -328,7 +328,7 @@ export async function getRecentRecipe(userId:string,pageParam:number) {
 
     const queries:any[] = [Query.orderDesc('$updatedAt'), Query.limit(12)];
     if(userId) 
-        queries.push (Query.or([Query.equal('Publish', true),Query.contains('shared', userId)]));
+        queries.push (Query.or([Query.equal('Publish', true),Query.contains('shared', userId),Query.equal("creator", userId)]));
     else
         queries.push (Query.equal('Publish', true));
       
@@ -503,7 +503,7 @@ export async function getInfiniteRecipes({userId, pageParam}:{userId:string,page
     const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
 
     if (userId)
-      queries.push( Query.or([ Query.equal("Publish", true), Query.contains("shared", userId),]));
+      queries.push( Query.or([ Query.equal("Publish", true), Query.contains("shared", userId),Query.equal("creator", userId)]));
     else 
       queries.push(Query.equal("Publish", true));
 
@@ -537,7 +537,7 @@ export async function searchRecipes(userId:string, searchValue:string) {
     
             const queries:any[] = [Query.search('RecipeName',searchValue)]
             if(userId) 
-                queries.push (Query.or([Query.equal('Publish', true),Query.contains('shared', userId)]));
+                queries.push (Query.or([Query.equal('Publish', true),Query.contains('shared', userId),Query.equal("creator", userId)]));
             else
                 queries.push (Query.equal('Publish', true));
 
