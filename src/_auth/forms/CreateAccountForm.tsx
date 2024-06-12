@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
+import { object, z } from "zod";
 import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast"
 import { useCreateUserAccountMutation, useLoginAccountMutation } from "@/lib/react-query/queriesAndMutation";
@@ -26,7 +26,7 @@ const CreateAccountForm = () => {
   const {mutateAsync:createUserAccount, isPending:isCreatingAccount} = useCreateUserAccountMutation();
 
   const {mutateAsync: loginAccount} = useLoginAccountMutation();
-  // 1. Define your form.
+
   const form = useForm<z.infer<typeof createAccountValidation>>({
     resolver: zodResolver(createAccountValidation),
     defaultValues: {
@@ -37,13 +37,17 @@ const CreateAccountForm = () => {
     },
   });
 
-  // 2. Define a submit handler.
+
   async function onSubmit(values: z.infer<typeof createAccountValidation>) {
-    const newUser = await createUserAccount(values);
-    console.log(newUser);
+    
+  try
+    {
+      const newUser = await createUserAccount(values);
+      console.log(newUser);
     toast({
-      title: "Account Created"
+      title: "Account Created with username : "+(newUser as any).username
     })
+  
     const session = await loginAccount({email:values.email, password:values.password});
     if(!session) {
       return toast({
@@ -62,6 +66,22 @@ const CreateAccountForm = () => {
         title: "Creating of Account failed. Please try again"
       });
     }
+  }
+  catch(error)
+  {
+    var message = '';
+    if( (error as any).toString().includes('A user with the same id, email, or phone already exists in this project.'))
+   { 
+    message = "Please try again. Creating of Account failed with error :- A user with the same email already exists" 
+  }
+  else 
+  {
+    message = 'Something went wrong. Please try again after sometime.'
+  }
+  toast({
+    title: message
+  });
+  }
   }
 
   return (

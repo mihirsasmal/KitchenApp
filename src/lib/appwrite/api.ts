@@ -25,7 +25,7 @@ export async function createUserAccount(user:INewUser) {
     }
     catch(error) {
         console.log(error)
-        return error;
+        throw error;
     }
 }
 
