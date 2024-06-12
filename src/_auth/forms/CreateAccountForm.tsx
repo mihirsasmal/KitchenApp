@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { object, z } from "zod";
+import { z } from "zod";
 import Loader from "@/components/shared/Loader";
 import { useToast } from "@/components/ui/use-toast"
 import { useCreateUserAccountMutation, useLoginAccountMutation } from "@/lib/react-query/queriesAndMutation";
