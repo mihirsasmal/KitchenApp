@@ -10,15 +10,16 @@ type SearchResultProps = {
     searchedRecipes:Models.Document[];
     position?:string;
     userId?: string;
+    userEmail?: string;
 }
 
-const SearchResults = ({isSearchFetching, searchedRecipes, position, userId}:SearchResultProps) => {
+const SearchResults = ({isSearchFetching, searchedRecipes, position, userId, userEmail}:SearchResultProps) => {
 
     if(isSearchFetching) return <Loader />
     
     if(searchedRecipes && (searchedRecipes as any).documents.length > 0) {
       
-        return ( position==='Thumbnail View' ? ( <ThumbnailView recipes={(searchedRecipes as any).documents} userId={userId as string}/> )
+        return ( position==='Thumbnail View' ? ( <ThumbnailView recipes={(searchedRecipes as any).documents} userId={userId as string} userEmail = {userEmail as string}/> )
        : position==='List View' ? ( <ListView recipes= {(searchedRecipes as any).documents} />) : position==='Table View' ?  ( <TableView  columns ={columns} data={(searchedRecipes as any).documents} /> ) :<GridRecipeList recipes = {(searchedRecipes as any).documents} />)
     }
   return (

@@ -108,6 +108,7 @@ recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
               searchedRecipes = {searchedRecipes as any}
               position ={position}
               userId={user.id}
+              userEmail= {user.email}
               />
             ) : shouldShowRecipes? (
               <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> End of Recipes</p>
