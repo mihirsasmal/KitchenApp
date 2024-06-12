@@ -10,18 +10,19 @@ import PublishModal from './PublishModal';
 type RecipeActionProps = {
     recipe:Models.Document;
     userId:string;
+    userEmail:string;
     navigateBack?:boolean;
     isVerticalRequired?:boolean;
 }
 
-const RecipeActions = ({recipe, userId, navigateBack, isVerticalRequired: isSmallDevice}:RecipeActionProps) => {
+const RecipeActions = ({recipe, userId, userEmail, navigateBack, isVerticalRequired: isSmallDevice}:RecipeActionProps) => {
 
     const[open, setOpen] = useState(false);
     const[shareOpen, setShareOpen] = useState(false);
     const[publishOpen, setPublishOpen] = useState(false);
 
-    const sharedUser = recipe.share.filter((x:any)=>{const tempSharedUser = JSON.parse(x); if(tempSharedUser.userId=== userId) return x;}).map((x:any)=>JSON.parse(x));
-    
+    const sharedUser = (JSON.parse(recipe.shared)).filter((x:any)=>{if(x.userId=== userId || x.userId=== userEmail) return x;}).map((x:any)=>x);
+
   return (
     <div className='flex justify-between items-center z-20'>
         <div className='flex gap-2 mr-5'>

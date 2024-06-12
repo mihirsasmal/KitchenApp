@@ -179,7 +179,7 @@ export const columns:ColumnDef<RecipeTableView>[] = [
       const[open, setOpen] = useState(false);
       const[shareOpen, setShareOpen] = useState(false);
       const[publishOpen, setPublishOpen] = useState(false);
-      const sharedUser = (recipe as any).share.filter((x:any)=>{const tempSharedUser = JSON.parse(x); if(tempSharedUser.userId=== user.id) return x;}).map((x:any)=>JSON.parse(x));
+      const sharedUser = (JSON.parse(recipe.shared)).filter((x:any)=>{if(x.userId=== user.id || x.userId=== user.email) return x;}).map((x:any)=>x);
       
       return ( (user.id ===(recipe as any).creator.$id)  ?
         <DropdownMenu>

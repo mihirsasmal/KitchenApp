@@ -35,7 +35,7 @@ const RecipeDetails =  () => {
     )
    }
    
-   const sharedUser = recipe.share.filter((x:any)=>{const tempSharedUser = JSON.parse(x); if(tempSharedUser.userId=== user.id) return x;}).map((x:any)=>JSON.parse(x));
+   const sharedUser = (JSON.parse(recipe.shared)).filter((x:any)=>{if(x.userId=== user.id || x.userId=== user.email) return x;}).map((x:any)=>x);
   return (
     <div className='flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 dark:custom-scrollbar lightCustom-scrollbar '>
       {isPending? <Loader /> :(
@@ -49,7 +49,7 @@ const RecipeDetails =  () => {
                 (<div className = 'flex  justify-between w-full '> 
                   <p className='subtle-semibold lg:small-regular flex justify-center items-center gap-2 dark:text-light-3 text-dark-4'>
                          {formatDate(recipe.$createdAt)}</p>
-                         <RecipeActions recipe = {recipe} userId = {user.id} navigateBack={true}/>
+                         <RecipeActions recipe = {recipe} userId = {user.id} userEmail = {user.email} navigateBack={true}/>
                   </div>
             ):( <div className = 'flex  justify-between w-full '> 
             <p className='subtle-semibold lg:small-regular flex justify-center items-center mx-auto gap-2 dark:text-light-3 text-dark-4'>by {recipe.creator.name} - 

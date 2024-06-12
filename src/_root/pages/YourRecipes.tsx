@@ -113,7 +113,7 @@ recipes.pages.flatMap((x)=>tableRecipe.push(...x as any[]) );
               <p className='dark:text-light-4 text-light-5 mt-10 text-center w-full'> End of Recipes</p>
             ) : position!=='Table View'?
          (recipes.pages.map((item,index)=>(
-          position==='Thumbnail View' && ( <ThumbnailView key={`page-${index}`} recipes={item as Models.Document[]} userId={user.id}/>
+          position==='Thumbnail View' && ( <ThumbnailView key={`page-${index}`} recipes={item as Models.Document[]} userId={user.id} userEmail = {user.email} />
           ) || position==='List View' && ( <ListView key={`page-${index}`} recipes={item as Models.Document[]} />
           )
         ))) :

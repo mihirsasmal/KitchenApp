@@ -37,7 +37,7 @@ const {user} = useUserContext();
                 </div>
             </div>
            
-            {<RecipeActions recipe = {recipe} userId = {user.id} isVerticalRequired ={true}/>}
+            {<RecipeActions recipe = {recipe} userId = {user.id} userEmail = {user.email} isVerticalRequired ={true}/>}
             
     
             
