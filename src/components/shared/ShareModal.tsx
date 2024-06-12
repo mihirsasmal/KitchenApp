@@ -26,13 +26,7 @@ const debouncedValue = useDebounce(searchValue, 500);
   await recipeList?.map(async (recipeItem)=>{
   if (selectedUsers.length > 0) {
 
-    let existingSharedUsers: any = [];
-    const sharedValue = JSON.parse(recipeItem.shared);
-    if (sharedValue.length > 0) {
-      existingSharedUsers = recipeItem?.share.map((x: any) => {
-        return JSON.parse(x);
-      });
-    }
+    let existingSharedUsers: any = JSON.parse(recipeItem.shared);
 
     let filteredExistingUsers: any = [];
     const sharedUsers = selectedUsers.map((x: any) => {
@@ -108,6 +102,7 @@ const debouncedValue = useDebounce(searchValue, 500);
                       return isSearchFetching?[]:(searchedUsers as  Models.Document[]).map((x)=>{return {label:x.email, value:x.$id}});
                       }}
                       value = {selectedUsers}
+                      creatable
                       onChange={(e)=>{setSelectedUsers(e as any)}}
                     placeholder="Enter User Email"                   
                     emptyIndicator={isSearchFetching?

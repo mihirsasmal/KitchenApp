@@ -305,10 +305,10 @@ export const useGetRecentRecipeMutation = (userId:string)=> {
         });
     };
 
-    export const useSearchSharedRecipeMutation = (userId:string, searchValue:string)=> {
+    export const useSearchSharedRecipeMutation = (userId:string, userEmail:string, searchValue:string)=> {
         return useQuery({
             queryKey: [QUERY_KEYS.SEARCH_RECIPES, searchValue],
-            queryFn: ()=> searchSharedRecipes(userId,searchValue),
+            queryFn: ()=> searchSharedRecipes(userId, userEmail, searchValue),
             enabled: !! searchValue
         });
     };
@@ -354,10 +354,10 @@ export const useGetRecentRecipeMutation = (userId:string)=> {
         });
     };
 
-    export const useGetSharedRecipeOfUserMutation = (userId:string)=> {
+    export const useGetSharedRecipeOfUserMutation = (userId:string, userEmail:string)=> {
         return useInfiniteQuery ({
             queryKey: ['getSharedRecipeOfUser'],
-            queryFn: async({pageParam})=>getSharedRecipeOfUser(userId, pageParam),
+            queryFn: async({pageParam})=>getSharedRecipeOfUser(userId, userEmail, pageParam),
             enabled:!!userId,
             initialPageParam:0,
             //getPreviousPageParam: (firstPage) => firstPage[0].$id ?? undefined,

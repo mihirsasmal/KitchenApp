@@ -52,6 +52,8 @@ const CreateAccountForm = () => {
     if(!session) {
       return toast({
         title: "Login failed. Please try again"
+        ,     
+        className: 'dark:bg-rose-500 bg-rose-400',
       });
     }
 
@@ -64,6 +66,8 @@ const CreateAccountForm = () => {
     else {
       toast({
         title: "Creating of Account failed. Please try again"
+        ,     
+        className: 'dark:bg-rose-500 bg-rose-400',
       });
     }
   }
@@ -80,6 +84,8 @@ const CreateAccountForm = () => {
   }
   toast({
     title: message
+    ,     
+    className: 'dark:bg-rose-500 bg-rose-400',
   });
   }
   }

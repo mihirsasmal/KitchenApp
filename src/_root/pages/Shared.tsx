@@ -32,7 +32,7 @@ const Shared = () => {
   ,[isLoading])
   const {ref, inView} = useInView();
   const tableRecipe:any[]= []; 
- const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetSharedRecipeOfUserMutation(user.id);
+ const {data:recipes, fetchNextPage,isFetchingNextPage, hasNextPage} = useGetSharedRecipeOfUserMutation(user.id, user.email);
  const [position, setPosition] = useState("Thumbnail View");
  useEffect (()=>{
  if (position === 'Table View' && hasNextPage)
@@ -44,7 +44,7 @@ const Shared = () => {
 
 const [searchValue, setSearchValue] = useState('');
   const debouncedValue = useDebounce(searchValue, 500);
- const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchSharedRecipeMutation(user?.id, debouncedValue);
+ const {data:searchedRecipes, isFetching:isSearchFetching} = useSearchSharedRecipeMutation(user?.id, user.email, debouncedValue);
  
  if(!recipes) {
 

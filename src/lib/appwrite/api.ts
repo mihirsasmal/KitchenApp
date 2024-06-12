@@ -392,9 +392,9 @@ export async function getRecipeByUser(userId:string, pageParam:number) {
     }
 }
 
-export async function getSharedRecipeOfUser(userId:string, pageParam:number) {
+export async function getSharedRecipeOfUser(userId:string, userEmail:string, pageParam:number) {
 
-    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(12),Query.contains('shared', userId)]
+    const queries:any[] = [Query.orderDesc('$createdAt'), Query.limit(12), Query.or([ Query.contains("shared", userId), Query.contains("shared", userEmail)])]
     if(pageParam) {
 
         queries.push (Query.cursorAfter(pageParam.toString()));
@@ -503,7 +503,7 @@ export async function getInfiniteRecipes({userId, pageParam}:{userId:string,page
     const queries: any[] = [Query.orderDesc("$createdAt"), Query.limit(10)];
 
     if (userId)
-      queries.push( Query.or([ Query.equal("Publish", true), Query.contains("shared", userId),Query.equal("creator", userId)]));
+      queries.push( Query.or([ Query.equal("Publish", true), Query.contains("shared", userId), Query.equal("creator", userId)]));
     else 
       queries.push(Query.equal("Publish", true));
 
@@ -583,10 +583,10 @@ export async function searchRecipes(userId:string, searchValue:string) {
         }
     }
 
-    export async function searchSharedRecipes(userId:string, searchValue:string) { 
+    export async function searchSharedRecipes(userId:string, userEmail:string, searchValue:string) { 
         try{
     
-            const queries:any[] = [Query.search('RecipeName',searchValue),Query.contains('shared', userId)]
+            const queries:any[] = [Query.search('RecipeName',searchValue), Query.or([ Query.contains("shared", userId), Query.contains("shared", userEmail)])]
            
 
             const recipe = await databases.listDocuments(appwriteConfig.databaseId, appwriteConfig.recipeCollectionId,queries); // currently ANd OR option not available in Appwrite query so using only recipename
